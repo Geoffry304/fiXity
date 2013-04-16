@@ -78,14 +78,16 @@ public class EvenementDOA {
                     List<Evenement> results = new ArrayList<>();
                     while (rs.next()) {
                         Evenement e = new Evenement();
-                        e.setEvenementId(rs.getInt("EvenementenId"));
-                        e.setTitel(rs.getString("Title"));
+                        e.setEvenementId(rs.getInt("EvenementId"));
+                        e.setTitel(rs.getString("Titel"));
                         e.setDetails(rs.getString("Details"));
 
                         Gebruiker g = new Gebruiker();
-                        g.setGebruikerId(rs.getInt("Gebruiker.GebruikerId"));
+                        g.setGebruikerId(rs.getInt("GebruikerId"));
                         g.setNaam(rs.getString("Naam"));
                         g.setVoornaam(rs.getString("Voornaam"));
+                        g.setEmail(rs.getString("Email"));
+                        g.setGeboortedatum(rs.getDate("Geboortedatum"));
                         e.setGebruiker(g);
 
                         Locatie l = new Locatie();
@@ -115,8 +117,8 @@ public class EvenementDOA {
                 try (ResultSet rs = stat.executeQuery()) {
                     if (rs.next()) {
                         Evenement e = new Evenement();
-                        e.setEvenementId(rs.getInt("EvenementenId"));
-                        e.setTitel(rs.getString("Title"));
+                        e.setEvenementId(rs.getInt("EvenementId"));
+                        e.setTitel(rs.getString("Titel"));
                         e.setDetails(rs.getString("Details"));
 
                         Gebruiker g = new Gebruiker();
@@ -159,7 +161,7 @@ public class EvenementDOA {
                 }
             }
             
-            try (PreparedStatement stat = conn.prepareStatement("UPDATE Evenement SET Titel = ?, Details = ?, Gebruiker = ?, Latitude = ?, Longitude =  ?, Datum = ? WHERE ID = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("UPDATE Evenement SET Titel = ?, Details = ?, Gebruiker = ?, Latitude = ?, Longitude =  ?, Datum = ? WHERE evenementId = ?")) {
                 
                 stat.setString(1, e.getTitel());
                 stat.setString(2, e.getDetails());

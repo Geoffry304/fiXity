@@ -1,0 +1,160 @@
+<!DOCTYPE html> 
+<html>
+	<head> 
+		<title>fiXity</title> 
+    	<meta charset="utf-8" >
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" />
+		<script src="http://code.jquery.com/jquery-1.5.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyARybuJqAlKdwN1H_wM4zC3s_8agSj4-Tk&sensor=true"></script>
+        <script type="text/javascript" src="geocode.js"></script>
+        <script type="text/javascript" src="fblogin.js"></script>
+        <script type="text/javascript" src="mightygumball.js"></script>
+        
+        <link rel="stylesheet" href="style.css" >
+	</head> 
+	<body>
+		<div data-role="page" id="pageAanmelden" data-theme="b" data-position="fixed">
+        	<center>
+           		 <img src="logo.png" style="max-width: 100%; margin-top: 150px" >
+            </center>
+			<div data-role="content"> Aanmelden met:
+	  			<div data-role="controlgroup" data-position="">
+                	<a href="#" data-role="button" onClick="login()" >Facebook</a><a href="#page" data-role="button">Twitter</a>
+           		</div>
+ 			</div>
+		</div> 
+		<div data-role="page" id="page" data-add-back-btn="false">
+			<div data-role="header" data-theme="b" data-position="fixed">
+				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"><a href="#pageMelding" class="ui-btn-right" data-role="button" data-icon="alert" data-iconpos="notext"style="margin-top: 7px" >Melding plaatsen</a>      
+			</div>
+   			<div data-role="content">	
+        		Hier komen de meldingen
+			</div>
+			<div data-role="footer" data-theme="b" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#page1" class="ui-btn-active" data-icon="home" data-theme="b">Overzicht</a></li>
+						<li><a href="#page2" data-icon="search" data-theme="b"> Zoeken</a></li>
+           				<li><a href="#page3" data-icon="gear" data-theme="b">Profiel</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div data-role="page" data-add-back-btn="false" id="page2">
+			<div data-role="header" data-theme="b" data-position="fixed">
+				<h1>Zoeken</h1>
+			</div>
+            <div data-role="content">
+            	<center>	
+        			<input type="search" name="search" id="search-basic" value="" />
+                </center>
+			</div>
+			<div data-role="footer" data-theme="b" data-position="fixed">
+   				<div data-role="navbar">
+					<ul>
+						<li><a href="#page" data-icon="home" data-theme="b">Overzicht</a></li>
+						<li><a href="#page2" class="ui-btn-active" data-icon="search" data-theme="b"> Zoeken</a></li>
+           				<li><a href="#page3" data-icon="gear" data-theme="b">Profiel</a></li>
+					</ul>
+				</div><!-- /navbar -->
+			</div>
+		</div>
+		<div data-role="page" data-add-back-btn="false" id="page3">
+			<div data-role="header" data-theme="b" data-position="fixed">
+				<h1>Profiel</h1>
+			</div>
+			<a href="#" data-role="button" data-icon="gear" data-iconpos="top">Instellingen</a>
+            <a href="#" data-role="button" data-icon="star" data-iconpos="top">Punten</a>
+			<div data-role="footer" data-theme="b" data-position="fixed">
+   				<div data-role="navbar">
+					<ul>
+						<li><a href="#page" data-icon="home" data-theme="b">Overzicht</a></li>
+						<li><a href="#page2" class="search" data-icon="search" data-theme="b"> Zoeken</a></li>
+           				<li><a href="#page3" class="ui-btn-active" data-icon="gear" data-theme="b">Profiel</a></li>
+					</ul>
+				</div>
+			</div>
+    	</div>        
+		<div data-role="page" id="pageMelding" >
+		  	<div data-role="header" data-theme="b" data-position="fixed" >
+		   	 	<h1>Locatie kiezen</h1>
+		    	<a href="#pageMeldingPlaatsen" data-role="button" data-icon="arrow-r" class="ui-btn-right" data-iconpos="right">Next</a>
+	      	</div>
+    		<div data-role="content">
+		  	<div id="google_map" style="width: 300px; height: 400px"></div>
+	      	</div>
+   		</div>
+    	<div data-role="page" id="pageMeldingPlaatsen">
+     		<div data-role="header" data-theme="b" data-position="fixed">
+        		<h1>Melding plaatsen</h1>
+                <a href="#page" data-role="button" data-icon="delete" class="ui-btn-right" data-iconpos="right">Close</a>
+      		</div>
+      		<div data-role="content">
+            	<div data-role="fieldcontain">
+              		<label for="selectmenu" class="select">Type:</label>
+              		<select name="selectmenu" id="selectmenu">
+                		<option value="option1">Situatie</option>
+                		<option value="option2">Event</option>
+              		</select>
+            	</div>
+            	<div data-role="fieldcontain">
+              		<label for="selectmenu" class="select">Categorie:</label>
+              		<select name="selectmenu" id="selectmenu">
+               			<option value="option1">Gevaarlijk</option>
+                		<option value="option2">Vuil</option>
+              		</select>
+            	</div>       
+            	<div data-role="fieldcontain">
+              		<label for="textarea">Omschrijving:</label>
+              		<textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
+            	</div>          
+                <div data-role="fieldcontain">
+                	<label for="flipswitch">Share:</label>                	
+                  	<select name="flipswitch" id="flipswitch" data-role="slider">
+                    	<option value="on">Facebook</option>
+                    	<option value="off">Off</option>
+                  	</select>
+                </div>
+                <div data-role="fieldcontain">
+                   	<label for="flipswitch"> </label>
+                    <select name="flipswitch" id="flipswitch" data-role="slider">
+                  		<option value="on">Twitter</option>
+                    	<option value="off">Off</option>
+                  	</select>
+                </div>
+                <div data-role="fieldcontain">
+                   	<a href="#" data-role="button" data-icon="star">Foto</a>
+              	</div>
+              	<a href="#" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
+      		</div>
+      	</div>
+		<div data-role="page" id="pageTut1" >
+		  	<div data-role="header" data-theme="b" data-position="fixed" >
+		    	<h1>Welcome to fiXity!</h1>
+		    	<a href="#pageTut2" data-role="button" data-icon="arrow-r" class="ui-btn-right" data-iconpos="right">Next</a>
+	      	</div>
+          	<center>
+          		<img src="tut1.png" style="max-width: 100%; margin-top:50px; margin-left:auto;margin-right:auto; box-shadow:0px 0px 10px 7px #777777"> 
+          	</center>
+		</div>
+        <div data-role="page" id="pageTut2" >
+		  	<div data-role="header" data-theme="b" data-position="fixed" >
+		    	<h1>Welcome to fiXity!</h1>
+		    	<a href="#pageTut3" data-role="button" data-icon="arrow-r" class="ui-btn-right" data-iconpos="right">Next</a>
+	      	</div>
+        	<center>
+          		<img src="tut2.png" style="max-width: 100%; margin-top:50px; margin-left:auto;margin-right:auto; box-shadow:0px 0px 10px 7px #777777"> 
+          	</center>
+		</div>	     
+        <div data-role="page" id="pageTut3" >
+		  	<div data-role="header" data-theme="b" data-position="fixed">
+		    	<h1>Welcome to fiXity!</h1>
+		    	<a href="#page" data-role="button" data-icon="arrow-r" class="ui-btn-right" data-iconpos="right">Ready!</a>
+	     	</div>
+        	<center>
+          		<img src="tut3.png" style="max-width: 100%; margin-top:50px; margin-left:auto;margin-right:auto; box-shadow:0px 0px 10px 7px #777777"> 
+          	</center>
+	   	</div>
+	</body>
+</html>

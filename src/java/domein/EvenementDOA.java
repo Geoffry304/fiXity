@@ -41,7 +41,7 @@ public class EvenementDOA {
                 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Een evenement moet een gebruiker hebben.").build());
             }
 
-            try (PreparedStatement stat = conn.prepareStatement("SELECT MAX(ID) FROM Evenement")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT MAX(evenementId) FROM Evenement")) {
                 try (ResultSet rs = stat.executeQuery()) {
                     if (rs.next()) {
                         e.setEvenementId(rs.getInt(1) + 1);
@@ -55,8 +55,15 @@ public class EvenementDOA {
                 stat.setInt(1, e.getEvenementId());
                 stat.setString(2, e.getTitel());
                 stat.setString(3, e.getDetails());
+                if (e.getLocatie() != null){
                 stat.setDouble(4, e.getLocatie().getLatitude());
                 stat.setDouble(5, e.getLocatie().getLongitude());
+                }
+                else {
+                    stat.setDouble(4, 0);
+                stat.setDouble(5, 0);
+                }
+                
                 stat.setDate(6, (Date) e.getDatum());
                 stat.setInt(7, e.getGebruiker().getGebruikerId());
                 stat.executeUpdate();

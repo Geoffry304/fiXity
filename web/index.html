@@ -92,6 +92,7 @@
                 <a href="#page" data-role="button" data-icon="delete" class="ui-btn-right" data-iconpos="right">Close</a>
       		</div>
             <div data-role="content">
+                <form enctype="multipart/form-data" method="post" name="fileinfo">
       		  <div data-role="collapsible-set">
       		    <div data-role="collapsible" data-collapsed="true">
       		     <h3>Melding plaatsen</h3>
@@ -142,10 +143,10 @@
       		    <div data-role="fieldcontain">
               		<label for="selectmenuTitelEvent" class="select">Titel:         </label>
               		<select name="selectmenu" id="selectmenuTitelEvent">
-               			<option value="option1">Feest</option>
-                		<option value="option2">BBQ</option>
-                        <option value="option3">Opruimactie</option>
-                        <option value="option4">Andere</option>
+               			<option value="Feest">Feest</option>
+                		<option value="BBQ">BBQ</option>
+                        <option value="Opruimactie">Opruimactie</option>
+                        <option value="Andere">Andere</option>
               		</select>
             	</div>                      
             	<div data-role="fieldcontain">
@@ -174,9 +175,10 @@
                    	<a href="#" id="btnFotoEvent" data-role="button" data-icon="star">Foto plaatsen</a>
               	</div>
                 <a onclick='postToFeed(); return false;'href="#" id="btnFBEvent" data-role="button" data-icon="star">Post on Facebook</a>
-              	<a href="#" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Melding plaatsen</a>
+              	<a onclick='createEventFromInput()' href="#" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Melding plaatsen</a>
              </div>         
             </div>
+                </form>
             </div>       
       	</div>
 		<div data-role="page" id="pageTut1" >

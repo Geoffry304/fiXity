@@ -3,6 +3,7 @@
 	<head> 
 		<title>fiXity</title> 
     	<meta charset="utf-8" >
+        <meta http-equiv="refresh" content="30; URL=#page">
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" />
 		<script src="http://code.jquery.com/jquery-1.5.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script>
@@ -11,6 +12,7 @@
         <script type="text/javascript" src="geocode.js"></script>
         <script type="text/javascript" src="fblogin.js"></script>
         <script type="text/javascript" src="fbpost.js"></script>
+        <script type="text/javascript" src="script.js"></script>
         <link rel="stylesheet" href="style.css" >
 	</head> 
 	<body>
@@ -28,6 +30,7 @@
 			<div data-role="header" data-theme="b" data-position="fixed" data-fullscreen="true">
 				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"><a href="#pageMelding" class="ui-btn-right" data-role="button" data-icon="alert" data-iconpos="notext"style="margin-top: 7px" >Melding plaatsen</a>      
 			</div>
+                        <div id="meldingTonen"></div>
 			<div data-role="footer" data-theme="b" data-position="fixed" data-fullscreen="true">
 				<div data-role="navbar">
 					<ul>
@@ -96,7 +99,7 @@
       		       	<div data-role="fieldcontain">
               			<label for="selectmenuTitelMeldingen" class="select">Titel:         </label>
               			<select name="selectmenu" id="selectmenuTitelMeldingen">
-               				<option value="option1">Put in de weg</option>
+               				<option value="Put in de weg">Put in de weg</option>
                 			<option value="option2">Zwerfvuil</option>
                             <option value="option2">Werken</option>
                             <option value="option2">Andere</option>
@@ -140,10 +143,10 @@
       		    <div data-role="fieldcontain">
               		<label for="selectmenuTitelEvent" class="select">Titel:         </label>
               		<select name="selectmenu" id="selectmenuTitelEvent">
-               			<option value="option1">Feest</option>
-                		<option value="option2">BBQ</option>
-                        <option value="option3">Opruimactie</option>
-                        <option value="option4">Andere</option>
+               			<option value="Feest">Feest</option>
+                		<option value="BBQ">BBQ</option>
+                        <option value="Opruimactie">Opruimactie</option>
+                        <option value="Andere">Andere</option>
               		</select>
             	</div>                      
             	<div data-role="fieldcontain">
@@ -172,7 +175,7 @@
                    	<a href="#" id="btnFotoEvent" data-role="button" data-icon="star">Foto plaatsen</a>
               	</div>
                 <a onclick='postToFeed(); return false;'href="#" id="btnFBEvent" data-role="button" data-icon="star">Post on Facebook</a>
-              	<a href="#" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Melding plaatsen</a>
+              	<a onclick='createEventFromInput()' href="#page" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Melding plaatsen</a>
              </div>         
             </div>
             </div>       

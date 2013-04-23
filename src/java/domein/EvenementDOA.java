@@ -80,7 +80,7 @@ public class EvenementDOA {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Evenement> getAllEvenementen() {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM Evenement INNER JOIN Gebruiker ON Evenement.Gebruiker = Gebruiker.GebruikerId")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM Evenement INNER JOIN Gebruiker ON Evenement.Gebruiker = Gebruiker.GebruikerId ORDER BY evenementId DESC")) {
                 try (ResultSet rs = stat.executeQuery()) {
                     List<Evenement> results = new ArrayList<>();
                     while (rs.next()) {

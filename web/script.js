@@ -54,6 +54,8 @@ function createEventFromInput() {
     
     event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
     event.gebruiker = {gebruikerId: 1};
+   // event.latitude = latitude;
+   // event.longtitude = longtitude;
     
     /*if (event.title.length < 1) {
         $("#eventDialog .alert-error").text("A event's title cannot be empty").show();

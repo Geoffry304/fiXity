@@ -6,14 +6,18 @@ public class FeedbackMelding {
     
     private int feedbackId;
     private String feedback;
-    private Evenement evenement;
+    private Melding melding;
     private Gebruiker gebruiker;
 
     public FeedbackMelding(int feedbackId, String feedback, Evenement evenement, Gebruiker gebruiker) {
         this.feedbackId = feedbackId;
         this.feedback = feedback;
-        this.evenement = evenement;
+        this.melding = melding;
         this.gebruiker = gebruiker;
+    }
+
+    FeedbackMelding() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getFeedbackId() {
@@ -32,12 +36,12 @@ public class FeedbackMelding {
         this.feedback = feedback;
     }
 
-    public Evenement getEvenement() {
-        return evenement;
+    public Melding getMelding() {
+        return melding;
     }
 
-    public void setEvenement(Evenement evenement) {
-        this.evenement = evenement;
+    public void setMelding(Melding melding) {
+        this.melding = melding;
     }
 
     public Gebruiker getGebruiker() {

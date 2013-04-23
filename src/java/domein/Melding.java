@@ -23,6 +23,10 @@ public class Melding {
         this.locatie = locatie;
     }
 
+    Melding() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public int getMeldingId() {
         return meldingId;
     }

@@ -78,7 +78,7 @@ public class FeedbackDOA {
                 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Een feedback moet een gebruiker hebben.").build());
             }
 
-            try (PreparedStatement stat = conn.prepareStatement("SELECT MAX(ID) FROM Feedback")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT MAX(FeedbackId) FROM Feedback")) {
                 try (ResultSet rs = stat.executeQuery()) {
                     if (rs.next()) {
                         f.setFeedbackId(rs.getInt(1) + 1);

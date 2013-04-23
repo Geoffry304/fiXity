@@ -9,7 +9,9 @@
 
 FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
-        window.location.href = "#page"
+             FB.api('/me', function(response) {
+       alert('Good to see you, ' + response.first_name + '.');
+     });
     } else if (response.status === 'not_authorized') {
         // not_authorized
         login();
@@ -39,3 +41,5 @@ FB.getLoginStatus(function(response) {
         }
     });
 }
+
+

@@ -1,11 +1,15 @@
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position){
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
-        var coords = new google.maps.LatLng(latitude, longitude);
-        var mapOptions = {
+$('#pageMelding').live('pageshow',function(event){
+    navigator.geolocation.getCurrentPosition(function (location) {
+          // Use location.coords.latitude and location.coords.longitude
+          loadMap(location.coords.latitude, location.coords.longitude);
+    }); 
+
+});
+function loadMap(Lat, Long){
+ var myLatlng = new google.maps.LatLng(Lat, Long);
+ var myOptions = {
             zoom: 16,
-            center: coords,
+            center: myLatlng,
             mapTypeControl: true,
             navigationControlOptions: {
                 style: google.maps.NavigationControlStyle.SMALL
@@ -13,17 +17,15 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             map = new google.maps.Map(
-                document.getElementById("google_map"), mapOptions
+                document.getElementById("map_canvas"), myOptions
                 );
+
             var marker = new google.maps.Marker({
-                    position: coords,
+                    position: myLatlng,
                     map: map,
 					animation: google.maps.Animation.DROP,
 					draggable: true,
                     title: "Your current location!"
         });
-            });
-    }else {
-        alert("Geolocation API is not supported in your browser.");
-    }
-	
+ 
+}

@@ -3,11 +3,8 @@ body {
  	background-color: #cccccc;
 }
 
-div#meldingTonen {
-	background-color: #d9d9d9;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	margin: 10px 0px 0px 0px;
-	padding: 0px;
-	border: 1px solid #d9d9d9;
-}
+      #map-canvas {
+        height: 400px;
+        width: 600px;
+        margin-top: 0.6em;
+      }

@@ -36,6 +36,7 @@ FB.getLoginStatus(function(response) {
         if (response.authResponse) {
             // connected
 			window.location.href = "#pageTut1"
+                        
         } else {
             // cancelled
         }

@@ -29,6 +29,7 @@
 			<div data-role="header" data-theme="b" data-position="fixed" data-fullscreen="true">
 				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"><a href="#pageMelding" class="ui-btn-right" data-role="button" data-icon="alert" data-iconpos="notext"style="margin-top: 7px" >Melding plaatsen</a>      
 			</div>
+                        <div id="eventTonen"></div>
                         <div id="meldingTonen"></div>
 			<div data-role="footer" data-theme="b" data-position="fixed" data-fullscreen="true">
 				<div data-role="navbar">
@@ -101,18 +102,18 @@
               			<label for="selectmenuTitelMeldingen" class="select">Titel:         </label>
               			<select name="selectmenu" id="selectmenuTitelMeldingen">
                				<option value="Put in de weg">Put in de weg</option>
-                			<option value="option2">Zwerfvuil</option>
-                            <option value="option2">Werken</option>
-                            <option value="option2">Andere</option>
+                			<option value="Zwerfvuil">Zwerfvuil</option>
+                            <option value="Werken">Werken</option>
+                            <option value="Andere">Andere</option>
               			</select>
             		</div>
                     <div data-role="fieldcontain">
               			<label for="selectmenuCategorieMeldingen" class="select">Categorie:     </label>
               			<select name="selectmenu" id="selectmenuCategorieMeldingen">
-               				<option value="option1">Gevaarlijk</option>
-                			<option value="option2">Vuil</option>
-                            <option value="option2">Storend</option>
-                            <option value="option2">Andere</option>
+               				<option value="Gevaarlijk">Gevaarlijk</option>
+                			<option value="Vuil">Vuil</option>
+                            <option value="Storend">Storend</option>
+                            <option value="Andere">Andere</option>
               			</select>
             		</div>         
             		<div data-role="fieldcontain">
@@ -173,7 +174,7 @@
                   	</select>
                 </div>
                 <div data-role="fieldcontain">
-                   	<a href="#" id="btnFotoEvent" data-role="button" data-icon="star">Foto plaatsen</a>
+                   	<a onclick='createGebruikerFromInput()'href="#page" id="btnFotoEvent" data-role="button" data-icon="star">Foto plaatsen</a>
               	</div>
                 <a onclick='postToFeed(); return false;'href="#" id="btnFBEvent" data-role="button" data-icon="star">Post on Facebook</a>
               	<a onclick='createEventFromInput()' href="#page" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Melding plaatsen</a>

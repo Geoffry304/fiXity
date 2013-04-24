@@ -6,6 +6,7 @@ package domein;
 
 import java.net.URI;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,7 +76,8 @@ public class GebruikerDOA {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUser(Gebruiker u) {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT MAX(gebruikerId) FROM gebruiker")) {
+            
+             try (PreparedStatement stat = conn.prepareStatement("SELECT MAX(gebruikerId) FROM gebruiker")) {
                 try (ResultSet rs = stat.executeQuery()) {
                     if (rs.next()) {
                         u.setGebruikerId(rs.getInt(1) + 1);
@@ -83,15 +85,14 @@ public class GebruikerDOA {
                         u.setGebruikerId(1);
                     }
                 }
-            }
+            } 
             
-            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO gebruiker VALUES(?, ?, ?, ?)")) {
+            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO Gebruiker VALUES(?, ?, ?, ?, ?)")) {
                 stat.setInt(1, u.getGebruikerId());
                 stat.setString(2, u.getNaam());
                 stat.setString(3, u.getVoornaam());
                 stat.setString(4, u.getEmail());
-                //stat.setChar(5, u.getPassword());
-                //stat.setString(6, u.getGeboortedatum());                
+                stat.setDate(5, (Date)u.getGeboortedatum());                
                 stat.executeUpdate();
             }
             

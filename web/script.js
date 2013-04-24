@@ -3,11 +3,11 @@ window.onload = init;
 
 
 function init() {
-	getEvent();
-        getMelding();
+	getEvents();
+        getMeldingen();
 }
 
-function getEvent() {
+function getEvents() {
 	var url = "http://localhost:8080/onzebuurt/resources/evenements";
 	var request = new XMLHttpRequest();
 	request.open("GET", url);

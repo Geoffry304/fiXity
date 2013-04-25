@@ -64,7 +64,7 @@ public class EvenementDOA {
                 stat.setDouble(5, 0);
                 }
                 
-                stat.setDate(6, (Date) e.getDatum());
+                stat.setDate(6, new Date(e.getDatum().getTime()));
                 stat.setInt(7, e.getGebruiker().getGebruikerId());
                 stat.executeUpdate();
             }

@@ -15,14 +15,16 @@ public class Gebruiker {
     private String naam, voornaam, email;
     private char password;
     private Date geboortedatum;
+    private long uId;
 
-    public Gebruiker(int gebruikerId, String naam, String voornaam, String email, char password, Date geboortedatum) {
+    public Gebruiker(int gebruikerId, String naam, String voornaam, String email, char password, Date geboortedatum, long uId) {
         this.gebruikerId = gebruikerId;
         this.naam = naam;
         this.voornaam = voornaam;
         this.email = email;
         this.password = password;
         this.geboortedatum = geboortedatum;
+        this.uId = uId;
     }
 
     Gebruiker() {
@@ -75,6 +77,14 @@ public class Gebruiker {
 
     public void setGeboortedatum(Date geboortedatum) {
         this.geboortedatum = geboortedatum;
+    }
+    
+    public long getUid() {
+        return uId;
+    }
+
+    public void setUid(long uId) {
+        this.uId = uId;
     }
     
     

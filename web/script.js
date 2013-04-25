@@ -66,6 +66,7 @@ function createEventFromInput() {
     event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
     event.gebruiker = {gebruikerId: 1};
     event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
+    
     //event.datum = $('#datepickerEvent').datepicker({ dateFormat: 'dd-mm-yy' }).val();
 
 
@@ -131,45 +132,45 @@ function createEventFromInput() {
         });
 }*/
 
-    function createGebruikerFromInput() {
-    //var events = [];
-    var gebruiker = {};
-    
-    gebruiker.naam = jQuery.trim($("#selectmenuTitelEvent").val());
-    
-    /*if (event.title.length < 1) {
-        $("#eventDialog .alert-error").text("A event's title cannot be empty").show();
-        return;
-    }
-    
-    for (var i = 0; i < events.length; i++) {
-        if (event.title === events[i].title) {
-            $("#eventDialog .alert-error").text("A event with this title already exists").show();
-            return;
-        }
-    }*/
-    
-    // Send the new group to the back-end.
-    var request = new XMLHttpRequest();
-    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
-    request.open("POST", url);
-    request.onload = function() {
-        if (request.status === 201) {
-            gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
-           // events.push(event);
-            /*("#eventList").append(createListElementForGroup(events.length - 1));
-            selectGroupAndLoadReminders(events.length - 1);
-            $(".reminderDialogToggle").attr("disabled", false);
-            $("#eventDialog").modal("hide");*/
-        } else {
-            //$("#eventDialog .alert-error").text("Error creating event. See the console for more information.").show();
-            console.log("Error creating event: " + request.status + " " + request.responseText);
-        }
-    };
-    request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(gebruiker));
-    
-}
+//    function createGebruikerFromInput() {
+//    //var events = [];
+//    var gebruiker = {};
+//    
+//    gebruiker.naam = jQuery.trim($("#selectmenuTitelEvent").val());
+//    
+//    /*if (event.title.length < 1) {
+//        $("#eventDialog .alert-error").text("A event's title cannot be empty").show();
+//        return;
+//    }
+//    
+//    for (var i = 0; i < events.length; i++) {
+//        if (event.title === events[i].title) {
+//            $("#eventDialog .alert-error").text("A event with this title already exists").show();
+//            return;
+//        }
+//    }*/
+//    
+//    // Send the new group to the back-end.
+//    var request = new XMLHttpRequest();
+//    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
+//    request.open("POST", url);
+//    request.onload = function() {
+//        if (request.status === 201) {
+//            gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
+//           // events.push(event);
+//            /*("#eventList").append(createListElementForGroup(events.length - 1));
+//            selectGroupAndLoadReminders(events.length - 1);
+//            $(".reminderDialogToggle").attr("disabled", false);
+//            $("#eventDialog").modal("hide");*/
+//        } else {
+//            //$("#eventDialog .alert-error").text("Error creating event. See the console for more information.").show();
+//            console.log("Error creating event: " + request.status + " " + request.responseText);
+//        }
+//    };
+//    request.setRequestHeader("Content-Type", "application/json");
+//    request.send(JSON.stringify(gebruiker));
+//    
+//}
 
 function createMeldingFromInput() {
     //var events = [];

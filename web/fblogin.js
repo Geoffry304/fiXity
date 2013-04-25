@@ -9,9 +9,7 @@
 
 FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
-             FB.api('/me', function(response) {
-       alert('Good to see you, ' + response.first_name + '.');
-     });
+             window.location="#page";
     } else if (response.status === 'not_authorized') {
         // not_authorized
         login();

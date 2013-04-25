@@ -42,5 +42,11 @@ FB.getLoginStatus(function(response) {
         }
     });
 }
+function logout(){
+FB.logout(function(response) {
+  window.location = "#pageAanmelden";
+  console.log("Uitgelogd");
+  
+});
 
-
+}

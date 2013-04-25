@@ -89,34 +89,10 @@ function login() {
         else if
             (response.status === 'not_authorized')
         {
-            // not_authorized
-            //login();
-//            FB.login(function(response) {
-//
-//                var naam;
-//                var voornaam;
-//                var uid;
-//
-//                if (response.authResponse) {
-//                    // connected
-//                    window.location.href = "#pageTut1";
-//                    uid = response.authResponse.userID;
-//                    FB.api('/me', function(response) {
-//
-//                        naam = response.last_name;
-//                        voornaam = response.first_name;
-//
-//                        createGebruikerFromInput(uid, naam, voornaam);
-//
-//                    });
-//
-//                } else {
-//                    // cancelled
-//                }
-//
-//            });
+
         }
         else {
+            
             FB.login(function(response) {
 
                 var naam;

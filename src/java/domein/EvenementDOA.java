@@ -94,7 +94,6 @@ public class EvenementDOA {
                         g.setNaam(rs.getString("Naam"));
                         g.setVoornaam(rs.getString("Voornaam"));
                         g.setEmail(rs.getString("Email"));
-                        g.setGeboortedatum(rs.getDate("Geboortedatum"));
                         e.setGebruiker(g);
 
                         Locatie l = new Locatie();

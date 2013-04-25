@@ -86,13 +86,12 @@ public class GebruikerDOA {
                 }
             }
             
-            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO gebruiker VALUES(?, ?, ?, ?, ?, ?)")) {
+            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO gebruiker VALUES(?, ?, ?, ?, ?)")) {
                 stat.setInt(1, u.getGebruikerId());
                 stat.setString(2, u.getNaam());
                 stat.setString(3, u.getVoornaam());
-                stat.setString(4, u.getEmail());
-                stat.setDate(5, (Date)u.getGeboortedatum()); 
-                stat.setLong(6, u.getUid());
+                stat.setString(4, u.getEmail()); 
+                stat.setLong(5, u.getUid());
                 stat.executeUpdate();
             }
             

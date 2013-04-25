@@ -1,11 +1,12 @@
 <!DOCTYPE html> 
 <html>
 	<head> 
-		<title>fiXity</title> 
+	<title>fiXity</title> 
     	<meta charset="utf-8" >
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" />
-		<script src="http://code.jquery.com/jquery-1.5.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyARybuJqAlKdwN1H_wM4zC3s_8agSj4-Tk&sensor=true"></script>
         <script src='http://connect.facebook.net/en_US/all.js'></script>
         <script type="text/javascript" src="geocode.js"></script>
@@ -26,15 +27,44 @@
  			</div>
 		</div> 
 		<div data-role="page" id="page" data-add-back-btn="false">
-			<div data-role="header" data-theme="b" data-position="fixed" data-fullscreen="true">
+			<div data-role="header" data-theme="b" data-position="fixed">
 				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"><a href="#pageMelding" class="ui-btn-right" data-role="button" data-icon="alert" data-iconpos="notext"style="margin-top: 7px" >Melding plaatsen</a>      
 			</div>
-                        <div id="eventTonen"></div>
-                        <div id="meldingTonen"></div>
-			<div data-role="footer" data-theme="b" data-position="fixed" data-fullscreen="true">
+            <div data-role="navbar">
+	<ul>
+		<li><a href="" class="ui-btn-active ui-state-persist">Meldingen</a></li>
+		<li><a href="#pageEvent" >Events</a></li>
+	</ul>
+                <div id="meldingTonen"></div>
+</div>                        
+                        
+                        
+			<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
 				<div data-role="navbar">
 					<ul>
-						<li><a href="#page1" class="ui-btn-active" data-icon="home" data-theme="b">Overzicht</a></li>
+						<li><a href="#"  class="ui-btn-active ui-state-persist" data-icon="home" data-theme="b">Overzicht</a></li>
+						<li><a href="#page2" data-icon="search" data-theme="b"> Zoeken</a></li>
+           				<li><a href="#page3" data-icon="gear" data-theme="b">Profiel</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+        <div data-role="page" id="pageEvent" data-add-back-btn="false">
+			<div data-role="header" data-theme="b" data-position="fixed">
+				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"><a href="#pageMelding" class="ui-btn-right" data-role="button" data-icon="alert" data-iconpos="notext"style="margin-top: 7px" >Melding plaatsen</a>      
+			</div>
+            <div data-role="navbar">
+	<ul>
+		<li><a href="#page">Meldingen</a></li>
+		<li><a href="" class="ui-btn-active ui-state-persist">Events</a></li>
+	</ul>
+                <div id="eventTonen"></div>
+</div>                        
+                        
+			<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="home" data-theme="b">Overzicht</a></li>
 						<li><a href="#page2" data-icon="search" data-theme="b"> Zoeken</a></li>
            				<li><a href="#page3" data-icon="gear" data-theme="b">Profiel</a></li>
 					</ul>
@@ -42,7 +72,7 @@
 			</div>
 		</div>
 		<div data-role="page" data-add-back-btn="false" id="page2">
-			<div data-role="header" data-theme="b" data-position="fixed" data-fullscreen="true">
+			<div data-role="header" data-theme="b" data-position="fixed">
 				<h1>Zoeken</h1>
 			</div>
             <div data-role="content">
@@ -52,19 +82,18 @@
                                 
                 </center>
 			</div>
-  			<div id="map-canvas"></div>
-			<div data-role="footer" data-theme="b" data-position="fixed" data-fullscreen="true">
+			<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
    				<div data-role="navbar">
 					<ul>
 						<li><a href="#page" data-icon="home" data-theme="b">Overzicht</a></li>
-						<li><a href="#page2" class="ui-btn-active" data-icon="search" data-theme="b"> Zoeken</a></li>
+						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="search" data-theme="b"> Zoeken</a></li>
            				<li><a href="#page3" data-icon="gear" data-theme="b">Profiel</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<div data-role="page" data-add-back-btn="false" id="page3">
-			<div data-role="header" data-theme="b" data-position="fixed" data-fullscreen="true">
+			<div data-role="header" data-theme="b" data-position="fixed">
 				<h1>Profiel</h1>
 			</div>
 			<a href="#" data-role="button" data-icon="gear" data-iconpos="top">Instellingen</a>
@@ -77,20 +106,22 @@
 					<ul>
 						<li><a href="#page" data-icon="home" data-theme="b">Overzicht</a></li>
 						<li><a href="#page2" class="search" data-icon="search" data-theme="b"> Zoeken</a></li>
-           				<li><a href="#page3" class="ui-btn-active" data-icon="gear" data-theme="b">Profiel</a></li>
+           				<li><a href="" class="ui-btn-active ui-state-persist" data-icon="gear" data-theme="b">Profiel</a></li>
 					</ul>
 				</div>
 			</div>
     	</div>        
 		<div data-role="page" id="pageMelding" >
-		  	<div data-role="header" data-theme="b" data-position="fixed" data-fullscreen="true">
+		  	<div data-role="header" data-theme="b" data-position="fixed">
 		   	 	<h1>Locatie kiezen</h1>
 		    	<a href="#pageMeldingPlaatsen" data-role="button" data-icon="arrow-r" class="ui-btn-right" data-iconpos="right">Next</a>
 	      	</div>
-		  	<div id="map_canvas" style="width: 100%; height: 400px"></div>
+                    <div data-role="content">
+		  	<div id="map_canvas" style="width: 300px; height: 400px"></div>
+                    </div>
    		</div>
     	<div data-role="page" id="pageMeldingPlaatsen">
-     		<div data-role="header" data-theme="b" data-position="fixed" data-fullscreen="true">
+     		<div data-role="header" data-theme="b" data-position="fixed">
         		<h1>Melding plaatsen</h1>
                 <a href="#page" data-role="button" data-icon="delete" class="ui-btn-right" data-iconpos="right">Close</a>
       		</div>
@@ -106,16 +137,7 @@
                             <option value="Werken">Werken</option>
                             <option value="Andere">Andere</option>
               			</select>
-            		</div>
-                    <div data-role="fieldcontain">
-              			<label for="selectmenuCategorieMeldingen" class="select">Categorie:     </label>
-              			<select name="selectmenu" id="selectmenuCategorieMeldingen">
-               				<option value="Gevaarlijk">Gevaarlijk</option>
-                			<option value="Vuil">Vuil</option>
-                            <option value="Storend">Storend</option>
-                            <option value="Andere">Andere</option>
-              			</select>
-            		</div>         
+            		</div>       
             		<div data-role="fieldcontain">
               			<label for="textareaOmschrijvingMeldingen">Omschrijving:  </label>
               			<textarea cols="40" rows="8" name="textarea" id="textareaOmschrijvingMeldingen"></textarea>
@@ -138,7 +160,7 @@
                    		<a href="#" id="btnFotoMeldingen" data-role="button" data-icon="star">Foto plaatsen</a>
               		</div>
                 	<a onclick='postToFeed(); return false;'href="#" id="btnFbMeldingen" data-role="button" data-icon="star">Post on Facebook</a>
-              		<a href="#" id="btnPlaatsMeldingen" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
+              		<a onclick='createMeldingFromInput()' href="#page" id="btnPlaatsMeldingen" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
       			</div>
            		<div data-role="collapsible" data-collapsed="true">
 				<h3>Event plaatsen</h3>

@@ -29,3 +29,4 @@ function loadMap(Lat, Long){
         });
  
 }
+

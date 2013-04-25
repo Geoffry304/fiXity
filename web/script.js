@@ -3,11 +3,11 @@ window.onload = init;
 
 
 function init() {
-	getEvents();
+	getEvent();
         getMeldingen();
 }
 
-function getEvents() {
+function getEvent() {
 	var url = "http://localhost:8080/onzebuurt/resources/evenements";
 	var request = new XMLHttpRequest();
 	request.open("GET", url);
@@ -175,9 +175,9 @@ function createMeldingFromInput() {
     //var events = [];
     var melding = {};
     
-    melding.titel = jQuery.trim($("#selectmenuTitelMelding").val());
-    melding.details = jQuery.trim($("#textareaOmschrijvingMelding").val());
-    melding.gebruiker = {gebruikerId: 1};
+    melding.titel = jQuery.trim($("#selectmenuTitelMeldingen").val());
+    melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
+    melding.gebruiker = {gebruikerId: 2};
 
     /*if (event.title.length < 1) {
         $("#eventDialog .alert-error").text("A event's title cannot be empty").show();
@@ -197,7 +197,7 @@ function createMeldingFromInput() {
     request.open("POST", url);
     request.onload = function() {
         if (request.status === 201) {
-            event.evenementid = request.getResponseHeader("Location").split("/").pop();
+            melding.MeldingId = request.getResponseHeader("Location").split("/").pop();
            // events.push(event);
             /*("#eventList").append(createListElementForGroup(events.length - 1));
             selectGroupAndLoadReminders(events.length - 1);
@@ -209,6 +209,6 @@ function createMeldingFromInput() {
         }
     };
     request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(event));
+    request.send(JSON.stringify(melding));
     
 }

@@ -76,8 +76,7 @@ public class GebruikerDOA {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUser(Gebruiker u) {
         try (Connection conn = source.getConnection()) {
-            
-             try (PreparedStatement stat = conn.prepareStatement("SELECT MAX(gebruikerId) FROM gebruiker")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT MAX(gebruikerId) FROM gebruiker")) {
                 try (ResultSet rs = stat.executeQuery()) {
                     if (rs.next()) {
                         u.setGebruikerId(rs.getInt(1) + 1);
@@ -85,9 +84,9 @@ public class GebruikerDOA {
                         u.setGebruikerId(1);
                     }
                 }
-            } 
+            }
             
-            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO Gebruiker VALUES(?, ?, ?, ?, ?)")) {
+            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO gebruiker VALUES(?, ?, ?, ?, ?)")) {
                 stat.setInt(1, u.getGebruikerId());
                 stat.setString(2, u.getNaam());
                 stat.setString(3, u.getVoornaam());

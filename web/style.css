@@ -9,3 +9,20 @@ body {
         margin-top: 0.6em;
       }
 	  
+div#eventTonen {
+	background-color: #d9d9d9;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	margin: 10px 5px 5px 5px;
+	padding: 15px;
+	border: 1px solid #d9d9d9;
+}
+
+div#meldingTonen {
+	background-color: #d9d9d9;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	margin: 10px 5px 5px 5px;
+	padding: 15px;
+	border: 1px solid #d9d9d9;
+}

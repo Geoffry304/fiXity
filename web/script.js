@@ -27,7 +27,7 @@ function updateEvents(responseText) {
 		var event = events[i];
 		var div = document.createElement("div");
 		div.setAttribute("class", "eventItem");
-                div.innerHTML = event.titel + " " + event.gebruiker.voornaam+ " " + event.gebruiker.naam;
+                div.innerHTML = event.titel + " door " + event.gebruiker.voornaam+ " " + event.gebruiker.naam;
 		eventDiv.appendChild(div);
                 
 	}
@@ -53,7 +53,7 @@ function updateMeldingen(responseText) {
 		var melding = meldingen[i];
 		var div = document.createElement("div");
 		div.setAttribute("class", "meldingItem");
-                div.innerHTML = melding.titel;
+                div.innerHTML = melding.titel + " door " + melding.gebruiker.voornaam + "" + melding.gebruiker.naam;
 		meldingDiv.appendChild(div);
                 
 	}

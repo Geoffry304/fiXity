@@ -19,6 +19,16 @@
 		draggable: true,
                 title: "You are here"
             });
+            
+            mapDiv2 = document.getElementById("map_canvas2"),
+            map = new google.maps.Map(mapDiv2, myOptions),
+            
+            marker = new google.maps.Marker({
+                position: point,
+                map: map,
+                title: "You are here"
+            });
+
 			
         }
         navigator.geolocation.getCurrentPosition(hasPosition);

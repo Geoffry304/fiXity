@@ -109,13 +109,14 @@ public class GebruikerDOA {
     @Produces(MediaType.APPLICATION_JSON)
     public Gebruiker getGebruiker(@PathParam("id") int id) {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker gebruikerId = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker WHERE UID = ?")) {
                 stat.setInt(1, id);
                 try (ResultSet rs = stat.executeQuery()) {
                     if (rs.next()) {
                         Gebruiker u = new Gebruiker();
                         u.setGebruikerId(rs.getInt("gebruikerId"));
                         u.setNaam(rs.getString("naam"));
+                        u.setUid(rs.getLong("uid"));
                         return u;
                     } else {
                         throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -127,6 +128,29 @@ public class GebruikerDOA {
         }
     }
     
+//    @Path("{uId}")
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Gebruiker getGebruikerById(@PathParam("uId") int id) {
+//        try (Connection conn = source.getConnection()) {
+//            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker WHERE uId = ?")) {
+//                stat.setInt(1, id);
+//                try (ResultSet rs = stat.executeQuery()) {
+//                    if (rs.next()) {
+//                        Gebruiker u = new Gebruiker();
+//                        u.setGebruikerId(rs.getInt("gebruikerId"));
+//                        u.setNaam(rs.getString("naam"));
+//                        return u;
+//                    } else {
+//                        throw new WebApplicationException(Response.Status.NOT_FOUND);
+//                    }
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            throw new WebApplicationException(ex);
+//        }
+//    }
+    
     /*
      * Een bestaande gebruiker met het opgegeven ID wijzigen.
      * Het ingediende User object hoeft geen ID te hebben, aangezien deze ID
@@ -137,7 +161,7 @@ public class GebruikerDOA {
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateUser(@PathParam("id") int id, Gebruiker u) {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT * gebruiker gebruikerId = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * gebruiker WHERE gebruikerId = ?")) {
                 stat.setInt(1, id);
                 try (ResultSet rs = stat.executeQuery()) {
                     if (!rs.next()) {

@@ -3,26 +3,7 @@ body {
  	background-color: #cccccc;
 }
 
-      #map-canvas {
-        height: 400px;
-        width: 600px;
-        margin-top: 0.6em;
+p.ui-li-desc{
+         margin: -10px 0px 2px 14px; 
       }
 	  
-div#eventTonen {
-	background-color: #d9d9d9;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	margin: 10px 5px 5px 5px;
-	padding: 15px;
-	border: 1px solid #d9d9d9;
-}
-
-div#meldingTonen {
-	background-color: #d9d9d9;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	margin: 10px 5px 5px 5px;
-	padding: 15px;
-	border: 1px solid #d9d9d9;
-}

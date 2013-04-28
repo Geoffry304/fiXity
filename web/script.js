@@ -3,8 +3,10 @@ window.onload = init;
 
 
 function init() {
-	getEvent();
-        getMeldingen();
+	//getEvent();
+        //getMeldingen();
+        initialiseListMeldingen();
+        initialiseListEvenementen();
 }
 
 function getEvent() {
@@ -66,23 +68,6 @@ function createEventFromInput() {
     event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
     event.gebruiker = {gebruikerId: 1};
     event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
-    
-    //event.datum = $('#datepickerEvent').datepicker({ dateFormat: 'dd-mm-yy' }).val();
-
-
-
-    
-    /*if (event.title.length < 1) {
-        $("#eventDialog .alert-error").text("A event's title cannot be empty").show();
-        return;
-    }
-    
-    for (var i = 0; i < events.length; i++) {
-        if (event.title === events[i].title) {
-            $("#eventDialog .alert-error").text("A event with this title already exists").show();
-            return;
-        }
-    }*/
     
     // Send the new group to the back-end.
     var request = new XMLHttpRequest();
@@ -212,4 +197,84 @@ function createMeldingFromInput() {
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(melding));
     
+}
+
+//listview op homepage automatisch laden met meldingen
+function initialiseListMeldingen() {
+    
+    // Load the groups from the back-end.
+    var request = new XMLHttpRequest();
+    var url = "http://localhost:8080/onzebuurt/resources/meldingen";
+    request.open("GET", url);
+    request.onload = function() {
+        if (request.status === 200) {
+            meldingen = JSON.parse(request.responseText);
+            for (var i = 0; i < meldingen.length; i++) {
+                $("#meldingList").append(createListElementForMelding(i));
+            }
+            
+            if (meldingen.length > 0) {
+                console.log("Error");
+            } else {
+                console.log("Error");
+            }
+        } else {
+            console.log("Error loading groups: " + request.status + " - "+ request.statusText);
+        }
+    };
+    request.send(null);
+}
+
+function createListElementForMelding(meldingIndex) {
+    
+    var link = $("<a>")
+        .text(meldingen[meldingIndex].titel + ": " + meldingen[meldingIndex].details);
+
+    var gebruiker = $("<p>") 
+        .text("Geplaatst door " + meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam);
+
+    return $("<li>")
+        .append(link)
+        .append(gebruiker);
+       
+}
+
+// listview op homepage laden met Events
+function initialiseListEvenementen() {
+    
+    // Load the groups from the back-end.
+    var request = new XMLHttpRequest();
+    var url = "http://localhost:8080/onzebuurt/resources/evenements";
+    request.open("GET", url);
+    request.onload = function() {
+        if (request.status === 200) {
+            events = JSON.parse(request.responseText);
+            for (var i = 0; i < events.length; i++) {
+                $("#eventList").append(createListElementForEvent(i));
+            }
+            
+            if (events.length > 0) {
+                console.log("Error");
+            } else {
+                console.log("Error");
+            }
+        } else {
+            console.log("Error loading groups: " + request.status + " - "+ request.statusText);
+        }
+    };
+    request.send(null);
+}
+
+function createListElementForEvent(eventIndex) {
+    
+    var link = $("<a>")
+        .text(events[eventIndex].titel + ": " + events[eventIndex].details);
+
+    var gebruiker = $("<p>") 
+        .text("Geplaatst door " + events[eventIndex].gebruiker.voornaam + " " + events[eventIndex].gebruiker.naam);
+
+    return $("<li>")
+        .append(link)
+        .append(gebruiker);
+       
 }

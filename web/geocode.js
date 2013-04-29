@@ -27,11 +27,13 @@
                 position: point,
                 map: map,
                 title: "You are here"
+                
             });
-
+        
 			
         }
         navigator.geolocation.getCurrentPosition(hasPosition);
+        
     }
     
  }

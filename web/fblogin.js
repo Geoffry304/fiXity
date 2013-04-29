@@ -9,6 +9,13 @@ window.fbAsyncInit = function() {
 
 }
 
+window.onload = init;
+
+
+function init() {
+	login()
+}
+
 // Load the SDK Asynchronously
 (function(d) {
     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -98,12 +105,11 @@ function login() {
                             window.location.href = "#pageTut1";
 
                             FB.api('/me', function(response) {
-
                                 naam = response.last_name;
                                 voornaam = response.first_name;
 
                                 createGebruikerFromInput(uid, naam, voornaam);
-
+                                 console.log(test);
                             });
 
                         }

@@ -1,6 +1,7 @@
 
 window.onload = init;
-
+window.onhashchange = refresh;
+var uid;
 
 function init() {
 	//getEvent();
@@ -9,6 +10,17 @@ function init() {
         initialiseListEvenementen();
 }
 
+        
+
+function refresh(){
+    if (events.length > 0 || meldingen.length > 0) {
+                $("#eventList").listview('refresh');
+                $("#meldingList").listview('refresh');
+                //console.log("EvenementenookGelukt");
+            } else {
+                console.log("Error");
+            }
+}
 function getEvent() {
 	var url = "http://localhost:8080/onzebuurt/resources/evenements";
 	var request = new XMLHttpRequest();
@@ -88,6 +100,9 @@ function createEventFromInput() {
     };
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(event));
+     //   $("#eventList").listview('refresh');
+   // $("#meldingList").listview('refresh');
+   
     
 }
 
@@ -117,7 +132,7 @@ function createEventFromInput() {
         });
 }*/
 
-//    function createGebruikerFromInput() {
+//    /*function createGebruikerFromInput() {
 //    //var events = [];
 //    var gebruiker = {};
 //    
@@ -155,15 +170,16 @@ function createEventFromInput() {
 //    request.setRequestHeader("Content-Type", "application/json");
 //    request.send(JSON.stringify(gebruiker));
 //    
-//}
+//}*/
 
 function createMeldingFromInput() {
     //var events = [];
     var melding = {};
     
+    
     melding.titel = jQuery.trim($("#selectmenuTitelMeldingen").val());
     melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
-    melding.gebruiker = {gebruikerId: 2};
+    melding.gebruiker = {gebruikerId : 1};
 
     /*if (event.title.length < 1) {
         $("#eventDialog .alert-error").text("A event's title cannot be empty").show();
@@ -197,6 +213,11 @@ function createMeldingFromInput() {
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(melding));
     
+    //$("#eventList").listview('refresh');
+    //$("#meldingList").listview('refresh');
+    console.log(uid);
+    
+    
 }
 
 //listview op homepage automatisch laden met meldingen
@@ -214,7 +235,9 @@ function initialiseListMeldingen() {
             }
             
             if (meldingen.length > 0) {
-                console.log("Error");
+                console.log("Gelukt");
+                $("#meldingList").listview('refresh');
+                
             } else {
                 console.log("Error");
             }
@@ -254,7 +277,8 @@ function initialiseListEvenementen() {
             }
             
             if (events.length > 0) {
-                console.log("Error");
+                $("#eventList").listview('refresh');
+                //console.log("EvenementenookGelukt");
             } else {
                 console.log("Error");
             }
@@ -277,4 +301,161 @@ function createListElementForEvent(eventIndex) {
         .append(link)
         .append(gebruiker);
        
+}
+
+
+
+/*FBLOGIN*/
+
+
+window.fbAsyncInit = function() {
+    FB.init({
+        appId: '118529111674998', // App ID
+        channelUrl: '//www.webs.hogent.be/timvdv/index.html', // Channel File
+        status: true, // check login status
+        cookie: true, // enable cookies to allow the server to access the session
+        xfbml: true  // parse XFBML
+    });
+
+}
+
+window.onload = init;
+
+
+function init() {
+	login()
+                initialiseListMeldingen();
+        initialiseListEvenementen();
+}
+
+// Load the SDK Asynchronously
+(function(d) {
+    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+    if (d.getElementById(id)) {
+        return;
+    }
+    js = d.createElement('script');
+    js.id = id;
+    js.async = true;
+    js.src = "//connect.facebook.net/en_US/all.js";
+    ref.parentNode.insertBefore(js, ref);
+}(document));
+
+
+
+function logout() {
+    FB.logout(function(response) {
+        window.location = "#pageAanmelden";
+        console.log("Uitgelogd");
+
+    });
+
+}
+
+function createGebruikerFromInput(uid, naam, voornaam, date, email) {
+//var events = [];
+    var gebruiker = {};
+
+    gebruiker.naam = naam;
+    gebruiker.uid = uid;
+    gebruiker.voornaam = voornaam;
+    gebruiker.geboortedatum = date;
+    gebruiker.email = email;
+// Send the new group to the back-end.
+    var request = new XMLHttpRequest();
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
+    request.open("POST", url);
+    request.onload = function() {
+        if (request.status === 201) {
+            gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
+        } else {
+            console.log("Error creating event: " + request.status + " " + request.responseText);
+        }
+    };
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(gebruiker));
+
+}
+
+
+function login() {
+    FB.getLoginStatus(function(response) {
+        console.log("roept ze aan")
+        if (response.status === 'connected') {
+            window.location = "#page";
+            console.log("Gelukt");
+
+
+        }
+//        else if
+//                (response.status === 'not_authorized')
+//        {
+//            console.log("mss toch dit");
+//        }
+        else {
+
+
+            FB.login(function(response) {
+                var naam;
+                var voornaam;
+                
+
+                if (response.authResponse) {
+                    uid = response.authResponse.userID;
+
+                    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/";
+                    var request = new XMLHttpRequest();
+                    request.open("GET", url + uid);
+                    request.onload = function() {
+                        if (request.status === 200) {
+                            window.location = "#page";
+                            console.log("pagina 200 open");
+                        }
+                        else
+                        {
+                            console.log("404");
+                            window.location.href = "#pageTut1";
+
+                            FB.api('/me', function(response) {
+                                naam = response.last_name;
+                                voornaam = response.first_name;
+
+                                createGebruikerFromInput(uid, naam, voornaam);
+                                 console.log(test);
+                            });
+
+                        }
+                    };
+                    request.send(null);
+                    // connected
+
+
+                } else {
+                    // cancelled
+                }
+
+            });
+
+        }
+
+    });
+}
+
+function getGebruikerByUID() {
+                   
+
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/";
+    var request = new XMLHttpRequest();
+    request.open("GET", url + uid);
+    request.onload = function() {
+        if (request.status === 200) {
+            
+        }
+        else
+        {
+            console.log("404");
+        }
+    };
+    request.send(null);
+
 }

@@ -340,3 +340,74 @@ function getGebruikerByUID() {
     request.send(null);
 
 }
+//*FB POST
+
+FB.init({appId: "118529111674998", status: true, cookie: true});
+
+      function postToFeed() {
+
+        // calling the API ...
+        var obj = {
+          method: 'feed',
+          redirect_uri: '//www.webs.hogent.be/timvdv/index.html',
+          link: 'http://webs.hogent.be/timvdv/',
+          picture: 'http://www.webs.hogent.be/timvdv/fixicon.png',
+          name: 'FiXity',
+          caption: 'Together we fix our city!',
+          description: 'Using Dialogs to interact with users.'
+        };
+
+        function callback(response) {
+          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+
+        FB.ui(obj, callback);
+      }
+	
+
+//*GOOGLE MAPS
+
+ function laadMap() {
+ if(navigator.geolocation) {
+        
+        function hasPosition(position) {
+            var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+            
+            myOptions = {
+                zoom: 16,
+                center: point,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            },
+            
+            mapDiv = document.getElementById("map_canvas"),
+            map = new google.maps.Map(mapDiv, myOptions),
+			            marker = new google.maps.Marker({
+                position: point,
+                map: map,
+                animation: google.maps.Animation.DROP,
+		draggable: true,
+                title: "You are here"
+            });
+            
+            mapDiv2 = document.getElementById("map_canvas2"),
+            map = new google.maps.Map(mapDiv2, myOptions),
+            
+            marker = new google.maps.Marker({
+                position: point,
+                map: map,
+                title: "You are here"
+                
+            });
+        
+			
+        }
+        navigator.geolocation.getCurrentPosition(hasPosition);
+        
+    }
+    
+ }
+ $(document).on("pageshow", "#pageMelding", function() {
+   
+        laadMap();
+    
+});

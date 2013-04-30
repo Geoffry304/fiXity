@@ -40,7 +40,9 @@ function createEventFromInput() {
         }
     };
     request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(event));    
+    request.send(JSON.stringify(event));  
+    window.location.reload('#page');
+     window.location.reload('#pageEvent');
 }
 
 //zet een melding in de database

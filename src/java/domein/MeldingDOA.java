@@ -85,7 +85,7 @@ public class MeldingDOA {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Melding> getAllMeldingen() {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM Melding INNER JOIN Gebruiker ON Melding.Gebruiker = Gebruiker.GebruikerId")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM Melding INNER JOIN Gebruiker ON Melding.Gebruiker = Gebruiker.GebruikerId ORDER BY MeldingId DESC")) {
                 try (ResultSet rs = stat.executeQuery()) {
                     List<Melding> results = new ArrayList<>();
                     while (rs.next()) {

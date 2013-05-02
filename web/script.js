@@ -120,10 +120,10 @@ function createPageMeldingInformation(meldingIndex) {
 var titel = meldingen[meldingIndex].titel;
 var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam;
 var details = meldingen[meldingIndex].details;
+var locatie = meldingen[meldingIndex].locatie.latitude + ", " + meldingen[meldingIndex].locatie.longitude;
 
 
-
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content>" + "Geplaatst door: " + gebruiker + "<p>" + "\n\Omschrijving: " + details +"</p></div></div");
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p>" + "<p>" + "Locatie: " + locatie +"</p></div></div");
  
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
@@ -179,10 +179,10 @@ function createPageEventInformation(eventIndex) {
 var titel = events[eventIndex].titel;
 var gebruiker = events[eventIndex].gebruiker.voornaam + " " + events[eventIndex].gebruiker.naam;
 var details = events[eventIndex].details;
+var locatie = events[eventIndex].locatie.latitude + ", " + events[eventIndex].locatie.longitude;
+var datum = events[eventIndex].datum;
 
-
-
-var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content>" + "Geplaatst door: " + gebruiker + "<p>" + "\n\Omschrijving: " + details +"</p></div></div");
+var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum +"</p></div></div");
 
 //append it to the page container
 newPage.appendTo( $.mobile.pageContainer );
@@ -443,3 +443,6 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
     
 });
 
+$('#flipswitchFacebook').change(function() {
+alert("godver");
+});

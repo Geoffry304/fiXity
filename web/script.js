@@ -3,6 +3,8 @@
 window.onload = init;
 window.onhashchange = refresh;
 var uid;
+var latitude;
+var longitude;
 
 function init() {
         initialiseListMeldingen();
@@ -27,6 +29,7 @@ function createEventFromInput() {
     event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
     event.gebruiker = {gebruikerId: 1};
     event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
+    event.locatie = {latitude : latitude, longitude : longitude};
     
     // Send the new group to the back-end.
     var request = new XMLHttpRequest();
@@ -51,6 +54,7 @@ function createMeldingFromInput() {
     
     melding.titel = jQuery.trim($("#selectmenuTitelMeldingen").val());
     melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
+    melding.locatie = {latitude : latitude, longitude : longitude};
     melding.gebruiker = {gebruikerId : 1};
 
     // Send the new group to the back-end.
@@ -66,8 +70,7 @@ function createMeldingFromInput() {
     };
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(melding));
-    refresh();
-    console.log(uid);   
+    window.location.reload('#page');  
 }
 
 //listview op homepage automatisch laden met meldingen
@@ -117,6 +120,8 @@ function createPageMeldingInformation(meldingIndex) {
 var titel = meldingen[meldingIndex].titel;
 var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam;
 var details = meldingen[meldingIndex].details;
+
+
 
 var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content>" + "Geplaatst door: " + gebruiker + "<p>" + "\n\Omschrijving: " + details +"</p></div></div");
  
@@ -175,8 +180,10 @@ var titel = events[eventIndex].titel;
 var gebruiker = events[eventIndex].gebruiker.voornaam + " " + events[eventIndex].gebruiker.naam;
 var details = events[eventIndex].details;
 
+
+
 var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content>" + "Geplaatst door: " + gebruiker + "<p>" + "\n\Omschrijving: " + details +"</p></div></div");
- 
+
 //append it to the page container
 newPage.appendTo( $.mobile.pageContainer );
  
@@ -326,13 +333,11 @@ function login() {
 
 function getGebruikerByUID() {
                    
-
     var url = "http://localhost:8080/onzebuurt/resources/gebruikers/";
     var request = new XMLHttpRequest();
     request.open("GET", url + uid);
     request.onload = function() {
         if (request.status === 200) {
-            
         }
         else
         {
@@ -373,7 +378,7 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
  if(navigator.geolocation) {
         
         function hasPosition(position) {
-            var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+            var point = new google.maps.LatLng(latitude = position.coords.latitude, longitude = position.coords.longitude),
             
             myOptions = {
                 zoom: 16,
@@ -391,16 +396,11 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
                 title: "You are here"
             });
             
-            mapDiv2 = document.getElementById("map_canvas2"),
-            map = new google.maps.Map(mapDiv2, myOptions),
-            
-            marker = new google.maps.Marker({
-                position: point,
-                map: map,
-                title: "You are here"
-                
-            });
-        
+        google.maps.event.addListener(marker, 'dragend', function(evt){
+           
+        latitude = evt.latLng.lat();
+        longitude = evt.latLng.lng();
+});
 			
         }
         navigator.geolocation.getCurrentPosition(hasPosition);
@@ -413,3 +413,33 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
         laadMap();
     
 });
+
+ function laadMap1() {
+ if(navigator.geolocation) {
+        
+        function hasPosition(position) {
+            var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+            
+            myOptions = {
+                zoom: 16,
+                center: point,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            },
+            
+            mapDiv = document.getElementById("map_canvas2");
+            map = new google.maps.Map(mapDiv, myOptions);
+			
+        }
+        navigator.geolocation.getCurrentPosition(hasPosition);
+        
+    }
+    
+ }
+
+
+ $(document).on("pageshow", "#page2", function() {
+   
+        laadMap1();
+    
+});
+

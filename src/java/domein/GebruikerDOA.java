@@ -57,6 +57,7 @@ public class GebruikerDOA {
                         u.setGebruikerId(rs.getInt("gebruikerId"));
                         u.setNaam(rs.getString("naam"));
                         u.setVoornaam(rs.getString("voornaam"));
+                        u.setUid(rs.getString("uid"));
                         results.add(u);
                     }
                     return results;
@@ -90,7 +91,7 @@ public class GebruikerDOA {
                 stat.setInt(1, u.getGebruikerId());
                 stat.setString(2, u.getNaam());
                 stat.setString(3, u.getVoornaam());
-                stat.setLong(4, u.getUid());
+                stat.setString(4, u.getUid());
                 stat.executeUpdate();
             }
             
@@ -104,19 +105,19 @@ public class GebruikerDOA {
     /*
      * Een bestaande gebruiker opvragen op basis van zijn ID.
      */
-    @Path("{id}")
+    @Path("fbid/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Gebruiker getGebruiker(@PathParam("id") int id) {
+    public Gebruiker getGebruiker(@PathParam("id") String id) {
         try (Connection conn = source.getConnection()) {
             try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker WHERE UID = ?")) {
-                stat.setInt(1, id);
+                stat.setString(1, id);
                 try (ResultSet rs = stat.executeQuery()) {
                     if (rs.next()) {
                         Gebruiker u = new Gebruiker();
                         u.setGebruikerId(rs.getInt("gebruikerId"));
                         u.setNaam(rs.getString("naam"));
-                        u.setUid(rs.getLong("uid"));
+                        u.setUid(rs.getString("uid"));
                         return u;
                     } else {
                         throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -128,28 +129,28 @@ public class GebruikerDOA {
         }
     }
     
-//    @Path("{uId}")
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Gebruiker getGebruikerById(@PathParam("uId") int id) {
-//        try (Connection conn = source.getConnection()) {
-//            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker WHERE uId = ?")) {
-//                stat.setInt(1, id);
-//                try (ResultSet rs = stat.executeQuery()) {
-//                    if (rs.next()) {
-//                        Gebruiker u = new Gebruiker();
-//                        u.setGebruikerId(rs.getInt("gebruikerId"));
-//                        u.setNaam(rs.getString("naam"));
-//                        return u;
-//                    } else {
-//                        throw new WebApplicationException(Response.Status.NOT_FOUND);
-//                    }
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            throw new WebApplicationException(ex);
-//        }
-//    }
+    @Path("gebruikerid/{gebruikerId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Gebruiker getGebruikerById(@PathParam("gebruikerId") int id) {
+        try (Connection conn = source.getConnection()) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker WHERE gebruikerId = ?")) {
+                stat.setInt(1, id);
+                try (ResultSet rs = stat.executeQuery()) {
+                    if (rs.next()) {
+                        Gebruiker u = new Gebruiker();
+                        u.setGebruikerId(rs.getInt("gebruikerId"));
+                        u.setNaam(rs.getString("naam"));
+                        return u;
+                    } else {
+                        throw new WebApplicationException(Response.Status.NOT_FOUND);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new WebApplicationException(ex);
+        }
+    }
     
     /*
      * Een bestaande gebruiker met het opgegeven ID wijzigen.

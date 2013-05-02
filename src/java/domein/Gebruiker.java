@@ -13,9 +13,9 @@ public class Gebruiker {
     private int gebruikerId;
     private String naam, voornaam, email;
     private char password;
-    private long uId;
+    private String uId;
 
-    public Gebruiker(int gebruikerId, String naam, String voornaam, String email, char password, long uId) {
+    public Gebruiker(int gebruikerId, String naam, String voornaam, String email, char password, String uId) {
         this.gebruikerId = gebruikerId;
         this.naam = naam;
         this.voornaam = voornaam;
@@ -70,11 +70,11 @@ public class Gebruiker {
 
     
     
-    public long getUid() {
+    public String getUid() {
         return uId;
     }
 
-    public void setUid(long uId) {
+    public void setUid(String uId) {
         this.uId = uId;
     }
     

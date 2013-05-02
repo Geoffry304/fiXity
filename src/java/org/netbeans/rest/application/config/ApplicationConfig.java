@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
         resources.add(domein.GebruikerDOA.class);
         resources.add(domein.FeedbackMeldingDOA.class);
         resources.add(domein.FeedbackDOA.class);
+        resources.add(domein.ImageService.class);
         try {
             Class<?> jacksonProvider = Class.forName("org.codehaus.jackson.jaxrs.JacksonJsonProvider");
             resources.add(jacksonProvider);

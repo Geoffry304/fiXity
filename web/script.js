@@ -1,36 +1,51 @@
 
 
 window.onload = init;
-window.onhashchange = refresh;
 var uid;
 var latitude;
 var longitude;
+var gebruikerid;
+
 
 function init() {
         initialiseListMeldingen();
         initialiseListEvenementen();
+        
 }
 
 //listview fix als je pagina refresht
-function refresh(){
-    if (events.length > 0 || meldingen.length > 0) {
-                $("#eventList").listview('refresh');
-                $("#meldingList").listview('refresh');
-                //console.log("EvenementenookGelukt");
-            } else {
-                console.log("Error");
-            }
-}
 
 //zet een event in de database
-function createEventFromInput() {
+function createEventFromInput() {                 
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
+    var request = new XMLHttpRequest();
+    request.open("GET", url + uid);
+    request.onload = function() {
+        if (request.status === 200) {
+            var gebruiker = JSON.parse(request.responseText);
+            
+            
+            gebruikerid = gebruiker.gebruikerId;
+            console.log(gebruikerid);
+        }
+        else
+        {
+            console.log("404");
+        }
+    };
+    request.send(null);
+
+    alert("GEBRUIKERID " + gebruikerid);
     var event = {};
     
+    //getGebruikerByUID();
     event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
-    event.gebruiker = {gebruikerId: 1};
+    
     event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
     event.locatie = {latitude : latitude, longitude : longitude};
-    
+    //event.gebruiker = {gebruikerId :gebruikerid};
+    //event.gebruiker = {gebruikerId : 5};
+    event.gebruiker = {gebruikerId : gebruikerid};
     // Send the new group to the back-end.
     var request = new XMLHttpRequest();
     var url = "http://localhost:8080/onzebuurt/resources/evenements";
@@ -42,20 +57,22 @@ function createEventFromInput() {
             console.log("Error creating event: " + request.status + " " + request.responseText);
         }
     };
+    
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(event));  
-    window.location.reload('#page');
-     window.location.reload('#pageEvent');
+    //window.location.reload('#page');
+     //window.location.reload('#pageEvent');
 }
 
 //zet een melding in de database
 function createMeldingFromInput() {
     var melding = {};
-    
+    //getGebruikerByUID();
     melding.titel = jQuery.trim($("#selectmenuTitelMeldingen").val());
     melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
     melding.locatie = {latitude : latitude, longitude : longitude};
     melding.gebruiker = {gebruikerId : 1};
+    //getGebruikerByUID();
 
     // Send the new group to the back-end.
     var request = new XMLHttpRequest();
@@ -70,7 +87,7 @@ function createMeldingFromInput() {
     };
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(melding));
-    window.location.reload('#page');  
+    //window.location.reload('#page');  
 }
 
 //listview op homepage automatisch laden met meldingen
@@ -120,11 +137,11 @@ function createPageMeldingInformation(meldingIndex) {
 var titel = meldingen[meldingIndex].titel;
 var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam;
 var details = meldingen[meldingIndex].details;
-var locatie = meldingen[meldingIndex].locatie.latitude + ", " + meldingen[meldingIndex].locatie.longitude;
+var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
 
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p>" + "<p>" + "Locatie: " + locatie +"</p></div></div");
- 
+
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
  
@@ -179,10 +196,11 @@ function createPageEventInformation(eventIndex) {
 var titel = events[eventIndex].titel;
 var gebruiker = events[eventIndex].gebruiker.voornaam + " " + events[eventIndex].gebruiker.naam;
 var details = events[eventIndex].details;
-var locatie = events[eventIndex].locatie.latitude + ", " + events[eventIndex].locatie.longitude;
-var datum = events[eventIndex].datum;
+var locatie = events[eventIndex].locatie.latitude + " , " + events[eventIndex].locatie.longitude;
 
-var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum +"</p></div></div");
+
+
+var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content>" + "Geplaatst door: " + gebruiker + "<p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p></div></div");
 
 //append it to the page container
 newPage.appendTo( $.mobile.pageContainer );
@@ -292,7 +310,7 @@ function login() {
                 if (response.authResponse) {
                     uid = response.authResponse.userID;
 
-                    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/";
+                    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
                     var request = new XMLHttpRequest();
                     request.open("GET", url + uid);
                     request.onload = function() {
@@ -304,7 +322,6 @@ function login() {
                         {
                             console.log("404");
                             window.location.href = "#pageTut1";
-
                             FB.api('/me', function(response) {
                                 naam = response.last_name;
                                 voornaam = response.first_name;
@@ -333,11 +350,16 @@ function login() {
 
 function getGebruikerByUID() {
                    
-    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/";
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
     var request = new XMLHttpRequest();
     request.open("GET", url + uid);
     request.onload = function() {
         if (request.status === 200) {
+            var gebruiker = JSON.parse(request.responseText);
+            
+            
+            gebruikerid = gebruiker.gebruikerId;
+            console.log(gebruikerid);
         }
         else
         {
@@ -443,6 +465,78 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
     
 });
 
-$('#flipswitchFacebook').change(function() {
-alert("godver");
-});
+
+///* UPLOAD */
+//
+//var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
+//
+//onload = function() {
+//    document.getElementById("btnPlaatsEvent").onclick = sendFile;
+//};
+//
+//function sendFile() {
+//    //document.getElementById("status").innerHTML = "";
+//    
+//    var file = document.getElementById("btnFotoEvent").files[0];
+//    var extension = file.name.split(".").pop();
+//    
+//    var type;
+//    if (extension === "jpg" || extension === "jpeg" ||
+//        extension === "JPG" || extension === "JPEG") {
+//        type = "image/jpeg";
+//    } else if (extension === "png" || extension === "PNG") {
+//        type = "image/png";
+//    } else {
+//        //document.getElementById("status").innerHTML = "Invalid file type";
+//        return;
+//    }
+//    
+//    var request = new XMLHttpRequest();
+//    request.open("POST", BASE_URL + "images");
+//    request.onload = function() {
+//        if (request.status === 201) {
+//            var fileName = request.getResponseHeader("Location").split("/").pop();
+//            document.getElementById("status").innerHTML = "File created with name " + fileName;
+//        } else {
+//            document.getElementById("status").innerHTML = "Error creating file: (" + request.status + ") " + request.responseText;
+//        }
+//    };
+//    request.setRequestHeader("Content-Type", type);
+//    request.send(file);
+//}
+//
+///* DOWNLOAD */
+//
+//var BASE_URL = "http://localhost:8080/fileserver/resources/";
+//
+//onload = function() {
+//    loadImageSelect();
+//    $("#download").click(downloadSelectedImage);
+//};
+//
+//function loadImageSelect() {
+//    $("#images").empty();
+//    
+//    var request = new XMLHttpRequest();
+//    request.open("GET", BASE_URL + "images");
+//    request.onload = function() {
+//        if (request.status === 200) {
+//            var results = JSON.parse(request.responseText);
+//            for (var i = 0; i < results.length; i++) {
+//                var option = $("<option>").attr("value", results[i]).text(results[i]);
+//                $("#images").append(option);
+//            }
+//        } else {
+//            console.log("Cannot load images: " + request.status + " - " + request.responseText);
+//        }
+//    };
+//    request.send(null);
+//}
+//
+//function downloadSelectedImage() {
+//    $("img").remove();
+//    var file = $("#images").val();  
+//    var img = $("<img>").attr("src", BASE_URL + "images/" + file).attr("alt", "Your downloaded images");
+//    $("body").append(img);
+//}
+

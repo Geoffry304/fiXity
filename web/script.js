@@ -14,14 +14,11 @@ function init() {
         
 }
 
-//listview fix als je pagina refresht
-
 //zet een event in de database
 function createEventFromInput() {
                  
     var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
     var request = new XMLHttpRequest();
-    //request.open("GET", url + uid);
     request.open("GET", url + uid);
     request.onload = function() {
         if (request.status === 200) {
@@ -34,8 +31,6 @@ function createEventFromInput() {
     event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
     event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
     event.locatie = {latitude : latitude, longitude : longitude};
-    //event.gebruiker = {gebruikerId :gebruikerid};
-    //event.gebruiker = {gebruikerId : 5};
     event.gebruiker = {gebruikerId : gebruikerid};
     // Send the new group to the back-end.
     var url = "http://localhost:8080/onzebuurt/resources/evenements";
@@ -50,8 +45,8 @@ function createEventFromInput() {
     
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(event));  
-    //window.location.reload('#page');
-     //window.location.reload('#pageEvent');
+    window.location.reload('#page');
+    window.location.reload('#pageEvent');
         }
         else
         {
@@ -59,34 +54,47 @@ function createEventFromInput() {
         }
     };
     request.send(null);
-
-
 }
 
 //zet een melding in de database
 function createMeldingFromInput() {
-    var melding = {};
+                 
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
+    var request = new XMLHttpRequest();
+    request.open("GET", url + uid);
+    request.onload = function() {
+        if (request.status === 200) {
+            var gebruiker = JSON.parse(request.responseText);
+            gebruikerid = gebruiker.gebruikerId;
+            console.log(gebruikerid);
+            var melding = {};
+    
     //getGebruikerByUID();
     melding.titel = jQuery.trim($("#selectmenuTitelMeldingen").val());
     melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
     melding.locatie = {latitude : latitude, longitude : longitude};
-    melding.gebruiker = {gebruikerId : 1};
-    //getGebruikerByUID();
-
+    melding.gebruiker = {gebruikerId : gebruikerid};
     // Send the new group to the back-end.
-    var request = new XMLHttpRequest();
     var url = "http://localhost:8080/onzebuurt/resources/meldingen";
     request.open("POST", url);
     request.onload = function() {
         if (request.status === 201) {
-            melding.MeldingId = request.getResponseHeader("Location").split("/").pop();            
+            melding.MeldingId = request.getResponseHeader("Location").split("/").pop();
         } else {
-            console.log("Error creating event: " + request.status + " " + request.responseText);   
+            console.log("Error creating event: " + request.status + " " + request.responseText);
         }
     };
+    
     request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(melding));
-    //window.location.reload('#page');  
+    request.send(JSON.stringify(melding));  
+    window.location.reload('#page');
+        }
+        else
+        {
+            console.log("404");
+        }
+    };
+    request.send(null);
 }
 
 //listview op homepage automatisch laden met meldingen
@@ -393,7 +401,7 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
             var point = new google.maps.LatLng(latitude = position.coords.latitude, longitude = position.coords.longitude),
             
             myOptions = {
-                zoom: 16,
+                zoom: 17,
                 center: point,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             },
@@ -433,14 +441,20 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
             var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
             
             myOptions = {
-                zoom: 16,
+                zoom: 17,
                 center: point,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             },
             
             mapDiv = document.getElementById("map_canvas2");
             map = new google.maps.Map(mapDiv, myOptions);
-			
+                 marker = new google.maps.Marker({
+                position: point,
+                map: map,
+                animation: google.maps.Animation.DROP,
+		draggable: false,
+                title: "You are here"
+            });
         }
         navigator.geolocation.getCurrentPosition(hasPosition);
         

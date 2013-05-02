@@ -20,10 +20,31 @@
 			<div data-role="content"> Aanmelden met:
 	  			<div data-role="controlgroup" data-position="">
                 	<a href="#" data-role="button" onClick="login()" >facebook</a>
-                        <a href="#page" data-role="button">fiXity-account</a>
            		</div>
- 			</div>
-		</div> 
+	  			                         
+<form>
+    <fieldset data-role="collapsible" data-theme="b" data-content-theme="b" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u" data-iconpos="right">
+        <legend><center>fiXity-account</center></legend>
+        <input type="text" name="textinput-f" id="textinput-f" placeholder="E-mailadres" value="">
+        <input type="password" name="passwordinput" id="passwordinput" placeholder="Wachtwoord" value=""  />
+        <a href="#" data-role="button">Aanmelden</a>
+    </fieldset>
+</form>
+                       
+		<p style="margin: 30px 0px 8px 0px">Geen facebook en nog geen account?:</p>
+	  			<form>
+    <fieldset data-role="collapsible" data-theme="b" data-content-theme="b" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u" data-iconpos="right">
+        <legend><center>Registreer</center></legend>
+        <input type="text" name="textinput-f" id="textinput-f" placeholder="Naam" value="">
+        <input type="text" name="textinput-f" id="textinput-f" placeholder="Voornaam" value="">
+        <input type="text" name="textinput-f" id="textinput-f" placeholder="E-mailadres" value="">
+        <input type="password" name="passwordinput" id="passwordinput" placeholder="Wachtwoord" value=""  />
+        <a href="#page" data-role="button">Bevestig</a>
+    </fieldset>
+</form>
+
+             </div>
+		</div>
 		<div data-role="page" id="page" data-add-back-btn="false">
 			<div data-role="header" data-theme="b" data-position="fixed">
 				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"><a href="#pageMelding" class="ui-btn-right" data-role="button" data-icon="alert" data-iconpos="notext"style="margin-top: 7px" >Locatie kiezen</a>      
@@ -75,7 +96,7 @@
 			<div data-role="header" data-theme="b" data-position="fixed">
 				<h1>Zoeken</h1>
 			</div>
-                    <div id="map_canvas2" style="width:100%; height:400px"></div>
+                    <div id="map_canvas2" style="position: absolute; width:100%; height:91%"></div>
 			<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
    				<div data-role="navbar">
 					<ul>
@@ -112,7 +133,7 @@
 		    	<a href="#pageMeldingPlaatsen" data-role="button" data-icon="arrow-r" class="ui-btn-right" data-iconpos="right">Next</a>
 	      	</div>
                     
-		  	<div id="map_canvas" style="width: 100% ; height: 400px"></div>
+		  	<div id="map_canvas" style="position: absolute; width:100%; height:91%"></div>
                     
    		</div>
     	<div data-role="page" id="pageMeldingPlaatsen">

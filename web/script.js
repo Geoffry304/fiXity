@@ -5,10 +5,10 @@ var uid;
 var latitude;
 var longitude;
 var gebruikerid;
-var gebruikerd;
 
 
 function init() {
+        login();
         initialiseListMeldingen();
         initialiseListEvenementen();
         
@@ -17,41 +17,41 @@ function init() {
 //listview fix als je pagina refresht
 
 //zet een event in de database
-function createEventFromInput() {                 
-var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
+function createEventFromInput() {
+                 
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
     var request = new XMLHttpRequest();
+    //request.open("GET", url + uid);
     request.open("GET", url + uid);
     request.onload = function() {
         if (request.status === 200) {
-            gebruikerd = JSON.parse(request.responseText);
-            
-            
-            gebruikerid = gebruikerd.gebruikerId;
+            var gebruiker = JSON.parse(request.responseText);
+            gebruikerid = gebruiker.gebruikerId;
             console.log(gebruikerid);
             var event = {};
-
-    event.gebruiker = {gebruikerId : gebruikerid};
-    event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
     
+    //getGebruikerByUID();
+    event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
     event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
     event.locatie = {latitude : latitude, longitude : longitude};
-
+    //event.gebruiker = {gebruikerId :gebruikerid};
+    //event.gebruiker = {gebruikerId : 5};
+    event.gebruiker = {gebruikerId : gebruikerid};
+    // Send the new group to the back-end.
     var url = "http://localhost:8080/onzebuurt/resources/evenements";
     request.open("POST", url);
     request.onload = function() {
         if (request.status === 201) {
             event.evenementid = request.getResponseHeader("Location").split("/").pop();
-            
-            //getGebruikerByUID();
-            alert("GEBRUIKERID " + gebruikerid);
-            
         } else {
             console.log("Error creating event: " + request.status + " " + request.responseText);
         }
     };
-        request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify(event)); 
     
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(event));  
+    //window.location.reload('#page');
+     //window.location.reload('#pageEvent');
         }
         else
         {
@@ -60,8 +60,60 @@ var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
     };
     request.send(null);
 
+
 }
 
+//zet een melding in de database
+function createMeldingFromInput() {
+    var melding = {};
+    //getGebruikerByUID();
+    melding.titel = jQuery.trim($("#selectmenuTitelMeldingen").val());
+    melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
+    melding.locatie = {latitude : latitude, longitude : longitude};
+    melding.gebruiker = {gebruikerId : 1};
+    //getGebruikerByUID();
+
+    // Send the new group to the back-end.
+    var request = new XMLHttpRequest();
+    var url = "http://localhost:8080/onzebuurt/resources/meldingen";
+    request.open("POST", url);
+    request.onload = function() {
+        if (request.status === 201) {
+            melding.MeldingId = request.getResponseHeader("Location").split("/").pop();            
+        } else {
+            console.log("Error creating event: " + request.status + " " + request.responseText);   
+        }
+    };
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(melding));
+    //window.location.reload('#page');  
+}
+
+//listview op homepage automatisch laden met meldingen
+function initialiseListMeldingen() {
+    
+    // Load the groups from the back-end.
+    var request = new XMLHttpRequest();
+    var url = "http://localhost:8080/onzebuurt/resources/meldingen";
+    request.open("GET", url);
+    request.onload = function() {
+        if (request.status === 200) {
+            meldingen = JSON.parse(request.responseText);
+            for (var i = 0; i < meldingen.length; i++) {
+                $("#meldingList").append(createListElementForMelding(i));                
+            }           
+            if (meldingen.length > 0) {
+                console.log("Gelukt");
+                $("#meldingList").listview('refresh');
+            } else {
+                console.log("Error");
+            }
+        } else {
+            console.log("Error loading groups: " + request.status + " - "+ request.statusText);
+        }
+    };
+    request.send(null);
+}
 //maakt de listview in de front end aan (HTML)
 function createListElementForMelding(meldingIndex) {
     
@@ -168,15 +220,6 @@ window.fbAsyncInit = function() {
         xfbml: true  // parse XFBML
     });
 
-}
-
-window.onload = init;
-
-
-function init() {
-	login()
-                initialiseListMeldingen();
-        initialiseListEvenementen();
 }
 
 // Load the SDK Asynchronously
@@ -302,35 +345,11 @@ function getGebruikerByUID() {
     request.open("GET", url + uid);
     request.onload = function() {
         if (request.status === 200) {
-            gebruikerd = JSON.parse(request.responseText);
+            var gebruiker = JSON.parse(request.responseText);
             
             
-            gebruikerid = gebruikerd.gebruikerId;
+            gebruikerid = gebruiker.gebruikerId;
             console.log(gebruikerid);
-            var event = {};
-
-    event.gebruiker = {gebruikerId : gebruikerid};
-    event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
-    
-    event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
-    event.locatie = {latitude : latitude, longitude : longitude};
-
-    var url = "http://localhost:8080/onzebuurt/resources/evenements";
-    request.open("POST", url);
-    request.onload = function() {
-        if (request.status === 201) {
-            event.evenementid = request.getResponseHeader("Location").split("/").pop();
-            
-            //getGebruikerByUID();
-            alert("GEBRUIKERID " + gebruikerid);
-            
-        } else {
-            console.log("Error creating event: " + request.status + " " + request.responseText);
-        }
-    };
-        request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify(event)); 
-    
         }
         else
         {

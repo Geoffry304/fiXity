@@ -1,5 +1,3 @@
-
-
 window.onload = init;
 var uid;
 var latitude;
@@ -32,6 +30,13 @@ function createEventFromInput() {
     event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
     event.locatie = {latitude : latitude, longitude : longitude};
     event.gebruiker = {gebruikerId : gebruikerid};
+    
+            if(jQuery.trim($("#flipswitchFBEvent").val()) === "on")
+        {
+            alert("Facebook schakelaar aan");
+            //postToFeed();
+        }
+      
     // Send the new group to the back-end.
     var url = "http://localhost:8080/onzebuurt/resources/evenements";
     request.open("POST", url);
@@ -74,6 +79,13 @@ function createMeldingFromInput() {
     melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
     melding.locatie = {latitude : latitude, longitude : longitude};
     melding.gebruiker = {gebruikerId : gebruikerid};
+    
+        if(jQuery.trim($("#flipswitchFBMeldingen").val()) === "on")
+        {
+            alert("Facebook schakelaar aan");
+            //postToFeed();
+        }
+      
     // Send the new group to the back-end.
     var url = "http://localhost:8080/onzebuurt/resources/meldingen";
     request.open("POST", url);
@@ -88,6 +100,7 @@ function createMeldingFromInput() {
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(melding));  
     window.location.reload('#page');
+            
         }
         else
         {
@@ -108,7 +121,8 @@ function initialiseListMeldingen() {
         if (request.status === 200) {
             meldingen = JSON.parse(request.responseText);
             for (var i = 0; i < meldingen.length; i++) {
-                $("#meldingList").append(createListElementForMelding(i));                
+                $("#meldingList").append(createListElementForMelding(i));
+                $("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
             }           
             if (meldingen.length > 0) {
                 console.log("Gelukt");
@@ -122,6 +136,7 @@ function initialiseListMeldingen() {
     };
     request.send(null);
 }
+
 //maakt de listview in de front end aan (HTML)
 function createListElementForMelding(meldingIndex) {
     
@@ -139,6 +154,34 @@ function createListElementForMelding(meldingIndex) {
         });      
 }
 
+//maakt de listview in de front end aan (HTML) voor admin pagina
+function createListElementForMeldingAdmin(meldingIndex) {
+    
+    var link = $("<a>")
+        .text(meldingen[meldingIndex].titel + ": " + meldingen[meldingIndex].details)
+                .click(function() {
+            alert("alee vooruit");
+        });        
+
+    var gebruiker = $("<p>") 
+        .text("Geplaatst door " + meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam)
+                .click(function() {
+            alert("alee vooruit");
+        });
+        
+    var icon = $("<a>")
+        .text("wijzigen/verwijderen")
+        .click(function() {
+            createPageMeldingInformationAdmin(meldingIndex);           
+        });  
+        
+    return $("<li>")
+        .append(link)
+        .append(gebruiker)
+        .append(icon)
+     
+}
+
 //vult de nieuwe pagina als je op de listview van meldingen klikt
 function createPageMeldingInformation(meldingIndex) {
 var titel = meldingen[meldingIndex].titel;
@@ -146,9 +189,24 @@ var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[mel
 var details = meldingen[meldingIndex].details;
 var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
 
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie +"</p></div></div"); 
+//append it to the page container
+pageMeldingInformation.appendTo( $.mobile.pageContainer );
+ 
+//go to it
+$.mobile.changePage( pageMeldingInformation );
+}
+
+//vult de nieuwe pagina als je op de listview van meldingen klikt
+function createPageMeldingInformationAdmin(meldingIndex) {
+var titel = meldingen[meldingIndex].titel;
+var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam;
+var details = meldingen[meldingIndex].details;
+var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
 
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p></div></div"); 
+
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a href=# id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding()' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
  
@@ -243,8 +301,6 @@ window.fbAsyncInit = function() {
     ref.parentNode.insertBefore(js, ref);
 }(document));
 
-
-
 function logout() {
     FB.logout(function(response) {
         window.location = "#pageAanmelden";
@@ -278,7 +334,6 @@ function createGebruikerFromInput(uid, naam, voornaam, date, email) {
     request.send(JSON.stringify(gebruiker));
 
 }
-
 
 function login() {
     FB.getLoginStatus(function(response) {
@@ -391,7 +446,6 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
         FB.ui(obj, callback);
       }
 	
-
 //*GOOGLE MAPS
 
  function laadMap() {
@@ -461,14 +515,11 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
     }
     
  }
-
-
  $(document).on("pageshow", "#page2", function() {
    
         laadMap1();
     
 });
-
 
 ///* UPLOAD */
 //
@@ -544,3 +595,60 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
 //    $("body").append(img);
 //}
 
+
+//Registreer + admin
+function createRegistreerGebruikerFromInput() {
+                 
+    var gebruiker = {};
+    
+    //getGebruikerByUID();
+    gebruiker.naam = jQuery.trim($("#textinputRegistreerNaam").val());
+    gebruiker.voornaam = jQuery.trim($("#textinputRegistreerVoornaam").val());
+    // Send the new group to the back-end.
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
+    var request = new XMLHttpRequest();
+    request.open("POST", url);
+    request.onload = function() {
+        if (request.status === 201) {
+            gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
+        } else {
+            console.log("Error creating event: " + request.status + " " + request.responseText);
+        }
+    };
+    
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(gebruiker));
+    alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
+}
+
+function deleteMelding(meldingIndex) {
+    
+    // Send a delete request to the back-end.
+    var url = "http://localhost:8080/onzebuurt/resources/meldingen";
+    var request = new XMLHttpRequest();
+    request.open("DELETE", url +  meldingen[meldingIndex].meldingId);
+    request.onload = function() {
+        if (request.status === 204) {
+            meldingen.splice(meldingIndex, 1);
+            
+            // Rebuild the group list (otherwise the indices used in the list elements are off).
+            $("#meldingListAdmin").empty();
+            for (var i = 0; i < meldingen.length; i++) {
+                $("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
+            }
+            
+            if (selectedGroupIndex > 0) {
+                selectGroupAndLoadReminders(selectedGroupIndex - 1);
+            } else if (groups.length > 0) {
+                selectGroupAndLoadReminders(0);
+            } else {
+                selectedGroupIndex = undefined;
+                $(".reminderDialogToggle").attr("disabled", true);
+            }
+            $("#groupDialog").modal("hide");
+        } else {
+            console.log("Error deleting group: " + request.status + " - " + request.statusText);
+        }
+    };
+    request.send(null);
+}

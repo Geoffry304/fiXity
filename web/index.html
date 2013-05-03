@@ -27,19 +27,19 @@
         <legend><center>fiXity-account</center></legend>
         <input type="text" name="textinput-f" id="textinput-f" placeholder="E-mailadres" value="">
         <input type="password" name="passwordinput" id="passwordinput" placeholder="Wachtwoord" value=""  />
-        <a href="#" data-role="button">Aanmelden</a>
+        <a href="#pageAdminMeldingen" data-role="button">Aanmelden</a>
     </fieldset>
 </form>
                        
-		<p style="margin: 30px 0px 8px 0px">Geen facebook en nog geen account?:</p>
+		<p style="margin: 30px 0px 8px 0px">Geen facebook en nog geen account?</p>
 	  			<form>
     <fieldset data-role="collapsible" data-theme="b" data-content-theme="b" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u" data-iconpos="right">
         <legend><center>Registreer</center></legend>
-        <input type="text" name="textinput-f" id="textinput-f" placeholder="Naam" value="">
-        <input type="text" name="textinput-f" id="textinput-f" placeholder="Voornaam" value="">
-        <input type="text" name="textinput-f" id="textinput-f" placeholder="E-mailadres" value="">
-        <input type="password" name="passwordinput" id="passwordinput" placeholder="Wachtwoord" value=""  />
-        <a href="#page" data-role="button">Bevestig</a>
+        <input type="text" name="textinput-f" id="textinputRegistreerNaam" placeholder="Naam" value="">
+        <input type="text" name="textinput-f" id="textinputRegistreerVoornaam" placeholder="Voornaam" value="">
+        <input type="text" name="textinput-f" id="textinputRegistreeremail" placeholder="E-mailadres" value="">
+        <input type="password" name="passwordinput" id="passwordinputRegistreerWachtwoord" placeholder="Wachtwoord" value=""  />
+        <a onclick='createRegistreerGebruikerFromInput()' href="" data-role="button">Bevestig</a>
     </fieldset>
 </form>
 
@@ -115,7 +115,7 @@
             <a href="#" data-role="button" data-icon="star" data-iconpos="top">Punten</a>
             <a href="#pageTut1" data-role="button" data-icon="star" data-iconpos="top">Tutorial</a>
             <a href="#" data-role="button" data-icon="star" data-iconpos="top">About Fixity</a>
-            <a onclick='logout()' href="#" data-role="button" data-icon="star" data-iconpos="top">Logout</a>
+            <a onclick='logout()' href="#" data-role="button" data-icon="star" data-iconpos="top">Afmelden</a>
 			<div data-role="footer" data-theme="b" data-position="fixed" data-fullscreen="true">
    				<div data-role="navbar">
 					<ul>
@@ -162,8 +162,8 @@
                 	<div data-role="fieldcontain">
                 		<label for="flipswitchFBMeldingen">facebook:         </label>                	
                   		<select name="flipswitch" id="flipswitchFBMeldingen" data-role="slider">
-                    		<option value="on">|</option>
-                    		<option value="off">0</option>
+                    		<option value="off">|</option>
+                    		<option value="on">0</option>
                   		</select>
                		</div>
                		<div data-role="fieldcontain">
@@ -194,8 +194,8 @@
                 <div data-role="fieldcontain">
                 	<label for="flipswitchFBEvent">facebook:         </label>                	
                   	<select name="flipswitch" id="flipswitchFBEvent" data-role="slider">
-                    	<option value="on">|</option>
-                    	<option value="off">0</option>
+                    	<option value="off">|</option>
+                    	<option value="on">0</option>
                   	</select>
                 </div>
                 <div data-role="fieldcontain">
@@ -234,5 +234,31 @@
           		<img src="tut3.png" style="max-width: 100%; margin-top:50px; margin-left:auto;margin-right:auto; box-shadow:0px 0px 10px 7px #777777"> 
           	</center>
 	   	</div>
+        <div data-role="page" id="pageAdminMeldingen">
+          <div data-role="header" data-theme="b">
+            <a href="#pageAdminOpties" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="right">Opties</a>
+                <h1>Admin pagina</h1>
+          </div>
+<ul data-role="listview" id="meldingListAdmin" data-split-icon="gear" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
+	<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="alert" data-theme="b">Meldingen</a></li>
+						<li><a href="#" data-icon="home" data-theme="b">Evenementen</a></li>
+                                                <li><a href="#" data-icon="info" data-theme="b">Feedback</a></li>
+                                                <li><a href="#" data-icon="grid" data-theme="b">Gebruikers</a></li>
+					</ul>
+				</div>
+			</div>
+        </div>
+             <div data-role="page" id="pageAdminOpties">
+          <div data-role="header" data-theme="b">
+            <a href="#pageAdminMeldingen" data-role="button" data-icon="arrow-l" data-iconpos="left">Back</a>
+                <h1>Instellingen</h1>
+          </div>
+                 <a href="#pageHow" id="btnHow" data-role="button" data-icon="info">Instructies</a>
+                 <a href="#pageAanmelden" id="btnAfmelden" data-role="button" data-icon="back">Afmelden</a>
+             </div>
+        
 	</body>
 </html>

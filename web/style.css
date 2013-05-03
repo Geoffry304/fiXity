@@ -6,4 +6,9 @@ body {
 p.ui-li-desc{
          margin: -10px 0px 2px 14px; 
       }
-	 
+
+.ui-listview-filter {
+border-width: 0;
+overflow: hidden;
+margin: 0.9px 0.9px 0.9px 0.9px;
+}

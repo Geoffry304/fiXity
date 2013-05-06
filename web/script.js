@@ -203,17 +203,62 @@ var titel = meldingen[meldingIndex].titel;
 var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam;
 var details = meldingen[meldingIndex].details;
 var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
+var  mid = meldingen[meldingIndex].meldingId;
+var gid = meldingen[meldingIndex].gebruiker.gebruikerId;
 
+console.log(gid);
 
-
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a href=# id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding()' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +")' href=# id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding("+ mid +")' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
  
 //go to it
 $.mobile.changePage( pageMeldingInformation );
 }
+function deleteMelding(meldingIndex) {
+    
+    // Send a delete request to the back-end.
+    
+    var url = "http://localhost:8080/onzebuurt/resources/meldingen/";
+    var request = new XMLHttpRequest();
+    request.open("DELETE", url +  meldingIndex);
+    request.onload = function() {
+        if (request.status === 204) {
+            console.log("gelukt");
+        } else {
+            console.log("Error deleting group: " + request.status + " - " + request.statusText);
+        }
+    };
+    request.send(null);
+} 
 
+
+function updateMelding(meldingIndex, gid) {
+    
+    // Send the updated group to the back-end.
+    var melding = jQuery.extend(true, {}, meldingen[meldingIndex]);
+    //melding.gebruiker = {gebruikerId : gid};
+    console.log("gid voor request " + gid)
+    var url = "http://localhost:8080/onzebuurt/resources/meldingen/";
+    var request = new XMLHttpRequest();
+    request.open("PUT", url + meldingIndex);
+        
+    request.onload = function() {
+            console.log("gid tijdens " + gid)
+            melding.gebruiker = {gebruikerId : gid};
+        if (request.status === 204) {
+            melding.gebruiker = {gebruikerId : gid};
+             melding.details = jQuery.trim($("#textareaOmschrijvingMeldingenAdmin").val());
+             
+        } else {
+            console.log(gid);
+            console.log(jQuery.trim($("#textareaOmschrijvingMeldingenAdmin").val()));
+            console.log("Error update melding: " + request.status + " " + request.responseText);
+        }
+    };
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(melding));
+}
 // listview op homepage laden met Events
 function initialiseListEvenementen() {   
     // Load the groups from the back-end.
@@ -618,37 +663,7 @@ function createRegistreerGebruikerFromInput() {
     
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(gebruiker));
+    deleteMelding();
     alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
 }
 
-function deleteMelding(meldingIndex) {
-    
-    // Send a delete request to the back-end.
-    var url = "http://localhost:8080/onzebuurt/resources/meldingen";
-    var request = new XMLHttpRequest();
-    request.open("DELETE", url +  meldingen[meldingIndex].meldingId);
-    request.onload = function() {
-        if (request.status === 204) {
-            meldingen.splice(meldingIndex, 1);
-            
-            // Rebuild the group list (otherwise the indices used in the list elements are off).
-            $("#meldingListAdmin").empty();
-            for (var i = 0; i < meldingen.length; i++) {
-                $("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
-            }
-            
-            if (selectedGroupIndex > 0) {
-                selectGroupAndLoadReminders(selectedGroupIndex - 1);
-            } else if (groups.length > 0) {
-                selectGroupAndLoadReminders(0);
-            } else {
-                selectedGroupIndex = undefined;
-                $(".reminderDialogToggle").attr("disabled", true);
-            }
-            $("#groupDialog").modal("hide");
-        } else {
-            console.log("Error deleting group: " + request.status + " - " + request.statusText);
-        }
-    };
-    request.send(null);
-}

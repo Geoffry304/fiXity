@@ -156,7 +156,7 @@ public class MeldingDOA {
     @Path("{meldingId}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateMelding(@PathParam("meldingId") int id, Melding m) {
+    public void updateMelding(@PathParam("meldingId") int id,  Melding m) {
         try (Connection conn = source.getConnection()) {
             if (m.getGebruiker() == null) {
                 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Een melding moet een gebruiker hebben.").build());

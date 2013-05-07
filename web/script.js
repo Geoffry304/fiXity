@@ -205,10 +205,12 @@ var details = meldingen[meldingIndex].details;
 var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
 var  mid = meldingen[meldingIndex].meldingId;
 var gid = meldingen[meldingIndex].gebruiker.gebruikerId;
+var lat = meldingen[meldingIndex].locatie.latitude;
+var long= meldingen[meldingIndex].locatie.longitude;
 
 console.log(gid);
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +")' href=# id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding("+ mid +")' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +"," + lat + "," + long + "," + mid + ")' href=# id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding("+ mid +")' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
  
@@ -233,32 +235,46 @@ function deleteMelding(meldingIndex) {
 } 
 
 
-function updateMelding(meldingIndex, gid) {
-    
-    // Send the updated group to the back-end.
-    var melding = jQuery.extend(true, {}, meldingen[meldingIndex]);
-    //melding.gebruiker = {gebruikerId : gid};
-    console.log("gid voor request " + gid)
-    var url = "http://localhost:8080/onzebuurt/resources/meldingen/";
-    var request = new XMLHttpRequest();
-    request.open("PUT", url + meldingIndex);
+function updateMelding(meldingIndex, gid, lat, long, mid) {
+   	var melding = jQuery.extend(true, {}, meldingen[meldingIndex]);
         
+var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
+    var request = new XMLHttpRequest();
+    request.open("GET", url + gid);
     request.onload = function() {
-            console.log("gid tijdens " + gid)
-            melding.gebruiker = {gebruikerId : gid};
+        if (request.status === 200) {
+        	var gid2;
+            var gebruiker = JSON.parse(request.responseText);
+            gid2 = gebruiker.gebruikerId;
+            console.log(gid2);
+    melding.titel = meldingen[meldingIndex].titel;
+    melding.gebruiker = {gebruikerId : gid2};
+    melding.locatie = {latitude : lat , longitude : long};
+    melding.meldingId = mid;
+    melding.details = jQuery.trim($("#textareaOmschrijvingMeldingenAdmin").val());
+    
+    // Send the new group to the back-end.
+    var url = "http://localhost:8080/onzebuurt/resources/meldingen/";
+    request.open("PUT", url + meldingIndex);
+    request.onload = function() {
         if (request.status === 204) {
-            melding.gebruiker = {gebruikerId : gid};
-             melding.details = jQuery.trim($("#textareaOmschrijvingMeldingenAdmin").val());
-             
+ 
         } else {
-            console.log(gid);
-            console.log(jQuery.trim($("#textareaOmschrijvingMeldingenAdmin").val()));
-            console.log("Error update melding: " + request.status + " " + request.responseText);
+            console.log("Error creating event: " + request.status + " " + request.responseText);
         }
     };
     request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(melding));
+    request.send(JSON.stringify(melding));  
+            
+        }
+        else
+        {
+            console.log("404");
+        }
+    };
+    request.send(null);
 }
+
 // listview op homepage laden met Events
 function initialiseListEvenementen() {   
     // Load the groups from the back-end.

@@ -158,9 +158,9 @@ public class MeldingDOA {
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateMelding(@PathParam("meldingId") int id,  Melding m) {
         try (Connection conn = source.getConnection()) {
-            if (m.getGebruiker() == null) {
-                throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Een melding moet een gebruiker hebben.").build());
-            }
+//            if (m.getGebruiker() == null) {
+//                throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Een melding moet een gebruiker hebben.").build());
+//            }
             
             try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM Melding WHERE MeldingId = ?")) {
                 stat.setInt(1, id);
@@ -178,7 +178,7 @@ public class MeldingDOA {
                 stat.setInt(3, m.getGebruiker().getGebruikerId());
                 stat.setDouble(4, m.getLocatie().getLatitude());
                 stat.setDouble(5, m.getLocatie().getLongitude());
-                stat.setInt(7, m.getMeldingId());
+                stat.setInt(6, m.getMeldingId());
                 stat.executeUpdate();
             }
         } catch (SQLException ex) {

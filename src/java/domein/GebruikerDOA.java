@@ -87,11 +87,13 @@ public class GebruikerDOA {
                 }
             }
             
-            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO gebruiker VALUES(?, ?, ?, ?)")) {
+            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO gebruiker VALUES(?, ?, ?, ?,? ,? )")) {
                 stat.setInt(1, u.getGebruikerId());
                 stat.setString(2, u.getNaam());
                 stat.setString(3, u.getVoornaam());
                 stat.setString(4, u.getUid());
+                stat.setString(5, u.getEmail());
+                stat.setString(6, u.getPassword());
                 stat.executeUpdate();
             }
             
@@ -118,6 +120,9 @@ public class GebruikerDOA {
                         u.setGebruikerId(rs.getInt("gebruikerId"));
                         u.setNaam(rs.getString("naam"));
                         u.setUid(rs.getString("uid"));
+                        u.setVoornaam(rs.getString("voornaam"));
+                        u.setEmail(rs.getString("email"));
+                        u.setPassword(rs.getString("wachtwoord"));
                         return u;
                     } else {
                         throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -141,6 +146,7 @@ public class GebruikerDOA {
                         Gebruiker u = new Gebruiker();
                         u.setGebruikerId(rs.getInt("gebruikerId"));
                         u.setNaam(rs.getString("naam"));
+                        u.setVoornaam(rs.getString("voornaam"));
                         return u;
                     } else {
                         throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -151,6 +157,33 @@ public class GebruikerDOA {
             throw new WebApplicationException(ex);
         }
     }
+    
+    @Path("gebruiker/{email}/{pass}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Gebruiker getGebruikerLogin(@PathParam("email") String email, @PathParam("pass") String pass) {
+        try (Connection conn = source.getConnection()) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker WHERE email = ? AND wachtwoord = ?")) {
+                stat.setString(1, email);
+                stat.setString(2, pass);
+                try (ResultSet rs = stat.executeQuery()) {
+                    if (rs.next()) {
+                        Gebruiker u = new Gebruiker();
+                        u.setGebruikerId(rs.getInt("gebruikerId"));
+                        u.setNaam(rs.getString("naam"));
+                        u.setVoornaam(rs.getString("voornaam"));
+                        u.setUid(rs.getString("uid"));
+                        return u;
+                    } else {
+                        throw new WebApplicationException(Response.Status.NOT_FOUND);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new WebApplicationException(ex);
+        }
+    }
+    
     
     /*
      * Een bestaande gebruiker met het opgegeven ID wijzigen.
@@ -170,9 +203,10 @@ public class GebruikerDOA {
                     }
                 }
             }
-            try (PreparedStatement stat = conn.prepareStatement("UPDATE gebruiker SET naam = ? WHERE gebruikerId = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("UPDATE gebruiker SET naam = ?, voornaam = ? WHERE gebruikerId = ?")) {
                 stat.setString(1, u.getNaam());
-                stat.setInt(2, id);
+                stat.setString(2, u.getVoornaam());
+                stat.setInt(3, id);
                 stat.executeUpdate();
             }
         } catch (SQLException ex) {

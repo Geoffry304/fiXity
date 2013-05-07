@@ -208,9 +208,11 @@ var gid = meldingen[meldingIndex].gebruiker.gebruikerId;
 var lat = meldingen[meldingIndex].locatie.latitude;
 var long= meldingen[meldingIndex].locatie.longitude;
 
+var tit = "Andere";
+console.log(titel);
 console.log(gid);
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +"," + lat + "," + long + "," + mid + ")' href=# id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding("+ mid +")' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +"," + lat + "," + long + "," + mid + "," + titel + ")' href=# id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding("+ mid +")' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
  
@@ -235,8 +237,11 @@ function deleteMelding(meldingIndex) {
 } 
 
 
-function updateMelding(meldingIndex, gid, lat, long, mid) {
+function updateMelding(meldingIndex, gid, lat, long, mid, tit) {
    	var melding = jQuery.extend(true, {}, meldingen[meldingIndex]);
+        //var tit = "Andere";
+        
+        console.log("titel bij functie: " + tit);
         
 var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
     var request = new XMLHttpRequest();
@@ -247,7 +252,7 @@ var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
             var gebruiker = JSON.parse(request.responseText);
             gid2 = gebruiker.gebruikerId;
             console.log(gid2);
-    melding.titel = meldingen[meldingIndex].titel;
+    melding.titel = tit;
     melding.gebruiker = {gebruikerId : gid2};
     melding.locatie = {latitude : lat , longitude : long};
     melding.meldingId = mid;
@@ -363,11 +368,15 @@ window.fbAsyncInit = function() {
 }(document));
 
 function logout() {
+    
+
+        
     FB.logout(function(response) {
         window.location = "#pageAanmelden";
         console.log("Uitgelogd");
 
     });
+        
 
 }
 
@@ -576,11 +585,7 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
     }
     
  }
- $(document).on("pageshow", "#page2", function() {
-   
-        laadMap1();
-    
-});
+
 
 ///* UPLOAD */
 //
@@ -665,6 +670,8 @@ function createRegistreerGebruikerFromInput() {
     //getGebruikerByUID();
     gebruiker.naam = jQuery.trim($("#textinputRegistreerNaam").val());
     gebruiker.voornaam = jQuery.trim($("#textinputRegistreerVoornaam").val());
+    gebruiker.email = jQuery.trim($("#textinputRegistreeremail").val());
+    gebruiker.password = jQuery.trim($("#passwordinputRegistreerWachtwoord").val());
     // Send the new group to the back-end.
     var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
     var request = new XMLHttpRequest();
@@ -679,7 +686,87 @@ function createRegistreerGebruikerFromInput() {
     
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(gebruiker));
-    deleteMelding();
     alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
 }
 
+function LoginDatabank(){
+    
+    var email = jQuery.trim($("#emailinput").val());
+    var pass = jQuery.trim($("#passwordinput").val());
+    
+    
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruiker/";
+    var request = new XMLHttpRequest();
+    request.open("GET", url + email + "/" + pass);
+    request.onload = function() {
+        if (request.status === 200) {
+            var gebruiker = JSON.parse(request.responseText);
+            var uid = gebruiker.uid;
+            
+            if (uid === "admin"){
+                window.location.href = "#pageAdminMeldingen";
+            }
+            else
+                {
+                  window.location.href = "#pageTut1";  
+                }
+        }
+        else
+        {
+            console.log("404");
+        }
+    };
+    request.send(null);
+
+    
+}
+
+function initializeMaps() {
+    var latlng = new google.maps.LatLng(50.93998968, 4.02869343);
+    var myOptions = {
+        zoom: 14,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas3"),myOptions);
+    
+    // Load the groups from the back-end.
+    var request = new XMLHttpRequest();
+    var url = "http://localhost:8080/onzebuurt/resources/meldingen";
+    request.open("GET", url);
+    request.onload = function() {
+        if (request.status === 200) {
+            meldingen = JSON.parse(request.responseText);
+            for (var i = 0; i < meldingen.length; i++) {
+                 marker = new google.maps.Marker({
+                 position: new google.maps.LatLng(meldingen[i].locatie.latitude, meldingen[i].locatie.longitude),
+                 map: map,
+                 title: meldingen[i].titel + ": " + meldingen[i].details
+                 
+            });
+
+    
+                google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+    });
+            }           
+            if (meldingen.length > 0) {
+
+            } else {
+
+            }
+        } else {
+
+        }
+  
+
+    };
+    request.send(null);
+}
+
+ $(document).on("pageshow", "#page2", function() {
+   
+        initializeMaps();
+    
+});

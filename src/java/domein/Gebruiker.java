@@ -12,10 +12,10 @@ public class Gebruiker {
     
     private int gebruikerId;
     private String naam, voornaam, email;
-    private char password;
+    private String password;
     private String uId;
 
-    public Gebruiker(int gebruikerId, String naam, String voornaam, String email, char password, String uId) {
+    public Gebruiker(int gebruikerId, String naam, String voornaam, String email, String password, String uId) {
         this.gebruikerId = gebruikerId;
         this.naam = naam;
         this.voornaam = voornaam;
@@ -60,11 +60,11 @@ public class Gebruiker {
         this.email = email;
     }
 
-    public char getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(char password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

@@ -127,6 +127,7 @@ function initialiseListMeldingen() {
             if (meldingen.length > 0) {
                 console.log("Gelukt");
                 $("#meldingList").listview('refresh');
+                $("#meldingListAdmin").listview('refresh');
             } else {
                 console.log("Error");
             }
@@ -208,11 +209,10 @@ var gid = meldingen[meldingIndex].gebruiker.gebruikerId;
 var lat = meldingen[meldingIndex].locatie.latitude;
 var long= meldingen[meldingIndex].locatie.longitude;
 
-var tit = "Andere";
 console.log(titel);
 console.log(gid);
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +"," + lat + "," + long + "," + mid + "," + titel + ")' href=# id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding("+ mid +")' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "\n\Titel: <textarea cols=40 rows=8 name=textarea id=textareaTitelMeldingenAdmin>" + titel + "</textarea></p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +"," + lat + "," + long + "," + mid + ")' href=#pageAdminMeldingen id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding("+ mid +")' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
  
@@ -237,11 +237,11 @@ function deleteMelding(meldingIndex) {
 } 
 
 
-function updateMelding(meldingIndex, gid, lat, long, mid, tit) {
+function updateMelding(meldingIndex, gid, lat, long, mid) {
    	var melding = jQuery.extend(true, {}, meldingen[meldingIndex]);
         //var tit = "Andere";
         
-        console.log("titel bij functie: " + tit);
+        console.log("titel bij functie: " );
         
 var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
     var request = new XMLHttpRequest();
@@ -252,7 +252,7 @@ var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
             var gebruiker = JSON.parse(request.responseText);
             gid2 = gebruiker.gebruikerId;
             console.log(gid2);
-    melding.titel = tit;
+    melding.titel = jQuery.trim($("#textareaTitelMeldingenAdmin").val());
     melding.gebruiker = {gebruikerId : gid2};
     melding.locatie = {latitude : lat , longitude : long};
     melding.meldingId = mid;
@@ -270,7 +270,8 @@ var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
     };
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(melding));  
-            
+    window.location.reload('#pageAdminMeldingen'); 
+    
         }
         else
         {
@@ -558,42 +559,15 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
     
 });
 
- function laadMap1() {
- if(navigator.geolocation) {
-        
-        function hasPosition(position) {
-            var point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            
-            myOptions = {
-                zoom: 17,
-                center: point,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            },
-            
-            mapDiv = document.getElementById("map_canvas2");
-            map = new google.maps.Map(mapDiv, myOptions);
-                 marker = new google.maps.Marker({
-                position: point,
-                map: map,
-                animation: google.maps.Animation.DROP,
-		draggable: false,
-                title: "You are here"
-            });
-        }
-        navigator.geolocation.getCurrentPosition(hasPosition);
-        
-    }
-    
- }
 
 
 ///* UPLOAD */
 //
 //var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
 //
-//onload = function() {
-//    document.getElementById("btnPlaatsEvent").onclick = sendFile;
-//};
+////onload = function() {
+////    document.getElementById("btnPlaatsEvent").onclick = sendFile;
+////};
 //
 //function sendFile() {
 //    //document.getElementById("status").innerHTML = "";
@@ -628,12 +602,12 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
 //
 ///* DOWNLOAD */
 //
-//var BASE_URL = "http://localhost:8080/fileserver/resources/";
-//
-//onload = function() {
-//    loadImageSelect();
-//    $("#download").click(downloadSelectedImage);
-//};
+////var BASE_URL = "http://localhost:8080/fileserver/resources/";
+////
+//////onload = function() {
+//////    loadImageSelect();
+//////    $("#download").click(downloadSelectedImage);
+////};
 //
 //function loadImageSelect() {
 //    $("#images").empty();
@@ -660,34 +634,34 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
 //    var img = $("<img>").attr("src", BASE_URL + "images/" + file).attr("alt", "Your downloaded images");
 //    $("body").append(img);
 //}
-
-
-//Registreer + admin
-function createRegistreerGebruikerFromInput() {
-                 
-    var gebruiker = {};
-    
-    //getGebruikerByUID();
-    gebruiker.naam = jQuery.trim($("#textinputRegistreerNaam").val());
-    gebruiker.voornaam = jQuery.trim($("#textinputRegistreerVoornaam").val());
-    gebruiker.email = jQuery.trim($("#textinputRegistreeremail").val());
-    gebruiker.password = jQuery.trim($("#passwordinputRegistreerWachtwoord").val());
-    // Send the new group to the back-end.
-    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
-    var request = new XMLHttpRequest();
-    request.open("POST", url);
-    request.onload = function() {
-        if (request.status === 201) {
-            gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
-        } else {
-            console.log("Error creating event: " + request.status + " " + request.responseText);
-        }
-    };
-    
-    request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(gebruiker));
-    alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
-}
+//
+//
+////Registreer + admin
+//function createRegistreerGebruikerFromInput() {
+//                 
+//    var gebruiker = {};
+//    
+//    //getGebruikerByUID();
+//    gebruiker.naam = jQuery.trim($("#textinputRegistreerNaam").val());
+//    gebruiker.voornaam = jQuery.trim($("#textinputRegistreerVoornaam").val());
+//    gebruiker.email = jQuery.trim($("#textinputRegistreeremail").val());
+//    gebruiker.password = jQuery.trim($("#passwordinputRegistreerWachtwoord").val());
+//    // Send the new group to the back-end.
+//    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
+//    var request = new XMLHttpRequest();
+//    request.open("POST", url);
+//    request.onload = function() {
+//        if (request.status === 201) {
+//            gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
+//        } else {
+//            console.log("Error creating event: " + request.status + " " + request.responseText);
+//        }
+//    };
+//    
+//    request.setRequestHeader("Content-Type", "application/json");
+//    request.send(JSON.stringify(gebruiker));
+//    alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
+//}
 
 function LoginDatabank(){
     
@@ -731,25 +705,41 @@ function initializeMaps() {
     };
     var map = new google.maps.Map(document.getElementById("map_canvas3"),myOptions);
     
-    // Load the groups from the back-end.
-    var request = new XMLHttpRequest();
+    setMarkersMeldingen(map);
+	    infowindow = new google.maps.InfoWindow({
+                content: "loading..."
+            });
+    setMarkersEvents(map);
+	    infowindow = new google.maps.InfoWindow({
+                content: "loading..."
+            });         
+
+        function setMarkersMeldingen(map) {
+
+          var request = new XMLHttpRequest();
     var url = "http://localhost:8080/onzebuurt/resources/meldingen";
     request.open("GET", url);
     request.onload = function() {
         if (request.status === 200) {
             meldingen = JSON.parse(request.responseText);
+            var contentString;
             for (var i = 0; i < meldingen.length; i++) {
+                
                  marker = new google.maps.Marker({
                  position: new google.maps.LatLng(meldingen[i].locatie.latitude, meldingen[i].locatie.longitude),
                  map: map,
-                 title: meldingen[i].titel + ": " + meldingen[i].details
+                 icon: 'repairIcons.png',
+                 title: contentString = (meldingen[i].titel + ": " + meldingen[i].details)
                  
             });
+            
 
-    
-                google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map, marker);
-    });
+            google.maps.event.addListener(marker, "click", function () {
+                infowindow.setContent(contentString);
+                alert(meldingen[i].titel);
+                infowindow.open(i);
+            });
+            
             }           
             if (meldingen.length > 0) {
 
@@ -763,9 +753,46 @@ function initializeMaps() {
 
     };
     request.send(null);
-}
 
- $(document).on("pageshow", "#page2", function() {
+
+        }
+        
+        function setMarkersEvents(map) {
+
+         var request = new XMLHttpRequest();
+    var url = "http://localhost:8080/onzebuurt/resources/evenements";
+    request.open("GET", url);
+    request.onload = function() {
+        if (request.status === 200) {
+            events = JSON.parse(request.responseText);
+            for (var i = 0; i < events.length; i++) {
+                 marker2 = new google.maps.Marker({
+                 position: new google.maps.LatLng(events[i].locatie.latitude, events[i].locatie.longitude),
+                 map: map,
+                 icon: 'familyIcon.png',
+                 title: events[i].titel + ": " + events[i].details
+                 
+            });
+            }           
+            if (events.length > 0) {
+
+            } else {
+
+            }
+        } else {
+
+        }
+  
+
+    };
+    request.send(null);
+ 
+
+
+        }
+}
+ 
+  $(document).on("pageshow", "#page2", function() {
    
         initializeMaps();
     

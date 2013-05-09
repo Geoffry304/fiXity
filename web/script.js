@@ -219,6 +219,8 @@ pageMeldingInformation.appendTo( $.mobile.pageContainer );
 //go to it
 $.mobile.changePage( pageMeldingInformation );
 }
+
+//delete melding via het adminpaneel
 function deleteMelding(meldingIndex) {
     
     // Send a delete request to the back-end.
@@ -236,7 +238,7 @@ function deleteMelding(meldingIndex) {
     request.send(null);
 } 
 
-
+//past een melding aan via het updatepaneel
 function updateMelding(meldingIndex, gid, lat, long, mid) {
    	var melding = jQuery.extend(true, {}, meldingen[meldingIndex]);
         //var tit = "Andere";
@@ -368,6 +370,7 @@ window.fbAsyncInit = function() {
     ref.parentNode.insertBefore(js, ref);
 }(document));
 
+//logt gebruiker uit (enkel via facebook)
 function logout() {
     
 
@@ -381,6 +384,7 @@ function logout() {
 
 }
 
+//maakt gebruiker aan via het aanmeldingsscherm
 function createGebruikerFromInput(uid, naam, voornaam, date, email) {
 //var events = [];
     var gebruiker = {};
@@ -406,6 +410,7 @@ function createGebruikerFromInput(uid, naam, voornaam, date, email) {
 
 }
 
+//login enkel via facebook
 function login() {
     FB.getLoginStatus(function(response) {
         console.log("roept ze aan")
@@ -472,6 +477,7 @@ function login() {
     });
 }
 
+//vind de gebruiker via facebookid
 function getGebruikerByUID() {
                    
     var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
@@ -493,11 +499,12 @@ function getGebruikerByUID() {
     request.send(null);
 
 }
-//*FB POST
 
+//*FB POST
 FB.init({appId: "118529111674998", status: true, cookie: true});
 
-      function postToFeed() {
+//Post op facebook timeline
+function postToFeed() {
 
         // calling the API ...
         var obj = {
@@ -517,8 +524,7 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
         FB.ui(obj, callback);
       }
 	
-//*GOOGLE MAPS
-
+//*GOOGLE MAPS voor het zoekenpaneel
  function laadMap() {
  if(navigator.geolocation) {
         
@@ -663,6 +669,7 @@ FB.init({appId: "118529111674998", status: true, cookie: true});
 //    alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
 //}
 
+//gewone login, niet via facebook (ook voor admin)
 function LoginDatabank(){
     
     var email = jQuery.trim($("#emailinput").val());
@@ -695,25 +702,30 @@ function LoginDatabank(){
     
 }
 
+//Overzichtmap van meldingen en evenementen in het Mappanneel
 function initializeMaps() {
-    var latlng = new google.maps.LatLng(50.93998968, 4.02869343);
+     if(navigator.geolocation) {
+        
+        function hasPosition(position) {
+            var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    
     var myOptions = {
         zoom: 14,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapTypeControl: false
     };
+            
     var map = new google.maps.Map(document.getElementById("map_canvas3"),myOptions);
-    
+            
     setMarkersMeldingen(map);
 	    infowindow = new google.maps.InfoWindow({
                 content: "loading..."
             });
-    setMarkersEvents(map);
+    setMarkersEvents(map),
 	    infowindow = new google.maps.InfoWindow({
                 content: "loading..."
-            });         
-
+            });    
+     
         function setMarkersMeldingen(map) {
 
           var request = new XMLHttpRequest();
@@ -733,12 +745,24 @@ function initializeMaps() {
                  
             });
             
+                var popupContent = meldingen[i].titel + ": " + meldingen[i].details + " - Geplaatst door: " + meldingen[i].gebruiker.voornaam + " " + meldingen[i].gebruiker.naam;
+                
+                createInfoWindow(marker, popupContent);
+                
+                 var infoWindow = new google.maps.InfoWindow();
+    function createInfoWindow(marker, popupContent) {
+        google.maps.event.addListener(marker, 'click', function () {
+            infoWindow.setContent(popupContent);
+            infoWindow.open(map, this);
+        });
+    }
+    
 
-            google.maps.event.addListener(marker, "click", function () {
-                infowindow.setContent(contentString);
-                alert(meldingen[i].titel);
-                infowindow.open(i);
-            });
+//            google.maps.event.addListener(marker, "click", function (i) {
+//                //infowindow.setContent(contentString);
+//                console.log(i);
+//                infowindow.open(this);
+//            });
             
             }           
             if (meldingen.length > 0) {
@@ -766,13 +790,25 @@ function initializeMaps() {
         if (request.status === 200) {
             events = JSON.parse(request.responseText);
             for (var i = 0; i < events.length; i++) {
-                 marker2 = new google.maps.Marker({
+                 marker = new google.maps.Marker({
                  position: new google.maps.LatLng(events[i].locatie.latitude, events[i].locatie.longitude),
                  map: map,
                  icon: 'familyIcon.png',
                  title: events[i].titel + ": " + events[i].details
                  
             });
+
+                var popupContent = events[i].titel + ": " + events[i].details + " - Geplaatst door: " + events[i].gebruiker.voornaam + " " + events[i].gebruiker.naam;
+                
+                createInfoWindow(marker, popupContent);
+                
+                 var infoWindow = new google.maps.InfoWindow();
+    function createInfoWindow(marker, popupContent) {
+        google.maps.event.addListener(marker, 'click', function () {
+            infoWindow.setContent(popupContent);
+            infoWindow.open(map, this);
+        });
+    }
             }           
             if (events.length > 0) {
 
@@ -790,10 +826,22 @@ function initializeMaps() {
 
 
         }
+        
 }
- 
+navigator.geolocation.getCurrentPosition(hasPosition);
+     }
+}
+
   $(document).on("pageshow", "#page2", function() {
    
         initializeMaps();
     
+});
+
+//bewegende vlag
+$(document).ready(function(){
+    $(".logo").hover(
+        function() {$(this).attr("src","flag2.png");}, 
+        function() {$(this).attr("src","flag1.png");
+    });
 });

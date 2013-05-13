@@ -32,6 +32,7 @@ function createEventFromInput() {
     event.locatie = {latitude : latitude, longitude : longitude};
     event.gebruiker = {gebruikerId : gebruikerid};
     event.datum = jQuery.trim($("#datepickerEvent").val());
+    console.log(fileName);
     event.afbeelding = fileName;
     
             if(jQuery.trim($("#flipswitchFBEvent").val()) === "on")
@@ -184,6 +185,21 @@ function createListElementForMeldingAdmin(meldingIndex) {
      
 }
 
+//function mapMeldingInformatie() {
+//  var mapOptions = {
+//    zoom: 8,
+//    center: new google.maps.LatLng(-34.397, 150.644),
+//    mapTypeId: google.maps.MapTypeId.ROADMAP
+//  };
+//  map = new google.maps.Map(document.getElementById('map-canvas'),
+//      mapOptions);
+//}
+//  $(document).on("pageshow", "#pageAdminOpties", function() {
+//   
+//        mapMeldingInformatie();
+//    
+//});
+
 //vult de nieuwe pagina als je op de listview van meldingen klikt
 function createPageMeldingInformation(meldingIndex) {
 var titel = meldingen[meldingIndex].titel;
@@ -191,8 +207,7 @@ var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[mel
 var details = meldingen[meldingIndex].details;
 var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
 
-
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie +"</p></div></div"); 
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:380px;></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie +"</p></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
  
@@ -335,7 +350,7 @@ var afbeelding = events[eventIndex].afbeelding;
 //var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
     var img = BASE_URL + "images/" + afbeelding;
 console.log(afbeelding);
-var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content>" + "Geplaatst door: " + gebruiker + "<p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum + "</p><img src="+ img +"></div></div>");
+var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><img src="+ img +" style=width:350px;height:350px><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum + "</p></div></div>");
 
 //append it to the page container
 newPage.appendTo( $.mobile.pageContainer );
@@ -524,46 +539,116 @@ function postToFeed() {
       }
 	
 //*GOOGLE MAPS voor het zoekenpaneel
- function laadMap() {
- if(navigator.geolocation) {
+// function laadMap() {
+// if(navigator.geolocation) {
+//        
+//        function hasPosition(position) {
+//            var point = new google.maps.LatLng(latitude = position.coords.latitude, longitude = position.coords.longitude),
+//            
+//            myOptions = {
+//                zoom: 17,
+//                center: point,
+//                mapTypeId: google.maps.MapTypeId.ROADMAP
+//            },
+//            
+//            mapDiv = document.getElementById("map_canvas"),
+//            map = new google.maps.Map(mapDiv, myOptions),
+//			            marker = new google.maps.Marker({
+//                position: point,
+//                map: map,
+//                animation: google.maps.Animation.DROP,
+//		draggable: true,
+//                title: "You are here"
+//            });
+//            
+//            
+//        google.maps.event.addListener(marker, 'dragend', function(evt){
+//           
+//        latitude = evt.latLng.lat();
+//        longitude = evt.latLng.lng();
+//});
+//			
+//        }
+//        navigator.geolocation.getCurrentPosition(hasPosition);
+//        
+//    }
+//    
+// }
+
+
+
+$(document).on("pageshow", "#pageMelding", function() {
+   
+        initialize2();
+    
+});
+
+    function initialize2() {
+           if(navigator.geolocation) {
         
         function hasPosition(position) {
-            var point = new google.maps.LatLng(latitude = position.coords.latitude, longitude = position.coords.longitude),
-            
-            myOptions = {
-                zoom: 17,
-                center: point,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            },
-            
-            mapDiv = document.getElementById("map_canvas"),
-            map = new google.maps.Map(mapDiv, myOptions),
-			            marker = new google.maps.Marker({
-                position: point,
+            var latlng = new google.maps.LatLng(latitude = position.coords.latitude, longitude = position.coords.longitude);
+            console.log(latitude + " , " + longitude);
+                    
+    var myOptions = {
+        zoom: 14,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+    };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
+        
+    marker = new google.maps.Marker({
+                position: latlng,
                 map: map,
                 animation: google.maps.Animation.DROP,
 		draggable: true,
-                title: "You are here"
+                title: "Druk op volgende als je deze locatie kiest"
             });
-            
-            
-        google.maps.event.addListener(marker, 'dragend', function(evt){
+    
+                    google.maps.event.addListener(marker, 'dragend', function(evt){
            
         latitude = evt.latLng.lat();
         longitude = evt.latLng.lng();
+        console.log(latitude + " , " + longitude);
 });
-			
+
+ 
+      var input = document.getElementById('searchTextField');
+      var autocomplete = new google.maps.places.Autocomplete(input);
+ 
+      autocomplete.bindTo('bounds', map);
+ 
+      var infowindow = new google.maps.InfoWindow();
+      var marker1 = new google.maps.Marker({
+        map: map,
+        draggable: true
+      });
+ 
+      google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        marker1.setMap(null);
+        infowindow.close();
+        var place = autocomplete.getPlace();
+        if (place.geometry.viewport) {
+          map.fitBounds(place.geometry.viewport);
+        } else {
+          map.setCenter(place.geometry.location);
+          map.setZoom(17);  // Why 17? Because it looks good.
         }
-        navigator.geolocation.getCurrentPosition(hasPosition);
         
+        latitude = place.geometry.location.lat();
+        longitude = place.geometry.location.lng();
+        
+	console.log(latitude + " , " + longitude);
+
+        marker.setPosition(place.geometry.location);
+
+      });
     }
-    
- }
- $(document).on("pageshow", "#pageMelding", function() {
-   
-        laadMap();
-    
-});
+    //google.maps.event.addDomListener(window, 'load', initialize);
+}
+navigator.geolocation.getCurrentPosition(hasPosition);
+     }
+
 
 
 

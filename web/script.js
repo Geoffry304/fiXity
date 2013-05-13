@@ -4,7 +4,6 @@ var latitude;
 var longitude;
 var gebruikerid;
 
-
 function init() {
         login();
         initialiseListMeldingen();
@@ -127,7 +126,6 @@ function initialiseListMeldingen() {
             if (meldingen.length > 0) {
                 console.log("Gelukt");
                 $("#meldingList").listview('refresh');
-                $("#meldingListAdmin").listview('refresh');
             } else {
                 console.log("Error");
             }
@@ -189,6 +187,7 @@ var titel = meldingen[meldingIndex].titel;
 var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam;
 var details = meldingen[meldingIndex].details;
 var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
+
 
 var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie +"</p></div></div"); 
 //append it to the page container
@@ -271,9 +270,7 @@ var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
         }
     };
     request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(melding));  
-    window.location.reload('#pageAdminMeldingen'); 
-    
+    request.send(JSON.stringify(melding));
         }
         else
         {
@@ -547,6 +544,7 @@ function postToFeed() {
                 title: "You are here"
             });
             
+            
         google.maps.event.addListener(marker, 'dragend', function(evt){
            
         latitude = evt.latLng.lat();
@@ -567,13 +565,13 @@ function postToFeed() {
 
 
 
-///* UPLOAD */
+/* UPLOAD */
 //
 //var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
-//
-////onload = function() {
-////    document.getElementById("btnPlaatsEvent").onclick = sendFile;
-////};
+
+//onload = function() {
+//    document.getElementById("btnPlaatsEvent").onclick = sendFile;
+//};
 //
 //function sendFile() {
 //    //document.getElementById("status").innerHTML = "";
@@ -745,7 +743,7 @@ function initializeMaps() {
                  
             });
             
-                var popupContent = meldingen[i].titel + ": " + meldingen[i].details + " - Geplaatst door: " + meldingen[i].gebruiker.voornaam + " " + meldingen[i].gebruiker.naam;
+                var popupContent = '<h3>' + meldingen[i].titel + ": " + meldingen[i].details + '</h3>' +  '<p>' + "Geplaatst door: " + meldingen[i].gebruiker.voornaam + " " + meldingen[i].gebruiker.naam +'</p>';
                 
                 createInfoWindow(marker, popupContent);
                 
@@ -798,8 +796,8 @@ function initializeMaps() {
                  
             });
 
-                var popupContent = events[i].titel + ": " + events[i].details + " - Geplaatst door: " + events[i].gebruiker.voornaam + " " + events[i].gebruiker.naam;
-                
+               var popupContent = '<h3>' + events[i].titel + ": " + events[i].details + '</h3>' +  '<p>' + "Geplaatst door: " + events[i].gebruiker.voornaam + " " + events[i].gebruiker.naam +'</p>';
+                 
                 createInfoWindow(marker, popupContent);
                 
                  var infoWindow = new google.maps.InfoWindow();

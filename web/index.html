@@ -133,7 +133,7 @@
 		   	 	<h1>Locatie kiezen</h1>
 		    	<a href="#pageMeldingPlaatsen" data-role="button" data-icon="arrow-r" class="ui-btn-right" data-iconpos="right">Next</a>
 	      	</div>
-                    
+
 		  	<div id="map_canvas" style="position: absolute; width:100%; height:91%"></div>
                     
    		</div>
@@ -167,9 +167,10 @@
                     		<option value="on">0</option>
                   		</select>
                		</div>
-               		<div data-role="fieldcontain">
-                   		<a onclick='getGebruikerByUID()' href="#" id="btnFotoMeldingen" data-role="button" data-icon="star">Foto plaatsen</a>
-              		</div>
+                                <div data-role="fieldcontain">
+                                     <label for="fotoEvent">Foto: </label>
+     <input type="file" data-clear-btn="true" name="file-2" id="fotoEvent" value="">
+                                </div>
                 	<a onclick='postToFeed(); return false;' href="#" id="btnFbMeldingen" data-role="button" data-icon="star">Post on Facebook</a>
               		<a onclick='createMeldingFromInput()' href="#page" id="btnPlaatsMeldingen" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
       			</div>
@@ -190,7 +191,7 @@
             	</div>
                 <div data-role="fieldcontain">
                 	<label for="datepickerEvent">Datum:         </label>
-                	<input id="datepickerEvent" type="date">
+                	<input id="datepickerEvent" type="text" placeholder="dd/mm/yyyy">
              	</div>
                 <div data-role="fieldcontain">
                 	<label for="flipswitchFBEvent">facebook:         </label>                	
@@ -199,11 +200,12 @@
                     	<option value="on">0</option>
                   	</select>
                 </div>
-                <div data-role="fieldcontain">
-                   	<a onclick='getGebruikerByUID()' href="#page" id="btnFotoEvent" data-role="button" data-icon="star">Foto plaatsen</a>
-              	</div>
+                                <div data-role="fieldcontain">
+                                     <label for="fotoMelding">Foto: </label>
+     <input type="file" data-clear-btn="true" name="file-2" id="fotoMelding" value="">
+                                </div>
                 <a onclick='postToFeed(); return false;' href="#" id="btnFBEvent" data-role="button" data-icon="star">Post on Facebook</a>
-              	<a onclick='createEventFromInput()' href="#page" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Melding plaatsen</a>
+              	<a onclick='createEventFromInput()' href="#page" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Evenement plaatsen</a>
              </div>         
             </div>
             </div>       
@@ -245,16 +247,50 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="alert" data-theme="b">Meldingen</a></li>
-						<li><a href="#" data-icon="home" data-theme="b">Evenementen</a></li>
+						<li><a href="#pageAdminEvenementen" data-icon="home" data-theme="b">Evenementen</a></li>
                                                 <li><a href="#" data-icon="info" data-theme="b">Feedback</a></li>
-                                                <li><a href="#" data-icon="grid" data-theme="b">Gebruikers</a></li>
+                                                <li><a href="#pageAdminGebruikers" data-icon="grid" data-theme="b">Gebruikers</a></li>
+					</ul>
+				</div>
+			</div>
+        </div>
+                    <div data-role="page" id="pageAdminEvenementen">
+          <div data-role="header" data-theme="b">
+            <a href="#pageAdminOpties" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="right">Opties</a>
+                <h1>Admin pagina</h1>
+          </div>
+<ul data-role="listview" id="evenementenListAdmin" data-split-icon="gear" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
+	<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#pageAdminMeldingen" data-icon="alert" data-theme="b">Meldingen</a></li>
+						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="home" data-theme="b">Evenementen</a></li>
+                                                <li><a href="#" data-icon="info" data-theme="b">Feedback</a></li>
+                                                <li><a href="#pageAdminGebruikers" data-icon="grid" data-theme="b">Gebruikers</a></li>
+					</ul>
+				</div>
+			</div>
+        </div>
+            <div data-role="page" id="pageAdminGebruikers">
+          <div data-role="header" data-theme="b">
+            <a href="#pageAdminOpties" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="right">Opties</a>
+                <h1>Admin pagina</h1>
+          </div>
+<ul data-role="listview" id="gebruikersListAdmin" data-split-icon="gear" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
+	<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#pageAdminMeldingen" data-icon="alert" data-theme="b">Meldingen</a></li>
+						<li><a href="#pageAdminEvenementen"  data-icon="home" data-theme="b">Evenementen</a></li>
+                                                <li><a href="#" data-icon="info" data-theme="b">Feedback</a></li>
+                                                <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="grid" data-theme="b">Gebruikers</a></li>
 					</ul>
 				</div>
 			</div>
         </div>
              <div data-role="page" id="pageAdminOpties">
           <div data-role="header" data-theme="b">
-            <a href="#pageAdminMeldingen" data-role="button" data-icon="arrow-l" data-iconpos="left">Back</a>
+            <a href="javascript:history.back(-1);" data-role="button" data-icon="arrow-l" data-iconpos="left">Back</a>
                 <h1>Instellingen</h1>
           </div>
                  <a href="#pageHow" id="btnHow" data-role="button" data-icon="info">Instructies</a>

@@ -51,7 +51,7 @@ public class EvenementDOA {
                 }
             }
 
-            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO Evenement VALUES(?, ?, ?, ?, ?, ?, ?)")) {
+            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO Evenement VALUES(?, ?, ?, ?, ?, ?, ?, ?)")) {
                 stat.setInt(1, e.getEvenementId());
                 stat.setString(2, e.getTitel());
                 stat.setString(3, e.getDetails());
@@ -64,8 +64,9 @@ public class EvenementDOA {
                 stat.setDouble(5, 0);
                 }
                 
-                stat.setDate(6, (Date) e.getDatum());
+                stat.setString(6, e.getDatum());
                 stat.setInt(7, e.getGebruiker().getGebruikerId());
+                stat.setString(8, e.getAfbeelding());
                 stat.executeUpdate();
             }
 
@@ -88,6 +89,8 @@ public class EvenementDOA {
                         e.setEvenementId(rs.getInt("EvenementId"));
                         e.setTitel(rs.getString("Titel"));
                         e.setDetails(rs.getString("Details"));
+                        e.setDatum(rs.getString("Datum"));
+                        e.setAfbeelding(rs.getString("Afbeelding"));
 
                         Gebruiker g = new Gebruiker();
                         g.setGebruikerId(rs.getInt("GebruikerId"));
@@ -125,6 +128,8 @@ public class EvenementDOA {
                         e.setEvenementId(rs.getInt("EvenementId"));
                         e.setTitel(rs.getString("Titel"));
                         e.setDetails(rs.getString("Details"));
+                        e.setDatum(rs.getString("Datum"));
+                        e.setAfbeelding(rs.getString("Afbeelding"));
 
                         Gebruiker g = new Gebruiker();
                         g.setGebruikerId(rs.getInt("Gebruiker.GebruikerId"));
@@ -176,7 +181,7 @@ public class EvenementDOA {
                 stat.setInt(3, e.getGebruiker().getGebruikerId());
                 stat.setDouble(4, e.getLocatie().getLatitude());
                 stat.setDouble(5, e.getLocatie().getLongitude());
-                stat.setDate(6, (Date) e.getDatum());
+                stat.setString(6, e.getDatum());
                 stat.setInt(7, e.getEvenementId());
                 stat.executeUpdate();
             }

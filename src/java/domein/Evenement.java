@@ -7,9 +7,10 @@ public class Evenement {
     
     private int evenementId;
     private String titel, details;
-    private Date datum;
+    private String datum;
     private Gebruiker gebruiker;
     private Locatie locatie;
+    private String afbeelding;
     
     
     public Evenement() {
@@ -17,7 +18,7 @@ public class Evenement {
 
     }
 
-    public Evenement(int evenementId, String titel, String details, Date datum, Gebruiker gebruiker, Locatie locatie) {
+    public Evenement(int evenementId, String titel, String details, String datum, Gebruiker gebruiker, Locatie locatie) {
         this.evenementId = evenementId;
         this.titel = titel;
         this.details = details;
@@ -50,12 +51,16 @@ public class Evenement {
         this.details = details;
     }
 
-    public Date getDatum() {
+    public String getDatum() {
         return datum;
     }
 
-    public void setDatum(Date datum) {
-        this.datum = datum;
+    public void setDatum(String datum) {
+        
+
+          this.datum = datum;  
+
+        
     }
 
     public Gebruiker getGebruiker() {
@@ -73,6 +78,16 @@ public class Evenement {
     public void setLocatie(Locatie locatie) {
         this.locatie = locatie;
     }
+
+    public String getAfbeelding() {
+        return afbeelding;
+    }
+
+    public void setAfbeelding(String afbeelding) {
+        this.afbeelding = afbeelding;
+    }
+    
+    
     
     
     

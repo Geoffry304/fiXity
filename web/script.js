@@ -3,6 +3,8 @@ var uid;
 var latitude;
 var longitude;
 var gebruikerid;
+var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
+var fileName;
 
 function init() {
         login();
@@ -13,10 +15,10 @@ function init() {
 
 //zet een event in de database
 function createEventFromInput() {
-                 
-    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
-    var request = new XMLHttpRequest();
-    request.open("GET", url + uid);
+  sendFile();
+  var request = new XMLHttpRequest();
+
+    request.open("GET", BASE_URL + "gebruikers/fbid/" + uid);
     request.onload = function() {
         if (request.status === 200) {
             var gebruiker = JSON.parse(request.responseText);
@@ -24,11 +26,13 @@ function createEventFromInput() {
             console.log(gebruikerid);
             var event = {};
     
-    //getGebruikerByUID();
+    
     event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
     event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
     event.locatie = {latitude : latitude, longitude : longitude};
     event.gebruiker = {gebruikerId : gebruikerid};
+    event.datum = jQuery.trim($("#datepickerEvent").val());
+    event.afbeelding = fileName;
     
             if(jQuery.trim($("#flipswitchFBEvent").val()) === "on")
         {
@@ -37,8 +41,7 @@ function createEventFromInput() {
         }
       
     // Send the new group to the back-end.
-    var url = "http://localhost:8080/onzebuurt/resources/evenements";
-    request.open("POST", url);
+    request.open("POST", BASE_URL + "evenements");
     request.onload = function() {
         if (request.status === 201) {
             event.evenementid = request.getResponseHeader("Location").split("/").pop();
@@ -49,8 +52,7 @@ function createEventFromInput() {
     
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(event));  
-    window.location.reload('#page');
-    window.location.reload('#pageEvent');
+
         }
         else
         {
@@ -58,14 +60,16 @@ function createEventFromInput() {
         }
     };
     request.send(null);
+    //sendFile();
+//        window.reload('#page');
+//    window.reload('#pageEvent');
 }
 
 //zet een melding in de database
 function createMeldingFromInput() {
                  
-    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
     var request = new XMLHttpRequest();
-    request.open("GET", url + uid);
+    request.open("GET", BASE_URL + "gebruikers/fbid/"+ uid);
     request.onload = function() {
         if (request.status === 200) {
             var gebruiker = JSON.parse(request.responseText);
@@ -73,7 +77,8 @@ function createMeldingFromInput() {
             console.log(gebruikerid);
             var melding = {};
     
-    //getGebruikerByUID();
+    
+ 
     melding.titel = jQuery.trim($("#selectmenuTitelMeldingen").val());
     melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
     melding.locatie = {latitude : latitude, longitude : longitude};
@@ -86,8 +91,7 @@ function createMeldingFromInput() {
         }
       
     // Send the new group to the back-end.
-    var url = "http://localhost:8080/onzebuurt/resources/meldingen";
-    request.open("POST", url);
+    request.open("POST", BASE_URL + "meldingen");
     request.onload = function() {
         if (request.status === 201) {
             melding.MeldingId = request.getResponseHeader("Location").split("/").pop();
@@ -114,8 +118,7 @@ function initialiseListMeldingen() {
     
     // Load the groups from the back-end.
     var request = new XMLHttpRequest();
-    var url = "http://localhost:8080/onzebuurt/resources/meldingen";
-    request.open("GET", url);
+    request.open("GET", BASE_URL  + "meldingen");
     request.onload = function() {
         if (request.status === 200) {
             meldingen = JSON.parse(request.responseText);
@@ -224,9 +227,8 @@ function deleteMelding(meldingIndex) {
     
     // Send a delete request to the back-end.
     
-    var url = "http://localhost:8080/onzebuurt/resources/meldingen/";
     var request = new XMLHttpRequest();
-    request.open("DELETE", url +  meldingIndex);
+    request.open("DELETE", BASE_URL + "meldingen/" +  meldingIndex);
     request.onload = function() {
         if (request.status === 204) {
             console.log("gelukt");
@@ -244,9 +246,8 @@ function updateMelding(meldingIndex, gid, lat, long, mid) {
         
         console.log("titel bij functie: " );
         
-var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
     var request = new XMLHttpRequest();
-    request.open("GET", url + gid);
+    request.open("GET", BASE_URL + "gebruikers/gebruikerid/" + gid);
     request.onload = function() {
         if (request.status === 200) {
         	var gid2;
@@ -260,8 +261,8 @@ var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
     melding.details = jQuery.trim($("#textareaOmschrijvingMeldingenAdmin").val());
     
     // Send the new group to the back-end.
-    var url = "http://localhost:8080/onzebuurt/resources/meldingen/";
-    request.open("PUT", url + meldingIndex);
+    
+    request.open("PUT", BASE_URL + "meldingen/" + meldingIndex);
     request.onload = function() {
         if (request.status === 204) {
  
@@ -284,8 +285,8 @@ var url = "http://localhost:8080/onzebuurt/resources/gebruikers/gebruikerid/";
 function initialiseListEvenementen() {   
     // Load the groups from the back-end.
     var request = new XMLHttpRequest();
-    var url = "http://localhost:8080/onzebuurt/resources/evenements";
-    request.open("GET", url);
+    
+    request.open("GET", BASE_URL + "evenements");
     request.onload = function() {
         if (request.status === 200) {
             events = JSON.parse(request.responseText);
@@ -328,10 +329,13 @@ var titel = events[eventIndex].titel;
 var gebruiker = events[eventIndex].gebruiker.voornaam + " " + events[eventIndex].gebruiker.naam;
 var details = events[eventIndex].details;
 var locatie = events[eventIndex].locatie.latitude + " , " + events[eventIndex].locatie.longitude;
+var datum = events[eventIndex].datum;
+var afbeelding = events[eventIndex].afbeelding;
 
-
-
-var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content>" + "Geplaatst door: " + gebruiker + "<p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p></div></div");
+//var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
+    var img = BASE_URL + "images/" + afbeelding;
+console.log(afbeelding);
+var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content>" + "Geplaatst door: " + gebruiker + "<p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum + "</p><img src="+ img +"></div></div>");
 
 //append it to the page container
 newPage.appendTo( $.mobile.pageContainer );
@@ -393,8 +397,7 @@ function createGebruikerFromInput(uid, naam, voornaam, date, email) {
     gebruiker.email = email;
 // Send the new group to the back-end.
     var request = new XMLHttpRequest();
-    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
-    request.open("POST", url);
+    request.open("POST", BASE_URL + "gebruikers");
     request.onload = function() {
         if (request.status === 201) {
             gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
@@ -436,9 +439,8 @@ function login() {
                 if (response.authResponse) {
                     uid = response.authResponse.userID;
 
-                    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
                     var request = new XMLHttpRequest();
-                    request.open("GET", url + uid);
+                    request.open("GET", BASE_URL + "gebruikers/fbid/" + uid);
                     request.onload = function() {
                         if (request.status === 200) {
                             window.location = "#page";
@@ -477,9 +479,9 @@ function login() {
 //vind de gebruiker via facebookid
 function getGebruikerByUID() {
                    
-    var url = "http://localhost:8080/onzebuurt/resources/gebruikers/fbid/";
+    
     var request = new XMLHttpRequest();
-    request.open("GET", url + uid);
+    request.open("GET", BASE_URL + "gebruikers/fbid/"+  uid);
     request.onload = function() {
         if (request.status === 200) {
             var gebruiker = JSON.parse(request.responseText);
@@ -566,78 +568,72 @@ function postToFeed() {
 
 
 /* UPLOAD */
-//
-//var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
 
-//onload = function() {
-//    document.getElementById("btnPlaatsEvent").onclick = sendFile;
-//};
-//
-//function sendFile() {
-//    //document.getElementById("status").innerHTML = "";
-//    
-//    var file = document.getElementById("btnFotoEvent").files[0];
-//    var extension = file.name.split(".").pop();
-//    
-//    var type;
-//    if (extension === "jpg" || extension === "jpeg" ||
-//        extension === "JPG" || extension === "JPEG") {
-//        type = "image/jpeg";
-//    } else if (extension === "png" || extension === "PNG") {
-//        type = "image/png";
-//    } else {
-//        //document.getElementById("status").innerHTML = "Invalid file type";
-//        return;
-//    }
-//    
-//    var request = new XMLHttpRequest();
-//    request.open("POST", BASE_URL + "images");
-//    request.onload = function() {
-//        if (request.status === 201) {
-//            var fileName = request.getResponseHeader("Location").split("/").pop();
-//            document.getElementById("status").innerHTML = "File created with name " + fileName;
-//        } else {
-//            document.getElementById("status").innerHTML = "Error creating file: (" + request.status + ") " + request.responseText;
-//        }
-//    };
-//    request.setRequestHeader("Content-Type", type);
-//    request.send(file);
-//}
-//
+
+
+function sendFile() {
+    //document.getElementById("status").innerHTML = "";
+    var file = document.getElementById("filechooser").files[0];
+    console.log(file);
+    var extension = file.name.split(".").pop();
+    
+    var type;
+    if (extension === "jpg" || extension === "jpeg" ||
+        extension === "JPG" || extension === "JPEG") {
+        type = "image/jpeg";
+    } else if (extension === "png" || extension === "PNG") {
+        type = "image/png";
+    } else {
+        //document.getElementById("status").innerHTML = "Invalid file type";
+        return;
+    }  
+    var request = new XMLHttpRequest();
+    request.open("POST", BASE_URL + "images");
+    request.onload = function() {
+        if (request.status === 201) {
+            fileName = request.getResponseHeader("Location").split("/").pop();
+            console.log(fileName);
+        } else { 
+        }
+    };
+    request.setRequestHeader("Content-Type", type);
+    request.send(file);
+}
+
 ///* DOWNLOAD */
+
+//var BASE_URL = "http://localhost:8080/fileserver/resources/";
 //
-////var BASE_URL = "http://localhost:8080/fileserver/resources/";
-////
-//////onload = function() {
-//////    loadImageSelect();
-//////    $("#download").click(downloadSelectedImage);
-////};
-//
-//function loadImageSelect() {
-//    $("#images").empty();
-//    
-//    var request = new XMLHttpRequest();
-//    request.open("GET", BASE_URL + "images");
-//    request.onload = function() {
-//        if (request.status === 200) {
-//            var results = JSON.parse(request.responseText);
-//            for (var i = 0; i < results.length; i++) {
-//                var option = $("<option>").attr("value", results[i]).text(results[i]);
-//                $("#images").append(option);
-//            }
-//        } else {
-//            console.log("Cannot load images: " + request.status + " - " + request.responseText);
-//        }
-//    };
-//    request.send(null);
-//}
-//
-//function downloadSelectedImage() {
-//    $("img").remove();
-//    var file = $("#images").val();  
-//    var img = $("<img>").attr("src", BASE_URL + "images/" + file).attr("alt", "Your downloaded images");
-//    $("body").append(img);
-//}
+////onload = function() {
+////    loadImageSelect();
+////    $("#download").click(downloadSelectedImage);
+//};
+
+function loadImageSelect() {
+    $("#images").empty();
+    
+    var request = new XMLHttpRequest();
+    request.open("GET", BASE_URL + "images");
+    request.onload = function() {
+        if (request.status === 200) {
+            var results = JSON.parse(request.responseText);
+            for (var i = 0; i < results.length; i++) {
+                var option = $("<option>").attr("value", results[i]).text(results[i]);
+                $("#images").append(option);
+            }
+        } else {
+            console.log("Cannot load images: " + request.status + " - " + request.responseText);
+        }
+    };
+    request.send(null);
+}
+
+function downloadSelectedImage() {
+    $("img").remove();
+    var file = $("#images").val();  
+    var img = $("<img>").attr("src", BASE_URL + "images/" + file).attr("alt", "Your downloaded images");
+    $("body").append(img);
+}
 //
 //
 ////Registreer + admin
@@ -843,3 +839,9 @@ $(document).ready(function(){
         function() {$(this).attr("src","flag1.png");
     });
 });
+
+
+function noAlpha(obj){
+	reg = /[^0-9/]/g;
+	obj.value =  obj.value.replace(reg,"");
+ }

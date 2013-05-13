@@ -35,6 +35,7 @@ public class ImageService {
      * Make sure this directory exists before you run the service.
      */
     private static final java.nio.file.Path BASE_DIR = Paths.get(System.getProperty("user.home"), "Documents", "Saved Images");
+
     
     /*
      * Download a list of all image file names.

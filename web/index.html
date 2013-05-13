@@ -169,7 +169,8 @@
                		</div>
                                 <div data-role="fieldcontain">
                                      <label for="fotoEvent">Foto: </label>
-     <input type="file" data-clear-btn="true" name="file-2" id="fotoEvent" value="">
+                                     <input type="file" id="filechooserMelding">
+     <!--<input type="file" data-clear-btn="true" name="file-2" id="fotoEvent" value="">-->
                                 </div>
                 	<a onclick='postToFeed(); return false;' href="#" id="btnFbMeldingen" data-role="button" data-icon="star">Post on Facebook</a>
               		<a onclick='createMeldingFromInput()' href="#page" id="btnPlaatsMeldingen" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
@@ -191,7 +192,7 @@
             	</div>
                 <div data-role="fieldcontain">
                 	<label for="datepickerEvent">Datum:         </label>
-                	<input id="datepickerEvent" type="text" placeholder="dd/mm/yyyy">
+                	<input id="datepickerEvent" type="text" onKeyUp='noAlpha(this)' onKeyPress='noAlpha(this)' placeholder="dd/mm/yyyy">
              	</div>
                 <div data-role="fieldcontain">
                 	<label for="flipswitchFBEvent">facebook:         </label>                	
@@ -201,8 +202,8 @@
                   	</select>
                 </div>
                                 <div data-role="fieldcontain">
-                                     <label for="fotoMelding">Foto: </label>
-     <input type="file" data-clear-btn="true" name="file-2" id="fotoMelding" value="">
+                                    <label for="fotoMelding">Foto: </label>
+     <input type="file" data-clear-btn="true" name="file-2" id="filechooser" value="">
                                 </div>
                 <a onclick='postToFeed(); return false;' href="#" id="btnFBEvent" data-role="button" data-icon="star">Post on Facebook</a>
               	<a onclick='createEventFromInput()' href="#page" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Evenement plaatsen</a>

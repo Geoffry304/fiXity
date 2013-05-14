@@ -58,6 +58,7 @@ public class GebruikerDOA {
                         u.setNaam(rs.getString("naam"));
                         u.setVoornaam(rs.getString("voornaam"));
                         u.setUid(rs.getString("uid"));
+                        u.setEmail((rs.getString("email")));
                         results.add(u);
                     }
                     return results;
@@ -190,10 +191,10 @@ public class GebruikerDOA {
      * Het ingediende User object hoeft geen ID te hebben, aangezien deze ID
      * reeds in de URL te vinden is.
      */
-    @Path("{id}")
+    @Path("gebruikerid/{gebruikerId}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateUser(@PathParam("id") int id, Gebruiker u) {
+    public void updateUser(@PathParam("gebruikerId") int id, Gebruiker u) {
         try (Connection conn = source.getConnection()) {
             try (PreparedStatement stat = conn.prepareStatement("SELECT * gebruiker WHERE gebruikerId = ?")) {
                 stat.setInt(1, id);
@@ -217,9 +218,9 @@ public class GebruikerDOA {
     /*
      * Een bestaande gebruiker met het opgegeven ID verwijderen.
      */
-    @Path("{id}")
+    @Path("gebruikerid/{gebruikerId}")
     @DELETE
-    public void removeUser(@PathParam("id") int id) {
+    public void removeUser(@PathParam("gebruikerId") int id) {
         try (Connection conn = source.getConnection()) {
             try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker gebruikerId = ?")) {
                 stat.setInt(1, id);

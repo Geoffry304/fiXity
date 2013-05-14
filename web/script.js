@@ -19,7 +19,8 @@ function init() {
         initialiseListMeldingen();
         initialiseListEvenementen();
         initialiseListMeldingenAdmin();   
-        initialiseListEvenementenAdmin()
+        initialiseListEvenementenAdmin();
+        initialiseListGebruikersAdmin();
         
 }
 
@@ -490,6 +491,150 @@ newPage.appendTo( $.mobile.pageContainer );
  
 //go to it
 $.mobile.changePage( newPage );
+}
+
+function initialiseListGebruikersAdmin() {
+    
+    // Load the groups from the back-end.
+    var request = new XMLHttpRequest();
+    $("#gebruikersListAdmin").empty();
+    
+    request.open("GET", BASE_URL  + "gebruikers");
+    request.onload = function() {
+        if (request.status === 200) {
+            gebruikers = JSON.parse(request.responseText);
+            for (var i = 0; i < gebruikers.length; i++) {
+               var gid = gebruikers[i].gebruikerId;
+               $("#gebruikersListAdmin").append(createListElementForGebruikerAdmin(i, gid));
+               
+            }           
+            if (gebruikers.length > 0) {
+                console.log("Gelukt");
+               $("#gebruikersListAdmin").listview('refresh');
+                
+            } else {
+                console.log("Error");
+                
+            }
+        } else {
+            console.log("Error loading groups: " + request.status + " - "+ request.statusText);
+           
+        }
+    };
+    request.send(null);
+}
+
+function createListElementForGebruikerAdmin(gebruikerIndex, gid) {
+    
+    var link = $("<a>")
+        .text(gebruikers[gebruikerIndex].naam + " " + gebruikers[gebruikerIndex].voornaam)
+                .click(function() {
+            createPageGebruikerInformationAdmin(gebruikerIndex);     
+        });        
+
+//    var gebruiker = $("<p>") 
+//        .text("Geplaatst door " + gebruikers[gebruikerIndex].gebruiker.voornaam + " " + gebruikers[gebruikerIndex].gebruiker.naam)
+//                .click(function() {
+//            createPageGebruikerInformationAdmin(gebruikerIndex);     
+//        });
+        
+    var icon = $("<a>")
+        .text("verwijderen")
+        .click(function() {
+             deleteGebruiker(gid);     
+        });  
+        
+    return $("<li>")
+        .append(link)
+//        .append(gebruiker)
+        .append(icon)
+     
+}
+
+function createPageGebruikerInformationAdmin(gebruikerIndex) {
+var naam = gebruikers[gebruikerIndex].naam;
+var voornaam = gebruikers[gebruikerIndex].voornaam;
+var uid = gebruikers[gebruikerIndex].uid;
+var email = gebruikers[gebruikerIndex].email;
+//var locatie = events[eventIndex].locatie.latitude + " , " + events[eventIndex].locatie.longitude;
+//var mid = events[eventIndex].evenementId;
+//var gid = events[eventIndex].gebruiker.gebruikerId;
+//var lat = events[eventIndex].locatie.latitude;
+//var long= events[eventIndex].locatie.longitude;
+
+//var afbeelding = events[eventIndex].afbeelding;
+//
+////var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
+//    var img = BASE_URL + "images/" + afbeelding;
+
+var newPage = $("<div data-role=page data-url=eventAdminInformation><div data-theme=b data-role=header ><a href=#pageAdminEvenementen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + naam + " </h1></div><div data-role=content><p>" + "\n\Voornaam: <textarea cols=40 rows=8 name=textarea id=textareaVoornaamGebruiker>" + voornaam + "</textarea></p> <p>" +
+        "Achternaam: " + naam + "</p><p>" + "UID: " + uid +"</p><a onclick='updateEvent()' href=#pageAdminGebruikers id=btnGebruikerAanpassen data-role=button data-icon=check>Aanpassen</a></div></div"); 
+//append it to the page container
+
+newPage.appendTo( $.mobile.pageContainer );
+ 
+//go to it
+$.mobile.changePage( newPage );
+}
+
+function deleteGebruiker(gebruikerIndex) {
+    
+    // Send a delete request to the back-end.
+    
+    var request = new XMLHttpRequest();
+    request.open("DELETE", BASE_URL + "gebruikers/gebruikerid/" +  gebruikerIndex);
+    request.onload = function() {
+        if (request.status === 204) {
+            console.log("gelukt");
+        } else {
+            console.log("Error deleting group: " + request.status + " - " + request.statusText);
+        }
+    };
+    request.send(null);
+} 
+
+//past een melding aan via het updatepaneel
+function updateGebruiker(gebruikerIndex, gid, lat2, long2, mid2) {
+   	var gebruiker = jQuery.extend(true, {}, gebruikers[gebruikerIndex]);
+        //var tit = "Andere";
+        
+        console.log("titel bij functie: " );
+        
+    
+//    request.open("PUT", BASE_URL + "gebruikers/gebruikerid/" + gebruikerIndex);
+//    request.onload = function() {
+//        if (request.status === 204) {
+//        	var gid2;
+//            var gebruiker = JSON.parse(request.responseText);
+//            gid2 = gebruiker.gebruikerId;
+//            console.log(gid2);
+    event.titel = jQuery.trim($("#textareaTitelEvenementenAdmin").val());
+    event.gebruiker = {gebruikerId : gid2};
+    event.locatie = {latitude : lat2 , longitude : long2};
+    event.evenementId = mid2;
+    event.details = jQuery.trim($("#textareaOmschrijvingEvenementenAdmin").val());
+    event.datum = jQuery.trim($("#textareaDatumEvenementenAdmin").val());
+    // Send the new group to the back-end.
+    var request = new XMLHttpRequest();
+    request.open("PUT", BASE_URL + "gebruikers/gebruikerid" + gebruikerIndex);
+    request.onload = function() {
+        if (request.status === 204) {
+ 
+        } else {
+            console.log("Error creating event: " + request.status + " " + request.responseText);
+        }
+    };
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(event));
+//    
+//        }
+//        else
+//        {
+//            console.log("404");
+//        }
+//    };
+//    request.send(null);
+
 }
 
 //delete melding via het adminpaneel

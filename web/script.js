@@ -458,7 +458,7 @@ var afbeelding = events[eventIndex].afbeelding;
 //var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
     var img = BASE_URL + "images/" + afbeelding;
 console.log(afbeelding);
-var newPage = $("<div data-role=page data-url=eventInformation><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><img src="+ img +" style=width:350px;height:350px><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum + "</p></div></div>");
+var newPage = $("<div id=eventInfo data-role=page data-url=eventInformation ><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><img src="+ img +" style=width:350px;height:350px><p>" + "Titel: " + titel + "</p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum + "</p><h2>" + "Reacties:</h2><p>" + "Tim Van de Velde: Dit is een reactie.</p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactie placeholder=Reageer></textarea><a href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
 
 //append it to the page container
 newPage.appendTo( $.mobile.pageContainer );

@@ -16,7 +16,7 @@
         <script type="text/javascript" src="script.js"></script>
         <link rel="stylesheet" href="style.css" >
 	</head> 
-	<body>
+	<body onpageshow='initialiseListMeldingen();'>
 		<div data-role="page" id="pageAanmelden" data-theme="b" data-position="fixed">
         	<center>
            		 <img src="logo.png" style="max-width: 100%; margin-top: 150px" >
@@ -56,7 +56,7 @@
             <div data-role="navbar">
 	<ul>
 		<li><a href="" class="ui-btn-active ui-state-persist">Meldingen</a></li>
-		<li><a href="#pageEvent" >Evenementen</a></li>
+		<li><a onclick='initialiseListEvenementen();'href="#pageEvent" >Evenementen</a></li>
 	</ul>
                
 </div>   
@@ -76,7 +76,7 @@
 		</div>
         <div data-role="page" id="pageEvent" data-add-back-btn="false">
 			<div data-role="header" data-theme="b" data-position="fixed">
-				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"> <a href="#pageMelding" data-role="none" class="ui-btn-right"><img src="flag1.png" style="margin-top: 5px" class="logo"></a>
+				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"> <a href="#pageMelding" onclick='refreshtest()' data-role="none" class="ui-btn-right"><img src="flag1.png" style="margin-top: 5px" class="logo"></a>
 			</div>
             <div data-role="navbar">
 	<ul>
@@ -176,7 +176,7 @@
      <!--<input type="file" data-clear-btn="true" name="file-2" id="fotoEvent" value="">-->
                                 </div>
                 	<a onclick='postToFeed(); return false;' href="#" id="btnFbMeldingen" data-role="button" data-icon="star">Post on Facebook</a>
-              		<a onclick='createMeldingFromInput()' href="#page" id="btnPlaatsMeldingen" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
+              		<a onclick='createMeldingFromInput();' href="#page" id="btnPlaatsMeldingen" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
       			</div>
            		<div data-role="collapsible" data-collapsed="true">
 				<h3>Event plaatsen</h3>

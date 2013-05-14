@@ -1,4 +1,6 @@
 window.onload = init;
+//window.onresize = test;
+
 var uid;
 var latitude;
 var longitude;
@@ -6,9 +8,14 @@ var gebruikerid;
 var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
 var fileName;
 
+//function test() {
+//        initialiseListEvenementen();
+//        
+//}
+
 function init() {
         login();
-        initialiseListMeldingen();
+        //initialiseListMeldingen();
         initialiseListEvenementen();
         
 }
@@ -53,7 +60,6 @@ function createEventFromInput() {
     
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(event));  
-
         }
         else
         {
@@ -61,6 +67,7 @@ function createEventFromInput() {
         }
     };
     request.send(null);
+
     //sendFile();
 //        window.reload('#page');
 //    window.reload('#pageEvent');
@@ -102,9 +109,7 @@ function createMeldingFromInput() {
     };
     
     request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(melding));  
-    window.location.reload('#page');
-            
+    request.send(JSON.stringify(melding));     
         }
         else
         {
@@ -119,17 +124,21 @@ function initialiseListMeldingen() {
     
     // Load the groups from the back-end.
     var request = new XMLHttpRequest();
+    $("#meldingList").empty();
+    
     request.open("GET", BASE_URL  + "meldingen");
     request.onload = function() {
         if (request.status === 200) {
             meldingen = JSON.parse(request.responseText);
             for (var i = 0; i < meldingen.length; i++) {
                 $("#meldingList").append(createListElementForMelding(i));
-                $("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
+               // $("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
             }           
             if (meldingen.length > 0) {
-                console.log("Gelukt");
-                $("#meldingList").listview('refresh');
+                console.log("Gelukt");              
+               $("#meldingList").listview('refresh');
+               // $("#meldingListAdmin").listview('refresh');
+                
             } else {
                 console.log("Error");
             }
@@ -185,20 +194,20 @@ function createListElementForMeldingAdmin(meldingIndex) {
      
 }
 
-//function mapMeldingInformatie() {
-//  var mapOptions = {
-//    zoom: 8,
-//    center: new google.maps.LatLng(-34.397, 150.644),
-//    mapTypeId: google.maps.MapTypeId.ROADMAP
-//  };
-//  map = new google.maps.Map(document.getElementById('map-canvas'),
-//      mapOptions);
-//}
-//  $(document).on("pageshow", "#pageAdminOpties", function() {
-//   
-//        mapMeldingInformatie();
-//    
-//});
+function mapMeldingInformatie() {
+  var mapOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(-34.397, 150.644),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+}
+  $(document).on("pageshow", "#pageAdminOpties", function() {
+   
+        mapMeldingInformatie();
+    
+});
 
 //vult de nieuwe pagina als je op de listview van meldingen klikt
 function createPageMeldingInformation(meldingIndex) {
@@ -207,7 +216,7 @@ var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[mel
 var details = meldingen[meldingIndex].details;
 var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:380px;></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie +"</p></div></div"); 
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:580px;></div><div data-role=content><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie +"</p></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
  
@@ -300,6 +309,7 @@ function updateMelding(meldingIndex, gid, lat, long, mid) {
 function initialiseListEvenementen() {   
     // Load the groups from the back-end.
     var request = new XMLHttpRequest();
+     $("#eventList").empty();
     
     request.open("GET", BASE_URL + "evenements");
     request.onload = function() {
@@ -309,7 +319,8 @@ function initialiseListEvenementen() {
                 $("#eventList").append(createListElementForEvent(i));
             }            
             if (events.length > 0) {
-                $("#eventList").listview('refresh');
+                
+               $("#eventList").listview('refresh');
                 //console.log("EvenementenookGelukt");
             } else {
                 console.log("Error");
@@ -930,3 +941,8 @@ function noAlpha(obj){
 	reg = /[^0-9/]/g;
 	obj.value =  obj.value.replace(reg,"");
  }
+ 
+function reloadListviews(){
+    initialiseListEvenementen();
+    initialiseListMeldingen();
+}

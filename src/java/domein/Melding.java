@@ -14,6 +14,8 @@ public class Melding {
     private String titel, details;
     private Gebruiker gebruiker;
     private Locatie locatie;
+    private String afbeelding;
+    
 
     public Melding(int meldingId, String titel, String details, Gebruiker gebruiker, Locatie locatie) {
         this.meldingId = meldingId;
@@ -65,6 +67,14 @@ public class Melding {
 
     public void setLocatie(Locatie locatie) {
         this.locatie = locatie;
+    }
+
+    public String getAfbeelding() {
+        return afbeelding;
+    }
+
+    public void setAfbeelding(String afbeelding) {
+        this.afbeelding = afbeelding;
     }
     
     

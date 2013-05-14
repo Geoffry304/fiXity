@@ -204,10 +204,12 @@ public class GebruikerDOA {
                     }
                 }
             }
-            try (PreparedStatement stat = conn.prepareStatement("UPDATE gebruiker SET naam = ?, voornaam = ? WHERE GebruikerId = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("UPDATE gebruiker SET naam = ?, voornaam = ?, uid = ?, email = ? WHERE GebruikerId = ?")) {
                 stat.setString(1, u.getNaam());
                 stat.setString(2, u.getVoornaam());
-                stat.setInt(3, id);
+                stat.setString(3, u.getUid());
+                stat.setString(4, u.getEmail());
+                stat.setInt(5, id);
                 stat.executeUpdate();
             }
         } catch (SQLException ex) {

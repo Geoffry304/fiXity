@@ -57,7 +57,7 @@ public class MeldingDOA {
                 }
             }
 
-            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO Melding VALUES(?, ?, ?, ?, ?, ?)")) {
+            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO Melding VALUES(?, ?, ?, ?, ?, ?, ?)")) {
                 stat.setInt(1, m.getMeldingId());
                 stat.setString(2, m.getTitel());
                 stat.setString(3, m.getDetails());
@@ -71,6 +71,7 @@ public class MeldingDOA {
                 }
                 
                 stat.setInt(6, m.getGebruiker().getGebruikerId());
+                stat.setString(7, m.getAfbeelding());
                 stat.executeUpdate();
             }
 
@@ -93,6 +94,7 @@ public class MeldingDOA {
                         m.setMeldingId(rs.getInt("MeldingId"));
                         m.setTitel(rs.getString("Titel"));
                         m.setDetails(rs.getString("Details"));
+                        m.setAfbeelding(rs.getString("Afbeelding"));
 
                         Gebruiker g = new Gebruiker();
                         g.setGebruikerId(rs.getInt("GebruikerId"));
@@ -130,6 +132,7 @@ public class MeldingDOA {
                         m.setMeldingId(rs.getInt("MeldingId"));
                         m.setTitel(rs.getString("Titel"));
                         m.setDetails(rs.getString("Details"));
+                        m.setAfbeelding(rs.getString("Afbeelding"));
 
                         Gebruiker g = new Gebruiker();
                         g.setGebruikerId(rs.getInt("Gebruiker.GebruikerId"));

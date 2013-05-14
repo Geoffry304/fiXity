@@ -1,5 +1,4 @@
 window.onload = init;
-//window.onresize = test;
 
 var uid;
 var latitude;
@@ -8,14 +7,9 @@ var gebruikerid;
 var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
 var fileName;
 
-//function test() {
-//        initialiseListEvenementen();
-//        
-//}
-
 function init() {
         login();
-        //initialiseListMeldingen();
+        initialiseListMeldingen();
         initialiseListEvenementen();
         
 }
@@ -125,6 +119,7 @@ function initialiseListMeldingen() {
     // Load the groups from the back-end.
     var request = new XMLHttpRequest();
     $("#meldingList").empty();
+    $("#meldingListAdmin").empty();
     
     request.open("GET", BASE_URL  + "meldingen");
     request.onload = function() {
@@ -132,18 +127,21 @@ function initialiseListMeldingen() {
             meldingen = JSON.parse(request.responseText);
             for (var i = 0; i < meldingen.length; i++) {
                 $("#meldingList").append(createListElementForMelding(i));
-               // $("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
+               $("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
+               
             }           
-            if (meldingen.length > 0) {
-                console.log("Gelukt");              
+            if (meldingen.length >= 0) {
+                console.log("Gelukt");
                $("#meldingList").listview('refresh');
                // $("#meldingListAdmin").listview('refresh');
                 
             } else {
                 console.log("Error");
+                
             }
         } else {
             console.log("Error loading groups: " + request.status + " - "+ request.statusText);
+           
         }
     };
     request.send(null);
@@ -549,52 +547,13 @@ function postToFeed() {
         FB.ui(obj, callback);
       }
 	
-//*GOOGLE MAPS voor het zoekenpaneel
-// function laadMap() {
-// if(navigator.geolocation) {
-//        
-//        function hasPosition(position) {
-//            var point = new google.maps.LatLng(latitude = position.coords.latitude, longitude = position.coords.longitude),
-//            
-//            myOptions = {
-//                zoom: 17,
-//                center: point,
-//                mapTypeId: google.maps.MapTypeId.ROADMAP
-//            },
-//            
-//            mapDiv = document.getElementById("map_canvas"),
-//            map = new google.maps.Map(mapDiv, myOptions),
-//			            marker = new google.maps.Marker({
-//                position: point,
-//                map: map,
-//                animation: google.maps.Animation.DROP,
-//		draggable: true,
-//                title: "You are here"
-//            });
-//            
-//            
-//        google.maps.event.addListener(marker, 'dragend', function(evt){
-//           
-//        latitude = evt.latLng.lat();
-//        longitude = evt.latLng.lng();
-//});
-//			
-//        }
-//        navigator.geolocation.getCurrentPosition(hasPosition);
-//        
-//    }
-//    
-// }
-
-
-
 $(document).on("pageshow", "#pageMelding", function() {
    
         initialize2();
     
 });
 
-    function initialize2() {
+function initialize2() {
            if(navigator.geolocation) {
         
         function hasPosition(position) {
@@ -602,7 +561,7 @@ $(document).on("pageshow", "#pageMelding", function() {
             console.log(latitude + " , " + longitude);
                     
     var myOptions = {
-        zoom: 14,
+        zoom: 17,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
     };
@@ -661,15 +620,17 @@ navigator.geolocation.getCurrentPosition(hasPosition);
      }
 
 
-
-
 /* UPLOAD */
-
-
 
 function sendFile() {
     //document.getElementById("status").innerHTML = "";
     var file = document.getElementById("filechooser").files[0];
+    if (file === undefined)
+        {
+            fileName = "NoImage.jpg";
+        }
+        else
+        {
     console.log(file);
     var extension = file.name.split(".").pop();
     
@@ -695,69 +656,34 @@ function sendFile() {
     request.setRequestHeader("Content-Type", type);
     request.send(file);
 }
-
-///* DOWNLOAD */
-
-//var BASE_URL = "http://localhost:8080/fileserver/resources/";
-//
-////onload = function() {
-////    loadImageSelect();
-////    $("#download").click(downloadSelectedImage);
-//};
-
-function loadImageSelect() {
-    $("#images").empty();
-    
-    var request = new XMLHttpRequest();
-    request.open("GET", BASE_URL + "images");
-    request.onload = function() {
-        if (request.status === 200) {
-            var results = JSON.parse(request.responseText);
-            for (var i = 0; i < results.length; i++) {
-                var option = $("<option>").attr("value", results[i]).text(results[i]);
-                $("#images").append(option);
-            }
-        } else {
-            console.log("Cannot load images: " + request.status + " - " + request.responseText);
-        }
-    };
-    request.send(null);
 }
 
-function downloadSelectedImage() {
-    $("img").remove();
-    var file = $("#images").val();  
-    var img = $("<img>").attr("src", BASE_URL + "images/" + file).attr("alt", "Your downloaded images");
-    $("body").append(img);
-}
-//
-//
 ////Registreer + admin
-//function createRegistreerGebruikerFromInput() {
-//                 
-//    var gebruiker = {};
-//    
-//    //getGebruikerByUID();
-//    gebruiker.naam = jQuery.trim($("#textinputRegistreerNaam").val());
-//    gebruiker.voornaam = jQuery.trim($("#textinputRegistreerVoornaam").val());
-//    gebruiker.email = jQuery.trim($("#textinputRegistreeremail").val());
-//    gebruiker.password = jQuery.trim($("#passwordinputRegistreerWachtwoord").val());
-//    // Send the new group to the back-end.
-//    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
-//    var request = new XMLHttpRequest();
-//    request.open("POST", url);
-//    request.onload = function() {
-//        if (request.status === 201) {
-//            gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
-//        } else {
-//            console.log("Error creating event: " + request.status + " " + request.responseText);
-//        }
-//    };
-//    
-//    request.setRequestHeader("Content-Type", "application/json");
-//    request.send(JSON.stringify(gebruiker));
-//    alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
-//}
+function createRegistreerGebruikerFromInput() {
+                 
+    var gebruiker = {};
+    
+    //getGebruikerByUID();
+    gebruiker.naam = jQuery.trim($("#textinputRegistreerNaam").val());
+    gebruiker.voornaam = jQuery.trim($("#textinputRegistreerVoornaam").val());
+    gebruiker.email = jQuery.trim($("#textinputRegistreeremail").val());
+    gebruiker.password = jQuery.trim($("#passwordinputRegistreerWachtwoord").val());
+    // Send the new group to the back-end.
+    var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
+    var request = new XMLHttpRequest();
+    request.open("POST", url);
+    request.onload = function() {
+        if (request.status === 201) {
+            gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
+        } else {
+            console.log("Error creating event: " + request.status + " " + request.responseText);
+        }
+    };
+    
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(gebruiker));
+    alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
+}
 
 //gewone login, niet via facebook (ook voor admin)
 function LoginDatabank(){
@@ -941,8 +867,3 @@ function noAlpha(obj){
 	reg = /[^0-9/]/g;
 	obj.value =  obj.value.replace(reg,"");
  }
- 
-function reloadListviews(){
-    initialiseListEvenementen();
-    initialiseListMeldingen();
-}

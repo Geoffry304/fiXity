@@ -567,8 +567,11 @@ var email = gebruikers[gebruikerIndex].email;
 ////var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
 //    var img = BASE_URL + "images/" + afbeelding;
 
-var newPage = $("<div data-role=page data-url=eventAdminInformation><div data-theme=b data-role=header ><a href=#pageAdminEvenementen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + naam + " </h1></div><div data-role=content><p>" + "\n\Voornaam: <textarea cols=40 rows=8 name=textarea id=textareaVoornaamGebruiker>" + voornaam + "</textarea></p> <p>" +
-        "Achternaam: " + naam + "</p><p>" + "UID: " + uid +"</p><a onclick='updateEvent()' href=#pageAdminGebruikers id=btnGebruikerAanpassen data-role=button data-icon=check>Aanpassen</a></div></div"); 
+var newPage = $("<div data-role=page data-url=eventAdminInformation><div data-theme=b data-role=header ><a href=#pageAdminEvenementen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + naam + " </h1></div><div data-role=content><p>" + "\n\Voornaam: <textarea cols=40 rows=8 name=textarea id=textareaVoornaamGebruiker>" + voornaam + "</textarea></p>" +
+        "<p>" + "\n\Achternaam: <textarea cols=40 rows=8 name=textarea id=textareaAchternaamGebruiker>" + naam + "</textarea></p>" + 
+        "<p>" + "\n\Uid: <textarea cols=40 rows=8 name=textarea id=textareaUidGebruiker>" + uid + "</textarea></p>" +
+        "<p>" + "\n\E-Mail: <textarea cols=40 rows=8 name=textarea id=textareaEmailGebruiker>" + email + "</textarea></p>" +
+        "<a onclick='updateGebruiker("+ gebruikerIndex + ")' href=#pageAdminGebruikers id=btnGebruikerAanpassen data-role=button data-icon=check>Aanpassen</a></div></div"); 
 //append it to the page container
 
 newPage.appendTo( $.mobile.pageContainer );
@@ -594,7 +597,7 @@ function deleteGebruiker(gebruikerIndex) {
 } 
 
 //past een melding aan via het updatepaneel
-function updateGebruiker(gebruikerIndex, gid, lat2, long2, mid2) {
+function updateGebruiker(gebruikerIndex) {
    	var gebruiker = jQuery.extend(true, {}, gebruikers[gebruikerIndex]);
         //var tit = "Andere";
         
@@ -608,15 +611,13 @@ function updateGebruiker(gebruikerIndex, gid, lat2, long2, mid2) {
 //            var gebruiker = JSON.parse(request.responseText);
 //            gid2 = gebruiker.gebruikerId;
 //            console.log(gid2);
-    event.titel = jQuery.trim($("#textareaTitelEvenementenAdmin").val());
-    event.gebruiker = {gebruikerId : gid2};
-    event.locatie = {latitude : lat2 , longitude : long2};
-    event.evenementId = mid2;
-    event.details = jQuery.trim($("#textareaOmschrijvingEvenementenAdmin").val());
-    event.datum = jQuery.trim($("#textareaDatumEvenementenAdmin").val());
+    gebruiker.naam = jQuery.trim($("#textareaAchternaamGebruikerAdmin").val());
+    gebruiker.voornaam = jQuery.trim($("#textareaVoornaamGebruikerAdmin").val());
+    gebruiker.uid = jQuery.trim($("#textareaUidGebruikerAdmin").val());
+    gebruiker.email = jQuery.trim($("#textareaEmailGebruikerAdmin").val());
     // Send the new group to the back-end.
     var request = new XMLHttpRequest();
-    request.open("PUT", BASE_URL + "gebruikers/gebruikerid" + gebruikerIndex);
+    request.open("PUT", BASE_URL + "gebruikers/gebruikerid/" + gebruikerIndex);
     request.onload = function() {
         if (request.status === 204) {
  
@@ -625,7 +626,7 @@ function updateGebruiker(gebruikerIndex, gid, lat2, long2, mid2) {
         }
     };
     request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(event));
+    request.send(JSON.stringify(gebruiker));
 //    
 //        }
 //        else

@@ -196,7 +196,7 @@ public class GebruikerDOA {
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateUser(@PathParam("gebruikerId") int id, Gebruiker u) {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT * gebruiker WHERE gebruikerId = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM Gebruiker WHERE GebruikerId = ?")) {
                 stat.setInt(1, id);
                 try (ResultSet rs = stat.executeQuery()) {
                     if (!rs.next()) {
@@ -204,7 +204,7 @@ public class GebruikerDOA {
                     }
                 }
             }
-            try (PreparedStatement stat = conn.prepareStatement("UPDATE gebruiker SET naam = ?, voornaam = ? WHERE gebruikerId = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("UPDATE gebruiker SET naam = ?, voornaam = ? WHERE GebruikerId = ?")) {
                 stat.setString(1, u.getNaam());
                 stat.setString(2, u.getVoornaam());
                 stat.setInt(3, id);
@@ -222,7 +222,7 @@ public class GebruikerDOA {
     @DELETE
     public void removeUser(@PathParam("gebruikerId") int id) {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker gebruikerId = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM gebruiker WHERE GebruikerId = ?")) {
                 stat.setInt(1, id);
                 try (ResultSet rs = stat.executeQuery()) {
                     if (!rs.next()) {
@@ -230,7 +230,7 @@ public class GebruikerDOA {
                     }
                 }
             }
-            try (PreparedStatement stat = conn.prepareStatement("DELETE FROM gebruiker gebruikerId = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("DELETE FROM gebruiker WHERE GebruikerId = ?")) {
                 stat.setInt(1, id);
                 stat.executeUpdate();
             }

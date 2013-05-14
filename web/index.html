@@ -16,7 +16,7 @@
         <script type="text/javascript" src="script.js"></script>
         <link rel="stylesheet" href="style.css" >
 	</head> 
-	<body onpageshow='initialiseListMeldingen();'>
+	<body onpageshow='init();'>
 		<div data-role="page" id="pageAanmelden" data-theme="b" data-position="fixed">
         	<center>
            		 <img src="logo.png" style="max-width: 100%; margin-top: 150px" >
@@ -246,7 +246,7 @@
             <a href="#pageAdminOpties" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="right">Opties</a>
                 <h1>Admin pagina</h1>
           </div>
-<ul data-role="listview" id="meldingListAdmin" data-split-icon="gear" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
+<ul data-role="listview" id="meldingListAdmin" data-split-icon="delete" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
 	<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
 				<div data-role="navbar">
 					<ul>
@@ -263,7 +263,7 @@
             <a href="#pageAdminOpties" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="right">Opties</a>
                 <h1>Admin pagina</h1>
           </div>
-<ul data-role="listview" id="evenementenListAdmin" data-split-icon="gear" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>	
+<ul data-role="listview" id="evenementenListAdmin" data-split-icon="delete" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>	
 <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
 				<div data-role="navbar">
 					<ul>
@@ -284,7 +284,7 @@
 	<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
 				<div data-role="navbar">
 					<ul>
-						<li><a onclick='initialiseListMeldingen();' href="#pageAdminMeldingen" data-icon="alert" data-theme="b">Meldingen</a></li>
+						<li><a onclick='initialiseListMeldingenAdmin();' href="#pageAdminMeldingen" data-icon="alert" data-theme="b">Meldingen</a></li>
 						<li><a href="#pageAdminEvenementen"  data-icon="home" data-theme="b">Evenementen</a></li>
                                                 <li><a href="#" data-icon="info" data-theme="b">Feedback</a></li>
                                                 <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="grid" data-theme="b">Gebruikers</a></li>

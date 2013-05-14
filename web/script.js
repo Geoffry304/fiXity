@@ -8,9 +8,18 @@ var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
 var fileName;
 
 function init() {
-        login();
+        console.log(uid);
+        if (uid === undefined){
+            login();
+            //window.location = "#pageAanmelden";
+        }else{
+            window.location = "#pageMelding";
+        }
+    
         initialiseListMeldingen();
         initialiseListEvenementen();
+        initialiseListMeldingenAdmin();   
+        initialiseListEvenementenAdmin()
         
 }
 
@@ -127,13 +136,44 @@ function initialiseListMeldingen() {
             meldingen = JSON.parse(request.responseText);
             for (var i = 0; i < meldingen.length; i++) {
                 $("#meldingList").append(createListElementForMelding(i));
-               $("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
+               //$("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
                
             }           
-            if (meldingen.length >= 0) {
+            if (meldingen.length > 0) {
                 console.log("Gelukt");
                $("#meldingList").listview('refresh');
-               // $("#meldingListAdmin").listview('refresh');
+               //$("#meldingListAdmin").listview('refresh');
+                
+            } else {
+                console.log("Error");
+                
+            }
+        } else {
+            console.log("Error loading groups: " + request.status + " - "+ request.statusText);
+           
+        }
+    };
+    request.send(null);
+}
+
+function initialiseListMeldingenAdmin() {
+    
+    // Load the groups from the back-end.
+    var request = new XMLHttpRequest();
+    $("#meldingListAdmin").empty();
+    
+    request.open("GET", BASE_URL  + "meldingen");
+    request.onload = function() {
+        if (request.status === 200) {
+            meldingen = JSON.parse(request.responseText);
+            for (var i = 0; i < meldingen.length; i++) {
+               var mid = meldingen[i].meldingId;
+               $("#meldingListAdmin").append(createListElementForMeldingAdmin(i, mid));
+               
+            }           
+            if (meldingen.length > 0) {
+                console.log("Gelukt");
+               $("#meldingListAdmin").listview('refresh');
                 
             } else {
                 console.log("Error");
@@ -165,24 +205,24 @@ function createListElementForMelding(meldingIndex) {
 }
 
 //maakt de listview in de front end aan (HTML) voor admin pagina
-function createListElementForMeldingAdmin(meldingIndex) {
+function createListElementForMeldingAdmin(meldingIndex, mid) {
     
     var link = $("<a>")
         .text(meldingen[meldingIndex].titel + ": " + meldingen[meldingIndex].details)
                 .click(function() {
-            alert("alee vooruit");
+            createPageMeldingInformationAdmin(meldingIndex);
         });        
 
     var gebruiker = $("<p>") 
         .text("Geplaatst door " + meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam)
                 .click(function() {
-            alert("alee vooruit");
+            createPageMeldingInformationAdmin(meldingIndex);
         });
         
     var icon = $("<a>")
         .text("wijzigen/verwijderen")
         .click(function() {
-            createPageMeldingInformationAdmin(meldingIndex);           
+           deleteMelding(mid);
         });  
         
     return $("<li>")
@@ -236,10 +276,10 @@ var long= meldingen[meldingIndex].locatie.longitude;
 console.log(titel);
 console.log(gid);
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "\n\Titel: <textarea cols=40 rows=8 name=textarea id=textareaTitelMeldingenAdmin>" + titel + "</textarea></p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +"," + lat + "," + long + "," + mid + ")' href=#pageAdminMeldingen id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a><a onclick='deleteMelding("+ mid +")' href=# id=btnMeldingVerwijderen data-role=button data-icon=delete>Verwijderen</a></div></div"); 
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "\n\Titel: <textarea cols=40 rows=8 name=textarea id=textareaTitelMeldingenAdmin>" + titel + "</textarea></p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid +"," + gid +"," + lat + "," + long + "," + mid + ")' href=#pageAdminMeldingen id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a></div></div"); 
 //append it to the page container
 pageMeldingInformation.appendTo( $.mobile.pageContainer );
- 
+  
 //go to it
 $.mobile.changePage( pageMeldingInformation );
 }
@@ -294,6 +334,7 @@ function updateMelding(meldingIndex, gid, lat, long, mid) {
     };
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(melding));
+    
         }
         else
         {
@@ -301,6 +342,7 @@ function updateMelding(meldingIndex, gid, lat, long, mid) {
         }
     };
     request.send(null);
+
 }
 
 // listview op homepage laden met Events
@@ -319,6 +361,62 @@ function initialiseListEvenementen() {
             if (events.length > 0) {
                 
                $("#eventList").listview('refresh');
+                //console.log("EvenementenookGelukt");
+            } else {
+                console.log("Error");
+            }
+        } else {
+            console.log("Error loading groups: " + request.status + " - "+ request.statusText);
+        }
+    };
+    request.send(null);
+}
+
+//maakt de listview in de front end aan (HTML) voor admin pagina
+function createListElementForEventAdmin(eventIndex, mid) {
+    
+    var link = $("<a>")
+        .text(events[eventIndex].titel + ": " + events[eventIndex].details)
+                .click(function() {
+            createPageEventInformationAdmin(eventIndex);     
+        });        
+
+    var gebruiker = $("<p>") 
+        .text("Geplaatst door " + events[eventIndex].gebruiker.voornaam + " " + events[eventIndex].gebruiker.naam)
+                .click(function() {
+            createPageEventInformationAdmin(eventIndex);     
+        });
+        
+    var icon = $("<a>")
+        .text("verwijderen")
+        .click(function() {
+             deleteEvent(mid);     
+        });  
+        
+    return $("<li>")
+        .append(link)
+        .append(gebruiker)
+        .append(icon)
+     
+}
+
+// listview op homepage laden met Events voor admin
+function initialiseListEvenementenAdmin() {   
+    // Load the groups from the back-end.
+    var request = new XMLHttpRequest();
+     $("#evenementenListAdmin").empty();
+    
+    request.open("GET", BASE_URL + "evenements");
+    request.onload = function() {
+        if (request.status === 200) {
+            events = JSON.parse(request.responseText);
+            for (var i = 0; i < events.length; i++) {
+                var mid = events[i].evenementId;
+                $("#evenementenListAdmin").append(createListElementForEventAdmin(i, mid));
+            }            
+            if (events.length > 0) {
+                
+               $("#evenementenListAdmin").listview('refresh');
                 //console.log("EvenementenookGelukt");
             } else {
                 console.log("Error");
@@ -368,6 +466,92 @@ newPage.appendTo( $.mobile.pageContainer );
 $.mobile.changePage( newPage );
 }
 
+//vult de pagina op als je op listview klikt
+function createPageEventInformationAdmin(eventIndex) {
+var titel = events[eventIndex].titel;
+var gebruiker = events[eventIndex].gebruiker.voornaam + " " + events[eventIndex].gebruiker.naam;
+var details = events[eventIndex].details;
+var datum = events[eventIndex].datum;
+var locatie = events[eventIndex].locatie.latitude + " , " + events[eventIndex].locatie.longitude;
+var mid = events[eventIndex].evenementId;
+var gid = events[eventIndex].gebruiker.gebruikerId;
+var lat = events[eventIndex].locatie.latitude;
+var long= events[eventIndex].locatie.longitude;
+
+var afbeelding = events[eventIndex].afbeelding;
+
+//var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
+    var img = BASE_URL + "images/" + afbeelding;
+
+var newPage = $("<div data-role=page data-url=eventAdminInformation><div data-theme=b data-role=header ><a href=#pageAdminEvenementen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><img src="+ img +" style=width:350px;height:350px><p>" + "\n\Titel: <textarea cols=40 rows=8 name=textarea id=textareaTitelEvenementenAdmin>" + titel + "</textarea></p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie +"</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingEvenementenAdmin>" + details + "</textarea></p><p>" + "\n\Datum: <textarea cols=40 rows=8 name=textarea id=textareaDatumEvenementenAdmin>" + datum + "</textarea></p><a onclick='updateEvent(" + mid +"," + gid +"," + lat + "," + long + "," + mid +")' href=#pageAdminEvenementen id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a></div></div"); 
+//append it to the page container
+
+newPage.appendTo( $.mobile.pageContainer );
+ 
+//go to it
+$.mobile.changePage( newPage );
+}
+
+//delete melding via het adminpaneel
+function deleteEvent(eventIndex) {
+    
+    // Send a delete request to the back-end.
+    
+    var request = new XMLHttpRequest();
+    request.open("DELETE", BASE_URL + "evenements/" +  eventIndex);
+    request.onload = function() {
+        if (request.status === 204) {
+            console.log("gelukt");
+        } else {
+            console.log("Error deleting group: " + request.status + " - " + request.statusText);
+        }
+    };
+    request.send(null);
+} 
+
+//past een melding aan via het updatepaneel
+function updateEvent(eventIndex, gid, lat2, long2, mid2) {
+   	var event = jQuery.extend(true, {}, events[eventIndex]);
+        //var tit = "Andere";
+        
+        console.log("titel bij functie: " );
+        
+    var request = new XMLHttpRequest();
+    request.open("GET", BASE_URL + "gebruikers/gebruikerid/" + gid);
+    request.onload = function() {
+        if (request.status === 200) {
+        	var gid2;
+            var gebruiker = JSON.parse(request.responseText);
+            gid2 = gebruiker.gebruikerId;
+            console.log(gid2);
+    event.titel = jQuery.trim($("#textareaTitelEvenementenAdmin").val());
+    event.gebruiker = {gebruikerId : gid2};
+    event.locatie = {latitude : lat2 , longitude : long2};
+    event.evenementId = mid2;
+    event.details = jQuery.trim($("#textareaOmschrijvingEvenementenAdmin").val());
+    event.datum = jQuery.trim($("#textareaDatumEvenementenAdmin").val());
+    // Send the new group to the back-end.
+    
+    request.open("PUT", BASE_URL + "evenements/" + eventIndex);
+    request.onload = function() {
+        if (request.status === 204) {
+ 
+        } else {
+            console.log("Error creating event: " + request.status + " " + request.responseText);
+        }
+    };
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(event));
+    
+        }
+        else
+        {
+            console.log("404");
+        }
+    };
+    request.send(null);
+
+}
 
 /*FBLOGIN*/
 

@@ -19,7 +19,7 @@
 	<body>
 		<div data-role="page" id="pageAanmelden" data-theme="b" data-position="fixed">
         	<center>
-           		 <img src="logo.png" style="max-width: 100%; margin-top: 150px" >
+           		 <img src="logoeffect.png" style="max-width: 100%; margin-top: 150px" >
             </center>
 			<div data-role="content"> Aanmelden met:
 	  			<div data-role="controlgroup" data-position="">
@@ -51,7 +51,7 @@
 		</div>
 		<div data-role="page" id="page" data-add-back-btn="false">
 			<div data-role="header" data-theme="b" data-position="fixed">
-				<img src="logo.png" width="145" height="45" alt="Fix your city!" style="margin-top: 5px"> <a href="#pageMelding" data-role="none" class="ui-btn-right"><img src="flag1.png" style="margin-top: 5px" class="logo"></a>
+				<img src="logoeffect.png" width="145" height="50" alt="Fix your city!" style="margin-top: 3px; margin-left: 10px;"> <a href="#pageMelding" data-role="none" class="ui-btn-right"><img src="flag1.png" style="margin-top: 5px" class="logo"></a>
 			</div>
             <div data-role="navbar">
 	<ul>
@@ -68,7 +68,7 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="home" data-theme="b">Overzicht</a></li>
-						<li><a href="#page2" data-icon="search" data-theme="b"> Zoeken</a></li>
+						<li><a href="#page2" data-icon="grid" data-theme="b"> Kaart</a></li>
            				<li><a href="#page3" data-icon="gear" data-theme="b">Profiel</a></li>
 					</ul>
 				</div>
@@ -90,7 +90,7 @@
 				<div data-role="navbar">
 					<ul>
 						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="home" data-theme="b">Overzicht</a></li>
-						<li><a href="#page2" data-icon="search" data-theme="b"> Zoeken</a></li>
+						<li><a href="#page2" data-icon="grid" data-theme="b"> Kaart</a></li>
            				<li><a href="#page3" data-icon="gear" data-theme="b">Profiel</a></li>
 					</ul>
 				</div>
@@ -98,14 +98,14 @@
 		</div>
 		<div data-role="page" data-add-back-btn="false" id="page2">
 			<div data-role="header" data-theme="b" data-position="fixed">
-				<h1>Zoeken</h1>
+				<h1>Kaart</h1>
 			</div>
                     <div id="map_canvas3" style="position: absolute; width:100%; height:91%"></div>
 			<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
    				<div data-role="navbar">
 					<ul>
 						<li><a href="#page" data-icon="home" data-theme="b">Overzicht</a></li>
-						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="search" data-theme="b"> Zoeken</a></li>
+						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="grid" data-theme="b"> Kaart</a></li>
            				<li><a href="#page3" data-icon="gear" data-theme="b">Profiel</a></li>
 					</ul>
 				</div>
@@ -121,7 +121,7 @@
    				<div data-role="navbar">
 					<ul>
 						<li><a href="#page" data-icon="home" data-theme="b">Overzicht</a></li>
-						<li><a href="#page2" class="search" data-icon="search" data-theme="b"> Zoeken</a></li>
+						<li><a href="#page2" class="search" data-icon="grid" data-theme="b"> Kaart</a></li>
            				<li><a href="" class="ui-btn-active ui-state-persist" data-icon="gear" data-theme="b">Profiel</a></li>
 					</ul>
 				</div>
@@ -226,7 +226,7 @@
 	   	</div>
         <div data-role="page" id="pageAdminMeldingen">
           <div data-role="header" data-theme="b">
-            <a href="#pageAdminOpties" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="right">Opties</a>
+            <a href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
                 <h1>Admin pagina</h1>
           </div>
 <ul data-role="listview" id="meldingListAdmin" data-split-icon="delete" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
@@ -243,7 +243,7 @@
         </div>
                     <div data-role="page" id="pageAdminEvenementen">
           <div data-role="header" data-theme="b">
-            <a href="#pageAdminOpties" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="right">Opties</a>
+            <a href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
                 <h1>Admin pagina</h1>
           </div>
 <ul data-role="listview" id="evenementenListAdmin" data-split-icon="delete" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>	
@@ -260,10 +260,10 @@
         </div>
             <div data-role="page" id="pageAdminGebruikers">
           <div data-role="header" data-theme="b">
-            <a href="#pageAdminOpties" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="right">Opties</a>
+            <a href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
                 <h1>Admin pagina</h1>
           </div>
-<ul data-role="listview" id="gebruikersListAdmin" data-split-icon="gear" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
+<ul data-role="listview" id="gebruikersListAdmin" data-split-icon="delete" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
 	<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
 				<div data-role="navbar">
 					<ul>
@@ -274,16 +274,6 @@
 					</ul>
 				</div>
 			</div>
-        </div>
-             <div data-role="page" id="pageAdminOpties">
-          <div data-role="header" data-theme="b">
-            <a href="javascript:history.back(-1);" data-role="button" data-icon="arrow-l" data-iconpos="left">Back</a>
-                <h1>Instellingen</h1>
-          </div>
-                 <a href="#pageHow" id="btnHow" data-role="button" data-icon="info">Instructies</a>
-                 <a href="#pageAanmelden" id="btnAfmelden" data-role="button" data-icon="back">Afmelden</a>
-                 
-             </div>
-        
+        </div>    
 	</body>
 </html>

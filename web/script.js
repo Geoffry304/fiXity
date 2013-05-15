@@ -256,11 +256,47 @@ var gebruiker = meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[mel
 var details = meldingen[meldingIndex].details;
 var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldingIndex].locatie.longitude;
 var afbeelding = meldingen[meldingIndex].afbeelding;
-
+var lat = meldingen[meldingIndex].locatie.latitude;
+var long = meldingen[meldingIndex].locatie.longitude;
 
 var img = BASE_URL + "images/" + afbeelding;
+console.log(afbeelding);
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:580px;></div><div data-role=content><img src=" + img + " style=width:350px;height:350px><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie + "</p></div></div");
+function initialize4()
+{
+
+  var mapProp = {
+      center: new google.maps.LatLng(lat, long),
+      zoom: 16,
+      mapTypeControl: false,
+      draggable: false,
+      scaleControl: false,
+      scrollwheel: false,
+      navigationControl: false,
+      streetViewControl: false,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+            
+var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+  marker = new google.maps.Marker({
+                 position: new google.maps.LatLng(lat, long),
+                 animation: google.maps.Animation.DROP,
+                 map: map,
+                 title: titel + ": " + details,
+                 
+            });
+}
+
+  $(document).on("pageshow", "#meldingInfo", function() {
+   
+        initialize4();
+    
+});
+
+var pageMeldingInformation = $("<div id=meldingInfo data-role=page data-url=meldingInformation ><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><p>" + "Titel: " + titel + "</p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><p>" + "Tim Van de Velde: Dit is een reactie.</p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactie placeholder=Reageer></textarea><a href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
+
+//var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:580px;></div><div data-role=content><img src=" + img + " style=width:350px;height:350px><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie + "</p></div></div");
 //append it to the page container
 pageMeldingInformation.appendTo($.mobile.pageContainer);
 
@@ -459,17 +495,55 @@ var details = events[eventIndex].details;
 var locatie = events[eventIndex].locatie.latitude + " , " + events[eventIndex].locatie.longitude;
 var datum = events[eventIndex].datum;
 var afbeelding = events[eventIndex].afbeelding;
+var lat = events[eventIndex].locatie.latitude;
+var long = events[eventIndex].locatie.longitude;
+
+function initialize3()
+{
+
+  var mapProp = {
+      center: new google.maps.LatLng(lat, long),
+      zoom: 16,
+      mapTypeControl: false,
+      draggable: false,
+      scaleControl: false,
+      scrollwheel: false,
+      navigationControl: false,
+      streetViewControl: false,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+            
+var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+  marker = new google.maps.Marker({
+                 position: new google.maps.LatLng(lat, long),
+                 animation: google.maps.Animation.DROP,
+                 map: map,
+                 title: titel + ": " + details,
+                 
+            });
+}
+
+  $(document).on("pageshow", "#eventInfo", function() {
+   
+        initialize3();
+    
+});
+
+
 
 //var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
-var img = BASE_URL + "images/" + afbeelding;
+    var img = BASE_URL + "images/" + afbeelding;
 console.log(afbeelding);
-var newPage = $("<div id=eventInfo data-role=page data-url=eventInformation ><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><img src=" + img + " style=width:350px;height:350px><p>" + "Titel: " + titel + "</p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie + "</p><p>" + "Datum: " + datum + "</p><h2>" + "Reacties:</h2><p>" + "Tim Van de Velde: Dit is een reactie.</p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactie placeholder=Reageer></textarea><a href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
+
+//initialize3(lat, long);
+var newPage = $("<div id=eventInfo data-role=page data-url=eventInformation ><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><div id=first>" + "Titel: " +"</div><div id=second>" + titel + "</div></p><div id=first>" + "Geplaatst door:"  + "</div><div id=second>" + gebruiker + "</div></p><div id=first>" + "\n\Omschrijving: " + "</div><div id=second>" + details +"</div></p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum + "</p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><p>" + "Tim Van de Velde: Dit is een reactie.</p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactie placeholder=Reageer></textarea><a href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
 
 //append it to the page container
-newPage.appendTo($.mobile.pageContainer);
-
+newPage.appendTo( $.mobile.pageContainer );
+ 
 //go to it
-$.mobile.changePage(newPage);
+$.mobile.changePage( newPage );
 }
 
 //vult de pagina op als je op listview klikt
@@ -573,7 +647,7 @@ var gebruikerid = gebruikers[gebruikerIndex].gebruikerId;
 ////var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
 //    var img = BASE_URL + "images/" + afbeelding;
 console.log(gebruikerid);
-var newPage = $("<div data-role=page data-url=eventAdminInformation><div data-theme=b data-role=header ><a href=#pageAdminEvenementen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + naam + " </h1></div><div data-role=content><p>" + "\n\Voornaam: <textarea cols=40 rows=8 name=textarea id=textareaVoornaamGebruikerAdmin>" + voornaam + "</textarea></p>" +
+var newPage = $("<div data-role=page data-url=eventAdminInformation><div data-theme=b data-role=header ><a href=#pageAdminGebruikers data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + naam + " </h1></div><div data-role=content><p>" + "\n\Voornaam: <textarea cols=40 rows=8 name=textarea id=textareaVoornaamGebruikerAdmin>" + voornaam + "</textarea></p>" +
         "<p>" + "\n\Achternaam: <textarea cols=40 rows=8 name=textarea id=textareaAchternaamGebruikerAdmin>" + naam + "</textarea></p>" +
         "<p>" + "\n\Uid: <textarea cols=40 rows=8 name=textarea id=textareaUidGebruikerAdmin>" + uid + "</textarea></p>" +
         "<p>" + "\n\E-Mail: <textarea cols=40 rows=8 name=textarea id=textareaEmailGebruikerAdmin>" + email + "</textarea></p>" +
@@ -880,6 +954,9 @@ if (navigator.geolocation) {
 
         var myOptions = {
             zoom: 17,
+            streetViewControl: false,
+            mapTypeControl: false,
+            navigationControl: true,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
         };
@@ -1081,6 +1158,9 @@ if (navigator.geolocation) {
         var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         var myOptions = {
+            streetViewControl: false,
+            mapTypeControl: false,
+            navigationControl: true,
             zoom: 14,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -1224,4 +1304,13 @@ $(".logo").hover(
 function noAlpha(obj) {
 reg = /[^0-9/]/g;
 obj.value = obj.value.replace(reg, "");
+}
+
+function refreshPage()
+{
+    jQuery.mobile.changePage(window.location.href, {
+        allowSamePageTransition: true,
+        transition: 'none',
+        reloadPage: true
+    });
 }

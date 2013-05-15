@@ -17,3 +17,17 @@ margin: 0.9px 0.9px 0.9px 0.9px;
 padding: 0 30px;
 margin: 3.9px 2.9px 3.9px 2.9px;
 }
+
+.ui-collapsible{
+   padding: 0 30px;
+margin: 0px -18.1px 0.9px -15.1px; 
+}
+
+#first {
+    float: left;
+    width: 200px;
+    font-weight: bold;
+}
+#second {
+    margin: 0 0 0 200px;
+}

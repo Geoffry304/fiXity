@@ -53,7 +53,7 @@ public class FeedbackDOA {
                         g.setGebruikerId(rs.getInt("Gebruiker.GebruikerId"));
                         g.setNaam(rs.getString("Naam"));
                         g.setVoornaam(rs.getString("Voornaam"));
-                        e.setGebruiker(g);
+                        f.setGebruiker(g);
 
 
                         results.add(f);

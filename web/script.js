@@ -36,21 +36,32 @@ request.onload = function() {
         gebruikerid = gebruiker.gebruikerId;
         console.log(gebruikerid);
         var event = {};
-
+        var details = jQuery.trim($("#textareaOmschrijvingEvent").val());
+        var datum = jQuery.trim($("#datepickerEvent").val());
 
         event.titel = jQuery.trim($("#selectmenuTitelEvent").val());
-        event.details = jQuery.trim($("#textareaOmschrijvingEvent").val());
+        
         event.locatie = {latitude: latitude, longitude: longitude};
         event.gebruiker = {gebruikerId: gebruikerid};
-        event.datum = jQuery.trim($("#datepickerEvent").val());
+        
         console.log(fileName);
         event.afbeelding = fileName;
-
-        if (jQuery.trim($("#flipswitchFBEvent").val()) === "on")
-        {
-            alert("Facebook schakelaar aan");
-            //postToFeed();
+        
+        if(details === ""){
+            event.details = "Geen beschrijving";
         }
+        else
+            {
+             event.details = details;   
+            }
+         
+                 if(datum === ""){
+            event.datum = "Geen datum";
+        }
+        else
+            {
+             event.datum = details;   
+            }
 
         // Send the new group to the back-end.
         request.open("POST", BASE_URL + "evenements");
@@ -88,14 +99,21 @@ request.onload = function() {
         gebruikerid = gebruiker.gebruikerId;
         console.log(gebruikerid);
         var melding = {};
-
+        var details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
 
 
         melding.titel = jQuery.trim($("#selectmenuTitelMeldingen").val());
-        melding.details = jQuery.trim($("#textareaOmschrijvingMeldingen").val());
+        
         melding.locatie = {latitude: latitude, longitude: longitude};
         melding.gebruiker = {gebruikerId: gebruikerid};
         melding.afbeelding = fileName;
+        
+        if (details === ""){
+             melding.details = "Geen beschrijving"
+        }
+        else{
+            melding.details = details;
+             } 
 
         if (jQuery.trim($("#flipswitchFBMeldingen").val()) === "on")
         {
@@ -260,6 +278,7 @@ var lat = meldingen[meldingIndex].locatie.latitude;
 var long = meldingen[meldingIndex].locatie.longitude;
 var meldingId = meldingen[meldingIndex].meldingId;
 
+
 var img = BASE_URL + "images/" + afbeelding;
 console.log(afbeelding);
 initialiseListFeedbackMelding(meldingId);
@@ -295,9 +314,9 @@ var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
     
 });
 
-var pageMeldingInformation = $("<div id=meldingInfo data-role=page data-url=meldingInformation ><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><p>" + "Titel: " + titel + "</p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><p>" + "Tim Van de Velde: Dit is een reactie.</p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactieMelding placeholder=Reageer></textarea><a onclick='createFeedbackEvent("+ meldingId  +")' href=#page id=btnPlaatsReactieMelding data-role=button data-icon=check>Plaats</a></div></div>");
+var pageMeldingInformation = $("<div id=meldingInfo data-role=page data-url=meldingInformation ><div data-theme=b data-role=header ><a onclick=refreshPage(); href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><div id=first>" + "Titel: " + "</div><div id=second>" + titel + "</div></p><div id=first>" + "Omschrijving: " + "</div><div id=second>" + details + "</div></p><div id=first>" + "Locatie: " + "</div><div id=second>" + locatie +"</div></p><div id=first>" + "Geplaatst door: " + "</div><div id=second>" +gebruiker + "</div></p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><div id=first>" + "Tim Van de Velde: " + "</div><div id=second>" + "Dit is een reactie." + "</div></p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactieMelding placeholder=Reageer></textarea><a onclick='createFeedbackEvent("+ meldingId  +");'href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
 
-//var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:580px;></div><div data-role=content><img src=" + img + " style=width:350px;height:350px><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie + "</p></div></div");
+//var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a onclick=refreshPage(); href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:580px;></div><div data-role=content><img src=" + img + " style=width:350px;height:350px><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie + "</p></div></div");
 //append it to the page container
 pageMeldingInformation.appendTo($.mobile.pageContainer);
 
@@ -538,7 +557,7 @@ var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 console.log(afbeelding);
 
 //initialize3(lat, long);
-var newPage = $("<div id=eventInfo data-role=page data-url=eventInformation ><div data-theme=b data-role=header ><a href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><div id=first>" + "Titel: " +"</div><div id=second>" + titel + "</div></p><div id=first>" + "Geplaatst door:"  + "</div><div id=second>" + gebruiker + "</div></p><div id=first>" + "\n\Omschrijving: " + "</div><div id=second>" + details +"</div></p><p>" + "Locatie: " + locatie +"</p><p>" + "Datum: " + datum + "</p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><p>" + "Tim Van de Velde: Dit is een reactie.</p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactie placeholder=Reageer></textarea><a href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
+var newPage = $("<div id=eventInfo data-role=page data-url=eventInformation ><div data-theme=b data-role=header ><a onclick= refreshPage(); href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><div id=first>" + "Titel: " +"</div><div id=second>" + titel + "</div></p><div id=first>" + "Omschrijving: " + "</div><div id=second>" + details +"</div></p><div id=first>" + "Locatie:" + "</div><div id=second>" + locatie +" </div></p><div id=first>" + "Datum: " + "</div><div id=second>" + datum + "</div></p><div id=first>" + "Geplaatst door:"  + "</div><div id=second>" + gebruiker + "</div></p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><p>" + "<div id=first>" + "Tim Van de Velde: " + "</div><div id=second>" + "Dit is een reactie." + "</div></p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactie placeholder=Reageer></textarea><a href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
 
 //append it to the page container
 newPage.appendTo( $.mobile.pageContainer );
@@ -1395,3 +1414,7 @@ function refreshPage()
         reloadPage: true
     });
 }
+
+$( '#page' ).live( 'pageshow',function(){
+  alert( 'This page was just enhanced by jQuery Mobile!' );
+});

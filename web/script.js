@@ -346,7 +346,7 @@ var long = meldingen[meldingIndex].locatie.longitude;
 console.log(titel);
 console.log(gid);
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "\n\Titel: <textarea cols=40 rows=8 name=textarea id=textareaTitelMeldingenAdmin>" + titel + "</textarea></p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie + "</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid + "," + gid + "," + lat + "," + long + "," + mid + ")' href=#pageAdminMeldingen id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a></div></div");
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "\n\Titel: <textarea cols=40 rows=8 name=textarea id=textareaTitelMeldingenAdmin>" + titel + "</textarea></p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie + "</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid + "," + gid + "," + lat + "," + long + "," + mid + ")' href=#dialogMeldingAanpassenAdmin data-rel=dialog id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a></div></div");
 //append it to the page container
 pageMeldingInformation.appendTo($.mobile.pageContainer);
 
@@ -1010,11 +1010,16 @@ function logoutAdmin() {
 }
 
 function check(){
+        console.log(adminBoolean);
     if (adminBoolean === true) {
-        window.location = "#pageAdminMeldingen";
+        alert("tzou moete werken");
+        //window.location.reload();
+        window.location = "#pageAdminMeldingen" 
+        $
     }
     else {
-      window.location = "#pageAanmelden";  
+        alert("ni goed eh");
+      //window.location = "#pageAanmelden";  
     }
     
     

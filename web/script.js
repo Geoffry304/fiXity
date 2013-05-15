@@ -258,10 +258,11 @@ var locatie = meldingen[meldingIndex].locatie.latitude + " , " + meldingen[meldi
 var afbeelding = meldingen[meldingIndex].afbeelding;
 var lat = meldingen[meldingIndex].locatie.latitude;
 var long = meldingen[meldingIndex].locatie.longitude;
+var meldingId = meldingen[meldingIndex].meldingId;
 
 var img = BASE_URL + "images/" + afbeelding;
 console.log(afbeelding);
-
+initialiseListFeedbackMelding(meldingId);
 function initialize4()
 {
 
@@ -294,7 +295,7 @@ var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
     
 });
 
-var pageMeldingInformation = $("<div id=meldingInfo data-role=page data-url=meldingInformation ><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><p>" + "Titel: " + titel + "</p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><p>" + "Tim Van de Velde: Dit is een reactie.</p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactie placeholder=Reageer></textarea><a href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
+var pageMeldingInformation = $("<div id=meldingInfo data-role=page data-url=meldingInformation ><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><p>" + "Titel: " + titel + "</p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details +"</p><p>" + "Locatie: " + locatie +"</p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><p>" + "Tim Van de Velde: Dit is een reactie.</p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactieMelding placeholder=Reageer></textarea><a onclick='createFeedbackEvent("+ meldingId  +")' href=#page id=btnPlaatsReactieMelding data-role=button data-icon=check>Plaats</a></div></div>");
 
 //var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:580px;></div><div data-role=content><img src=" + img + " style=width:350px;height:350px><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie + "</p></div></div");
 //append it to the page container
@@ -636,24 +637,18 @@ var voornaam = gebruikers[gebruikerIndex].voornaam;
 var uid = gebruikers[gebruikerIndex].uid;
 var email = gebruikers[gebruikerIndex].email;
 var gebruikerid = gebruikers[gebruikerIndex].gebruikerId;
-//var locatie = events[eventIndex].locatie.latitude + " , " + events[eventIndex].locatie.longitude;
-//var mid = events[eventIndex].evenementId;
-//var gid = events[eventIndex].gebruiker.gebruikerId;
-//var lat = events[eventIndex].locatie.latitude;
-//var long= events[eventIndex].locatie.longitude;
 
-//var afbeelding = events[eventIndex].afbeelding;
-//
-////var img = $("<img>").attr("src", BASE_URL + "images/" + afbeelding)
-//    var img = BASE_URL + "images/" + afbeelding;
+
+
+//past een melding aan via het updatepaneel
+
 console.log(gebruikerid);
 var newPage = $("<div data-role=page data-url=eventAdminInformation><div data-theme=b data-role=header ><a href=#pageAdminGebruikers data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + naam + " </h1></div><div data-role=content><p>" + "\n\Voornaam: <textarea cols=40 rows=8 name=textarea id=textareaVoornaamGebruikerAdmin>" + voornaam + "</textarea></p>" +
         "<p>" + "\n\Achternaam: <textarea cols=40 rows=8 name=textarea id=textareaAchternaamGebruikerAdmin>" + naam + "</textarea></p>" +
         "<p>" + "\n\Uid: <textarea cols=40 rows=8 name=textarea id=textareaUidGebruikerAdmin>" + uid + "</textarea></p>" +
         "<p>" + "\n\E-Mail: <textarea cols=40 rows=8 name=textarea id=textareaEmailGebruikerAdmin>" + email + "</textarea></p>" +
-        "<a onclick='updateGebruiker(" + gebruikerIndex + "," + gebruikerid + ")' href=#pageAdminGebruikers id=btnGebruikerAanpassen data-role=button data-icon=check>Aanpassen</a></div></div");
+        "<a onclick='updateGebruiker("+ gebruikerIndex + "," + gebruikerid + ")' href=#pageAdminGebruikers id=btnGebruikerAanpassen data-role=button data-icon=check>Aanpassen</a></div></div");
 //append it to the page container
-
 newPage.appendTo($.mobile.pageContainer);
 
 //go to it
@@ -759,6 +754,92 @@ request.onload = function() {
 };
 request.send(null);
 
+}
+
+
+/*FEEDBACK*/
+
+function initialiseListFeedbackMelding(meldingId) {
+
+// Load the groups from the back-end.
+var request = new XMLHttpRequest();
+
+
+request.open("GET", BASE_URL + "meldingen/feedback/" + meldingId);
+request.onload = function() {
+    if (request.status === 200) {
+        feedbackMelding = JSON.parse(request.responseText);
+        console.log(feedbackMelding);
+        for (var i = 0; i < feedbackMelding.length; i++) {
+            $("#FeedbackMeldingList").append(createListElementForFeedbackMelding(i));
+            //$("#meldingListAdmin").append(createListElementForMeldingAdmin(i));
+            
+        }
+
+    } else {
+        console.log("Error loading Feedback: " + request.status + " - " + request.statusText);
+
+    }
+};
+request.send(null);
+}
+
+function createListElementForFeedbackMelding(FeedbackIndex) {
+
+var link = $("<a>")
+        .text(feedbackMelding[FeedbackIndex].gebruiker.voornaam + ": " + feedbackMelding[FeedbackIndex].gebruiker.naam);
+
+//var gebruiker = $("<p>")
+//        .text("Geplaatst door " + meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam);
+
+return $("<li>")
+        .append(link)
+        //.append(gebruiker)
+}
+
+function createFeedbackEvent(mid) {
+
+var request = new XMLHttpRequest();
+
+request.open("GET", BASE_URL + "gebruikers/fbid/" + uid);
+request.onload = function() {
+    if (request.status === 200) {
+        var gebruiker = JSON.parse(request.responseText);
+        gebruikerid = gebruiker.gebruikerId;
+        console.log(gebruikerid);
+        var feedbackMelding = {};
+
+        feedbackMelding.feedback = jQuery.trim($("#plaatsReactieMelding").val());
+        feedbackMelding.gebruiker = {gebruikerId: gebruikerid};
+        feedbackMelding.melding = {meldingId : mid};
+
+        // Send the new group to the back-end.
+        request.open("POST", BASE_URL + "meldingen/feedback/" + mid);
+        request.onload = function() {
+            if (request.status === 201) {
+                feedbackMelding.FeedbackMeldingid = request.getResponseHeader("Location").split("/").pop();
+            } else {
+                console.log("Error creating event: " + request.status + " " + request.responseText);
+            }
+        };
+
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify(feedbackMelding));
+        
+        
+        
+        
+    }
+    else
+    {
+        console.log("404");
+    }
+};
+request.send(null);
+
+//sendFile();
+//        window.reload('#page');
+//    window.reload('#pageEvent');
 }
 
 /*FBLOGIN*/

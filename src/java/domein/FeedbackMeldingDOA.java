@@ -38,7 +38,7 @@ public class FeedbackMeldingDOA {
     @Produces(MediaType.APPLICATION_JSON)
     public List<FeedbackMelding> getAllFeedBackForMelding(@PathParam("meldingId") int meldingId) {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM FeedbackMelding INNER JOIN Gebruiker ON FeedbackMelding.Gebruiker = Gebruiker.GebruikerID INNER JOIN Melding ON FeedbackMelding.Melding = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM FeedbackMelding INNER JOIN Gebruiker ON FeedbackMelding.Gebruiker = Gebruiker.GebruikerID WHERE FeedbackMelding.Melding = ?")) {
                     stat.setInt(1, meldingId);
                 try (ResultSet rs = stat.executeQuery()) {
                     List<FeedbackMelding> results = new ArrayList<>();
@@ -47,7 +47,7 @@ public class FeedbackMeldingDOA {
                         FeedbackMelding f = new FeedbackMelding();
                         f.setFeedback(rs.getString("Feedback"));
                         Melding m = new Melding();
-                        m.setMeldingId(rs.getInt("MeldingId"));
+                        m.setMeldingId(rs.getInt("Melding"));
                         f.setMelding(m);
                         Gebruiker g = new Gebruiker();
                         g.setGebruikerId(rs.getInt("Gebruiker.GebruikerId"));
@@ -88,7 +88,7 @@ public class FeedbackMeldingDOA {
                 }
             }
 
-            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO FeedbackMeld VALUES(?, ?, ?, ?)")) {
+            try (PreparedStatement stat = conn.prepareStatement("INSERT INTO FeedbackMelding VALUES(?, ?, ?, ?)")) {
                 stat.setInt(1, f.getFeedbackId());
                 stat.setString(2, f.getFeedback());
                 stat.setInt(3, meldingId);

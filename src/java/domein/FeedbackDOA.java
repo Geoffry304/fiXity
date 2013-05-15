@@ -38,7 +38,7 @@ public class FeedbackDOA {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Feedback> getAllFeedBackForEvenement(@PathParam("evenementId") int evenementId) {
         try (Connection conn = source.getConnection()) {
-            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM Feedback INNER JOIN Gebruiker ON Feedback.Gebruiker = Gebruiker.GebruikerID INNER JOIN Evenement ON Feedback.Evenement = ?")) {
+            try (PreparedStatement stat = conn.prepareStatement("SELECT * FROM Feedback INNER JOIN Gebruiker ON Feedback.Gebruiker = Gebruiker.GebruikerID WHERE Feedback.Evenement = ?")) {
                     stat.setInt(1, evenementId);
                 try (ResultSet rs = stat.executeQuery()) {
                     List<Feedback> results = new ArrayList<>();
@@ -47,7 +47,7 @@ public class FeedbackDOA {
                         Feedback f = new Feedback();
                         f.setFeedback(rs.getString("Feedback"));
                         Evenement e = new Evenement();
-                        e.setEvenementId(rs.getInt("EvenementId"));
+                        e.setEvenementId(rs.getInt("Evenement"));
                         f.setEvenement(e);
                         Gebruiker g = new Gebruiker();
                         g.setGebruikerId(rs.getInt("Gebruiker.GebruikerId"));

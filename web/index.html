@@ -56,7 +56,7 @@
             <div data-role="navbar">
 	<ul>
 		<li><a href="" class="ui-btn-active ui-state-persist">Meldingen</a></li>
-		<li><a href="#pageEvent" >Evenementen</a></li>
+		<li><a href="#pageEvent">Evenementen</a></li>
 	</ul>
                
 </div>   
@@ -150,9 +150,9 @@
       		       	<div data-role="fieldcontain">
               			<label for="selectmenuTitelMeldingen" class="select">Titel:         </label>
               			<select name="selectmenu" id="selectmenuTitelMeldingen">
-               				<option value="Put in de weg">Put in de weg</option>
-                			<option value="Zwerfvuil">Zwerfvuil</option>
-                            <option value="Werken">Werken</option>
+               				<option value="Gevaarlijke omstandigheden">Gevaarlijke omstandigheden</option>
+                			<option value="Problemen met het wegdek">Problemen met het wegdek</option>
+                            <option value="Vervuiling">Vervuiling</option>
                             <option value="Andere">Andere</option>
               			</select>
             		</div>       
@@ -162,20 +162,19 @@
             		</div>
                                 <div data-role="fieldcontain">
                                      <label for="filechooserMelding">Foto: </label>
-                                     <input type="file" id="filechooserMelding">
+                                     <input type="file" data-clear-btn="true" id="filechooserMelding" value="">
      <!--<input type="file" data-clear-btn="true" name="file-2" id="fotoEvent" value="">-->
                                 </div>
                 	<a onclick='postToFeed(); return false;' href="#" id="btnFbMeldingen" data-role="button" data-icon="star">Post on Facebook</a>
-              		<a onclick='createMeldingFromInput();' href="#page" id="btnPlaatsMeldingen" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
+              		<a onclick='createMeldingFromInput();' href="#dialogMelding" data-rel="dialog" id="btnPlaatsMeldingen" data-role="button" data-icon="check" data-iconpos="left">Melding plaatsen</a>
       			</div>
            		<div data-role="collapsible" data-collapsed="true">
 				<h3>Evenement plaatsen</h3>
       		    <div data-role="fieldcontain">
               		<label for="selectmenuTitelEvent" class="select">Titel:         </label>
               		<select name="selectmenu" id="selectmenuTitelEvent">
-               			<option value="Feest">Feest</option>
-                		<option value="BBQ">BBQ</option>
-                        <option value="Opruimactie">Opruimactie</option>
+               			<option value="Actie met buurtbewoners">Actie met buurtbewoners</option>
+                		<option value="Buurtfeesten">Buurtfeesten</option>
                         <option value="Andere">Andere</option>
               		</select>
             	</div>                      
@@ -192,7 +191,7 @@
      <input type="file" data-clear-btn="true" name="file-2" id="filechooser" value="">
                                 </div>
                 <a onclick='postToFeed(); return false;' href="#" id="btnFBEvent" data-role="button" data-icon="star">Post on Facebook</a>
-              	<a onclick='createEventFromInput()' href="#page" data-role="button" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Evenement plaatsen</a>
+              	<a onclick='createEventFromInput()' href="#dialogEvent" data-role="button" data-rel="dialog" id="btnPlaatsEvent" data-icon="check" data-iconpos="left">Evenement plaatsen</a>
              </div>         
             </div>
             </div>       
@@ -226,7 +225,7 @@
 	   	</div>
         <div data-role="page" id="pageAdminMeldingen">
           <div data-role="header" data-theme="b">
-            <a href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
+            <a onclick="logoutAdmin();" href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
                 <h1>Admin pagina</h1>
           </div>
 <ul data-role="listview" id="meldingListAdmin" data-split-icon="delete" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
@@ -235,7 +234,6 @@
 					<ul>
 						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="alert" data-theme="b">Meldingen</a></li>
 						<li><a href="#pageAdminEvenementen" data-icon="home" data-theme="b">Evenementen</a></li>
-                                                <li><a href="#" data-icon="info" data-theme="b">Feedback</a></li>
                                                 <li><a href="#pageAdminGebruikers" data-icon="grid" data-theme="b">Gebruikers</a></li>
 					</ul>
 				</div>
@@ -243,7 +241,7 @@
         </div>
                     <div data-role="page" id="pageAdminEvenementen">
           <div data-role="header" data-theme="b">
-            <a href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
+            <a onclick="logoutAdmin();" href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
                 <h1>Admin pagina</h1>
           </div>
 <ul data-role="listview" id="evenementenListAdmin" data-split-icon="delete" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>	
@@ -252,7 +250,6 @@
 					<ul>
 						<li><a href="#pageAdminMeldingen" data-icon="alert" data-theme="b">Meldingen</a></li>
 						<li><a href="#" class="ui-btn-active ui-state-persist" data-icon="home" data-theme="b">Evenementen</a></li>
-                                                <li><a href="#" data-icon="info" data-theme="b">Feedback</a></li>
                                                 <li><a href="#pageAdminGebruikers" data-icon="grid" data-theme="b">Gebruikers</a></li>
 					</ul>
 				</div>
@@ -260,7 +257,7 @@
         </div>
             <div data-role="page" id="pageAdminGebruikers">
           <div data-role="header" data-theme="b">
-            <a href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
+            <a onclick="logoutAdmin();" href="#pageAanmelden" data-role="button" data-icon="forward" class="ui-btn-right" data-iconpos="right">Afmelden</a>
                 <h1>Admin pagina</h1>
           </div>
 <ul data-role="listview" id="gebruikersListAdmin" data-split-icon="delete" data-split-theme="d" data-filter="true" data-filter-placeholder="Zoek.." ></ul>
@@ -269,11 +266,49 @@
 					<ul>
 						<li><a onclick='initialiseListMeldingenAdmin();' href="#pageAdminMeldingen" data-icon="alert" data-theme="b">Meldingen</a></li>
 						<li><a href="#pageAdminEvenementen"  data-icon="home" data-theme="b">Evenementen</a></li>
-                                                <li><a href="#" data-icon="info" data-theme="b">Feedback</a></li>
                                                 <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="grid" data-theme="b">Gebruikers</a></li>
 					</ul>
 				</div>
 			</div>
-        </div>    
+        </div>   
+                            <div data-role="page" id="dialogMelding" data-close-btn="none">
+		  	<div data-role="header" data-theme="b" data-position="fixed" >
+		    	<h1>Melding plaatsen</h1>
+	     	</div>
+                              <div data-role="content" data-theme="d">
+                                De melding is geplaatst.
+                                <center>
+<a onclick="window.location.reload();" href="#page" data-role="button" data-icon="check" data-iconpos="left" data-inline="true" >Ok</a>
+                                </center>
+</div>
+                       
+                         
+                              </div>
+             <div data-role="page" id="dialogEvent" data-close-btn="none">
+		  	<div data-role="header" data-theme="b" data-position="fixed" >
+		    	<h1>Evenement plaatsen</h1>
+	     	</div>
+                              <div data-role="content" data-theme="d">
+                                Het evenement is geplaatst.
+                                <center>
+<a onclick="window.location.reload();" href="#pageEvent" data-role="button" data-icon="check" data-iconpos="left" data-inline="true" >Ok</a>
+                                </center>
+</div>
+      
+                              </div>
+                                     <div data-role="page" id="dialogMeldingFeedback" data-close-btn="none">
+		  	<div data-role="header" data-theme="b" data-position="fixed" >
+		    	<h1>Reactie</h1>
+	     	</div>
+                              <div data-role="content" data-theme="d">
+                                De reactie is geplaatst.
+                                <center>
+<a onclick="window.location.reload();" href="#page" data-role="button" data-icon="check" data-iconpos="left" data-inline="true" >Ok</a>
+                                </center>
+</div>
+                       
+                         
+                              </div>
 	</body>
+
 </html>

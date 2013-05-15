@@ -6,7 +6,7 @@ var longitude;
 var gebruikerid;
 var BASE_URL = "http://localhost:8080/onzebuurt/resources/";
 var fileName;
-
+var adminBoolean = new Boolean();
 function init() {
 console.log(uid);
 if (uid === undefined) {
@@ -890,7 +890,8 @@ ref.parentNode.insertBefore(js, ref);
 //logt gebruiker uit (enkel via facebook)
 function logout() {
 
-
+    adminBoolean = false;
+    console.log(adminBoolean);
 
 FB.logout(function(response) {
     window.location = "#pageAanmelden";
@@ -899,6 +900,23 @@ FB.logout(function(response) {
 });
 
 
+}
+
+function logoutAdmin() {
+
+    adminBoolean = false;
+    console.log(adminBoolean);
+}
+
+function check(){
+    if (adminBoolean === true) {
+        window.location = "#pageAdminMeldingen";
+    }
+    else {
+      window.location = "#pageAanmelden";  
+    }
+    
+    
 }
 
 //maakt gebruiker aan via het aanmeldingsscherm
@@ -1240,6 +1258,9 @@ request.onload = function() {
         console.log(uidgebruiker);
         if (uidgebruiker === "admin") {
             window.location.href = "#pageAdminMeldingen";
+            adminBoolean = true;
+            console.log(adminBoolean);
+            
         }
         else
         {
@@ -1253,6 +1274,8 @@ request.onload = function() {
     }
 };
 request.send(null);
+
+
 
 
 }

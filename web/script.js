@@ -314,7 +314,7 @@ var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
     
 });
 
-var pageMeldingInformation = $("<div id=meldingInfo data-role=page data-url=meldingInformation ><div data-theme=b data-role=header ><a onclick=refreshPage(); href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><div id=first>" + "Titel: " + "</div><div id=second>" + titel + "</div></p><div id=first>" + "Omschrijving: " + "</div><div id=second>" + details + "</div></p><div id=first>" + "Locatie: " + "</div><div id=second>" + locatie +"</div></p><div id=first>" + "Geplaatst door: " + "</div><div id=second>" +gebruiker + "</div></p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><div id=first>" + "Tim Van de Velde: " + "</div><div id=second>" + "Dit is een reactie." + "</div></p><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactieMelding placeholder=Reageer></textarea><a onclick='createFeedbackEvent("+ meldingId  +");'href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
+var pageMeldingInformation = $("<div id=meldingInfo data-role=page data-url=meldingInformation ><div data-theme=b data-role=header ><a onclick=refreshPage(); href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><div id=first>" + "Titel: " + "</div><div id=second>" + titel + "</div></p><div id=first>" + "Omschrijving: " + "</div><div id=second>" + details + "</div></p><div id=first>" + "Locatie: " + "</div><div id=second>" + locatie +"</div></p><div id=first>" + "Geplaatst door: " + "</div><div id=second>" +gebruiker + "</div></p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><div id=first>" + "Tim Van de Velde: " + "</div><div id=second>" + "Dit is een reactie." + "</div></p><ul data-role=listview id=FeedbackMeldingList><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactieMelding placeholder=Reageer></textarea><a onclick='createFeedbackEvent("+ meldingId  +");'href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
 
 //var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a onclick=refreshPage(); href=#page data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=map-canvas style=width:500px;height:580px;></div><div data-role=content><img src=" + img + " style=width:350px;height:350px><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "\n\Omschrijving: " + details + "</p><p>" + "Locatie: " + locatie + "</p></div></div");
 //append it to the page container
@@ -806,10 +806,10 @@ request.send(null);
 function createListElementForFeedbackMelding(FeedbackIndex) {
 
 var link = $("<a>")
-        .text(feedbackMelding[FeedbackIndex].gebruiker.voornaam + ": " + feedbackMelding[FeedbackIndex].gebruiker.naam);
+        .text(feedbackMelding[FeedbackIndex].gebruiker.voornaam + " " + feedbackMelding[FeedbackIndex].gebruiker.naam + " : " + feedbackMelding[FeedbackIndex].feedback);
 
 //var gebruiker = $("<p>")
-//        .text("Geplaatst door " + meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam);
+//        .text(feedbackMelding[FeedbackIndex].feedback);
 
 return $("<li>")
         .append(link)
@@ -1194,12 +1194,14 @@ else
 function createRegistreerGebruikerFromInput() {
 
 var gebruiker = {};
-
 //getGebruikerByUID();
 gebruiker.naam = jQuery.trim($("#textinputRegistreerNaam").val());
 gebruiker.voornaam = jQuery.trim($("#textinputRegistreerVoornaam").val());
 gebruiker.email = jQuery.trim($("#textinputRegistreeremail").val());
 gebruiker.password = jQuery.trim($("#passwordinputRegistreerWachtwoord").val());
+gebruiker.uid = ("GEBRUIKER" + gebruiker.email);
+
+
 // Send the new group to the back-end.
 var url = "http://localhost:8080/onzebuurt/resources/gebruikers";
 var request = new XMLHttpRequest();
@@ -1207,14 +1209,18 @@ request.open("POST", url);
 request.onload = function() {
     if (request.status === 201) {
         gebruiker.gebruikerId = request.getResponseHeader("Location").split("/").pop();
+        alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken");
     } else {
+        alert("E-mail bestaat al.");
         console.log("Error creating event: " + request.status + " " + request.responseText);
     }
+     
 };
-
+   
 request.setRequestHeader("Content-Type", "application/json");
 request.send(JSON.stringify(gebruiker));
-alert("Dag " + gebruiker.voornaam + ", uw account is aangemaakt! U kan nu zich nu aanmelden door op de knop << fiXity-account >> te klikken")
+    
+
 }
 
 //gewone login, niet via facebook (ook voor admin)
@@ -1230,14 +1236,15 @@ request.open("GET", url + email + "/" + pass);
 request.onload = function() {
     if (request.status === 200) {
         var gebruiker = JSON.parse(request.responseText);
-        var uid = gebruiker.uid;
-
-        if (uid === "admin") {
+        var uidgebruiker = gebruiker.uid;
+        console.log(uidgebruiker);
+        if (uidgebruiker === "admin") {
             window.location.href = "#pageAdminMeldingen";
         }
         else
         {
-            window.location.href = "#pageTut1";
+            uid = uidgebruiker;
+            window.location.href = "#page";
         }
     }
     else
@@ -1364,7 +1371,7 @@ if (navigator.geolocation) {
                     if (events.length > 0) {
 
                     } else {
-
+                        
                     }
                 } else {
 

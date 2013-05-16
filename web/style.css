@@ -2,7 +2,7 @@
 body {
  	background-color: #cccccc;
 }
-
+      
 p.ui-li-desc{
          margin: -10px 0px 2px 14px; 
       }
@@ -30,4 +30,10 @@ margin: 0px -18.1px 0.9px -15.1px;
 }
 #second {
     margin: 0 0 0 200px;
+}
+#third {
+    margin: 0 0 0 55px;
+}
+#fourth {
+    margin: 0 0 0 40px;
 }

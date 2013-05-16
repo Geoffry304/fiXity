@@ -31,7 +31,7 @@
         <legend><center>fiXity-account</center></legend>
         <input type="text" name="textinput-f" id="emailinput" placeholder="E-mailadres" value="">
         <input type="password" name="passwordinput" id="passwordinput" placeholder="Wachtwoord" value=""  />
-        <a onclick='LoginDatabank()' href="" id ="aanmeldenFixity" data-role="button">Aanmelden</a>
+        <a onclick='LoginDatabank()' href="" data-role="button">Aanmelden</a>
     </fieldset>
 </form>
                        
@@ -309,34 +309,19 @@
                        
                          
                               </div>
-                        <div data-role="page" id="dialogMeldingVerwijderAdmin" data-close-btn="none">
+                                                 <div data-role="page" id="dialogEventFeedback" data-close-btn="none">
 		  	<div data-role="header" data-theme="b" data-position="fixed" >
-		    	<h1>Verwijderen</h1>
+		    	<h1>Reactie</h1>
 	     	</div>
                               <div data-role="content" data-theme="d">
-                                Verwijderd.
+                                De reactie is geplaatst.
                                 <center>
-    <a onclick="check();" href="#page" data-role="button" data-icon="check" data-iconpos="left" data-inline="true" >Ok</a>
+<a onclick="window.location.reload();" href="#pageEvent" data-role="button" data-icon="check" data-iconpos="left" data-inline="true" >Ok</a>
                                 </center>
 </div>
                        
                          
                               </div>
-            <div data-role="page" id="dialogMeldingAanpassenAdmin" data-close-btn="none">
-		  	<div data-role="header" data-theme="b" data-position="fixed" >
-		    	<h1>Aanpassing</h1>
-	     	</div>
-                              <div data-role="content" data-theme="d">
-                                Aanpassen gebeurd.
-                                <center>
-    <a onclick="check();" href="#pageAdminMeldingen" data-role="button" data-icon="check" data-iconpos="left" data-inline="true" >Ok</a>
-                                </center>
-</div>
-                       
-                         
-                              </div>
-            
-                              
 	</body>
 
 </html>

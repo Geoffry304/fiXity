@@ -211,22 +211,22 @@ request.send(null);
 function createListElementForMelding(meldingIndex) {
 var file = meldingen[meldingIndex].afbeelding;
 
-var link = $("<a>")
+var link = $("<a div id=fourth>")
         .text(meldingen[meldingIndex].titel + ": " + meldingen[meldingIndex].details);
 
-var gebruiker = $("<p>")
-        .text("Geplaatst door " + meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam);
+var gebruiker = $("<p div id=third>")
+        .text("Geplaatst door " + meldingen[meldingIndex].gebruiker.voornaam + " " + meldingen[meldingIndex].gebruiker.naam)
+
 
 var img = $("<img>").attr("src", BASE_URL + "images/" + file).attr("alt", "Your downloaded images")
-                    .attr("style", "width:50px;height:50px");
-         
+                    .attr("style", "width:50px;height:50px;padding-top:2px;padding-left:2px;padding-bottom:1px")
+                    .attr("class", "ui-li-thumb");
 
 return $("<li>")
+ 
         .append(link)
         .append(img)
-        
         .append(gebruiker)
-        
         .click(function() {
     createPageMeldingInformation(meldingIndex);
 });
@@ -346,7 +346,7 @@ var long = meldingen[meldingIndex].locatie.longitude;
 console.log(titel);
 console.log(gid);
 
-var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "\n\Titel: <textarea cols=40 rows=8 name=textarea id=textareaTitelMeldingenAdmin>" + titel + "</textarea></p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie + "</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid + "," + gid + "," + lat + "," + long + "," + mid + ")' href=#dialogMeldingAanpassenAdmin data-rel=dialog id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a></div></div");
+var pageMeldingInformation = $("<div data-role=page data-url=meldingInformation><div data-theme=b data-role=header ><a href=#pageAdminMeldingen data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div data-role=content><p>" + "\n\Titel: <textarea cols=40 rows=8 name=textarea id=textareaTitelMeldingenAdmin>" + titel + "</textarea></p><p>" + "Geplaatst door: " + gebruiker + "</p><p>" + "Locatie: " + locatie + "</p><p>" + "\n\Omschrijving: <textarea cols=40 rows=8 name=textarea id=textareaOmschrijvingMeldingenAdmin>" + details + "</textarea></p><a onclick='updateMelding(" + mid + "," + gid + "," + lat + "," + long + "," + mid + ")' href=#pageAdminMeldingen id=btnMeldingAanpassen data-role=button data-icon=check>Aanpassen</a></div></div");
 //append it to the page container
 pageMeldingInformation.appendTo($.mobile.pageContainer);
 
@@ -500,15 +500,21 @@ request.send(null);
 
 //maakt de listview in de front end aan (HTML)
 function createListElementForEvent(eventIndex) {
+var file = events[eventIndex].afbeelding;
 
-var link = $("<a>")
+var img = $("<img>").attr("src", BASE_URL + "images/" + file).attr("alt", "Your downloaded images")
+                    .attr("style", "width:50px;height:50px;padding-top:2px;padding-left:2px;padding-bottom:1px")
+                    .attr("class", "ui-li-thumb");
+            
+var link = $("<a div id= fourth>")
         .text(events[eventIndex].titel + ": " + events[eventIndex].details);
 
-var gebruiker = $("<p>")
+var gebruiker = $("<p div id=third>")
         .text("Geplaatst door " + events[eventIndex].gebruiker.voornaam + " " + events[eventIndex].gebruiker.naam);
 
 return $("<li>")
         .append(link)
+        .append(img)
         .append(gebruiker)
         .click(function() {
     createPageEventInformation(eventIndex);
@@ -569,7 +575,7 @@ console.log(afbeelding);
 initialiseListFeedbackEvent(eventId);
 
 //initialize3(lat, long);
-var newPage = $("<div id=eventInfo data-role=page data-url=eventInformation ><div data-theme=b data-role=header ><a onclick= refreshPage(); href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><div id=first>" + "Titel: " +"</div><div id=second>" + titel + "</div></p><div id=first>" + "Omschrijving: " + "</div><div id=second>" + details +"</div></p><div id=first>" + "Locatie:" + "</div><div id=second>" + locatie +" </div></p><div id=first>" + "Datum: " + "</div><div id=second>" + datum + "</div></p><div id=first>" + "Geplaatst door:"  + "</div><div id=second>" + gebruiker + "</div></p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><ul data-role=listview id=FeedbackEventList><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactieEvent placeholder=Reageer></textarea><a onclick='createFeedbackEvent(" + eventId + ")' href=# id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
+var newPage = $("<div id=eventInfo data-role=page data-url=eventInformation ><div data-theme=b data-role=header ><a onclick= refreshPage(); href=#pageEvent data-role=button data-icon=arrow-l data-iconpos=left>Back</a><h1>" + titel + " </h1></div><div id=googleMap style=width:100%;height:380px;></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d data-collapsed=false style=margin: 10px 10px 10px 10px><h2>" + "Informatie" + "</h2><div id=first>" + "Titel: " +"</div><div id=second>" + titel + "</div></p><div id=first>" + "Omschrijving: " + "</div><div id=second>" + details +"</div></p><div id=first>" + "Locatie:" + "</div><div id=second>" + locatie +" </div></p><div id=first>" + "Datum: " + "</div><div id=second>" + datum + "</div></p><div id=first>" + "Geplaatst door:"  + "</div><div id=second>" + gebruiker + "</div></p></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Foto" + "</h2><img src="+ img +" style=width:350px;height:350px></div><div data-role=collapsible data-inset=false data-theme=c data-content-theme=d><h2>" + "Reacties</h2><ul data-role=listview id=FeedbackEventList><p>" + "<textarea cols=40 rows=8 name=textarea id=plaatsReactieEvent placeholder=Reageer></textarea><a onclick='createFeedbackEvent(" + eventId + ")' href=#dialogEventFeedback data-rel=dialog id=btnEventAanpassen data-role=button data-icon=check>Plaats</a></div></div>");
 
 //append it to the page container
 newPage.appendTo( $.mobile.pageContainer );
@@ -835,6 +841,11 @@ var request = new XMLHttpRequest();
 
 request.open("GET", BASE_URL + "gebruikers/fbid/" + uid);
 request.onload = function() {
+    if (jQuery.trim($("#plaatsReactieMelding").val()) === ""){
+        alert("Vul een reactie in.");
+    }
+    else
+        {
     if (request.status === 200) {
         var gebruiker = JSON.parse(request.responseText);
         gebruikerid = gebruiker.gebruikerId;
@@ -866,6 +877,7 @@ request.onload = function() {
     {
         console.log("404");
     }
+        }
 };
 request.send(null);
 
@@ -923,6 +935,11 @@ var request = new XMLHttpRequest();
 
 request.open("GET", BASE_URL + "gebruikers/fbid/" + uid);
 request.onload = function() {
+    if (jQuery.trim($("#plaatsReactieEvent").val()) === ""){
+        alert("Vul een reactie in.");
+    }
+    else
+        {
     if (request.status === 200) {
         var gebruiker = JSON.parse(request.responseText);
         gebruikerid = gebruiker.gebruikerId;
@@ -954,12 +971,14 @@ request.onload = function() {
     {
         console.log("404");
     }
+    }
 };
 request.send(null);
 
 //sendFile();
 //        window.reload('#page');
 //    window.reload('#pageEvent');
+
 }
 
 /*FBLOGIN*/
@@ -1010,16 +1029,11 @@ function logoutAdmin() {
 }
 
 function check(){
-        console.log(adminBoolean);
     if (adminBoolean === true) {
-        alert("tzou moete werken");
-        //window.location.reload();
-        window.location = "#pageAdminMeldingen" 
-        $
+        window.location = "#pageAdminMeldingen";
     }
     else {
-        alert("ni goed eh");
-      //window.location = "#pageAanmelden";  
+      window.location = "#pageAanmelden";  
     }
     
     
@@ -1376,7 +1390,7 @@ request.onload = function() {
     }
     else
     {
-        console.log("404");
+        alert("Fout e-mailadres of wachtwoord.")
     }
 };
 request.send(null);
